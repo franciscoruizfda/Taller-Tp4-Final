@@ -1,0 +1,555 @@
+/* Beatmind · Núcleo 1
+   Lienzo fijo de 1920×1080 (igual que los frames de Figma) que se escala para entrar en la ventana. */
+
+:root {
+  --violeta: #cc4bff;
+  --violeta-oscuro: #6a00ff;
+  --verde: #00ff89;
+  --azul: #0084ff;
+  --rosa: #e678eb;
+  --lila: #787eeb;
+  --celda: #2f0668;
+  --pista: #2f0768;
+  --gris-senal: #658073;
+  --borde-neon: linear-gradient(90deg, #cc4bff 0%, #cc4bff 45%, #d3aad4 100%);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  background: #120b24;
+}
+
+body {
+  font-family: "Akshar", sans-serif;
+  color: #fff;
+  -webkit-font-smoothing: antialiased;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+button:disabled { cursor: default; }
+button:focus-visible { outline: 3px solid var(--verde); outline-offset: 4px; border-radius: 8px; }
+
+img { display: block; }
+
+/* ---------- Lienzo ---------- */
+
+#viewport {
+  position: fixed;
+  inset: 0;
+  overflow: clip; /* el lienzo sin escalar desborda: evita que el foco lo desplace */
+}
+
+#stage {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
+  transform: translate(-50%, -50%) scale(var(--escala, 1));
+}
+
+.screen {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, #406889 0%, #120c25 100%);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .45s ease, visibility .45s;
+}
+.screen.fondo-a { background: linear-gradient(180deg, #426a8b 0%, #120b24 100%); }
+.screen.activa { opacity: 1; visibility: visible; }
+
+.a { position: absolute; }
+
+/* ---------- Texto ---------- */
+
+.texto {
+  position: absolute;
+  margin: 0;
+  font-weight: 400;
+  line-height: normal;
+  white-space: nowrap;
+}
+.texto.ajustado { white-space: normal; }
+.texto.centrado { transform: translateX(-50%); text-align: center; }
+.light { font-weight: 300; }
+.semi { font-weight: 600; }
+.negrita { font-weight: 700; }
+.verde { color: var(--verde); }
+.violeta { color: var(--violeta); }
+.brillo-verde { text-shadow: 0 0 4px var(--verde); }
+.sombra-oscura { text-shadow: 0 5px 0 #071625; }
+
+.titulo-capa {
+  font-size: 48px;
+  color: var(--violeta);
+  text-shadow: 0 0 4px var(--violeta);
+}
+.titulo-capa.sin-brillo { text-shadow: none; }
+
+/* Títulos con capas de color desplazadas (verde, azul, violeta) y frente degradado */
+.apilado {
+  position: absolute;
+  margin: 0;
+  font-weight: 700;
+  line-height: normal;
+  white-space: nowrap;
+}
+.apilado .capa-color {
+  position: absolute;
+  left: 0;
+  width: 100%;
+}
+.apilado .frente { position: relative; display: block; }
+.degradado-a .frente,
+.degradado-b .frente {
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+.degradado-a .frente { background-image: linear-gradient(180deg, #fff 19.774%, var(--violeta) 204.24%); }
+.degradado-b .frente { background-image: linear-gradient(180deg, #fff 0%, var(--violeta) 271.47%); }
+
+/* ---------- Marcos neón ---------- */
+
+.marco {
+  position: absolute;
+  inset: 0;
+  border-radius: 33px;
+  pointer-events: none;
+  filter: drop-shadow(0 0 4px rgba(204, 75, 255, .9));
+}
+.marco::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: var(--borde, 7px);
+  background: var(--grad, var(--borde-neon));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+}
+
+/* ---------- Barra superior ---------- */
+
+.nav-brillo,
+.nav-barra {
+  position: absolute;
+  left: 142px;
+  top: 28px;
+  width: 1636px;
+  height: 95px;
+  border-radius: 17px;
+}
+.nav-brillo { background: var(--azul); filter: blur(8.8px); }
+.nav-barra { background: rgba(2, 1, 28, .8); }
+
+.transporte .triangulo {
+  position: absolute;
+  left: 3px;
+  top: -3px;
+  width: 41px;
+  height: 47px;
+  transform: rotate(90deg);
+}
+.transporte .triangulo img {
+  position: absolute;
+  left: 2.75px;
+  top: 0;
+  width: 35.5px;
+  height: 35.25px;
+}
+.transporte .barra-azul {
+  position: absolute;
+  top: 0;
+  height: 36px;
+  background: var(--azul);
+}
+.transporte:hover { filter: brightness(1.25) drop-shadow(0 0 6px currentColor); }
+
+.nav-link {
+  top: 48px;
+  height: 50px;
+  font-size: 36px;
+  line-height: normal;
+  text-align: left;
+  white-space: nowrap;
+}
+.nav-link.activo { color: var(--verde); }
+.nav-link:not(:disabled):hover { color: var(--verde); }
+.nav-link:disabled { color: #fff; }
+
+.senal i {
+  position: absolute;
+  width: 10px;
+  background: var(--verde);
+}
+.senal i.off { background: var(--gris-senal); }
+
+/* ---------- Ondas del logo ---------- */
+
+.onda-logo { position: absolute; }
+.onda-logo i {
+  position: absolute;
+  box-shadow: 0 0 7px var(--c);
+  background: var(--c);
+}
+.onda-logo.animada i { animation: rebote 1s ease-in-out infinite alternate; transform-origin: center; }
+@keyframes rebote {
+  from { transform: scaleY(.55); }
+  to { transform: scaleY(1); }
+}
+
+/* ---------- Inicio ---------- */
+
+.parlante {
+  position: absolute;
+  width: 339px;
+  height: 514px;
+}
+.parlante .marco { border-radius: 46px; --borde: 5px; --grad: var(--violeta); filter: drop-shadow(0 0 6px var(--violeta)); }
+
+.cta {
+  position: absolute;
+  height: 78px;
+  border-radius: 54px;
+  background: linear-gradient(90deg, var(--violeta), var(--violeta-oscuro));
+  box-shadow: 0 0 24px #ab55af;
+  font-size: 36px;
+  font-weight: 300;
+  letter-spacing: 9px;
+  padding-left: 9px;
+  white-space: nowrap;
+  transition: filter .2s, box-shadow .2s;
+}
+.cta.chico { font-size: 34px; letter-spacing: 8.5px; padding-left: 8.5px; }
+.cta:hover { filter: brightness(1.12); box-shadow: 0 0 34px #c86bd0; }
+
+/* ---------- ¿Qué es un beat? ---------- */
+
+.opcion {
+  position: absolute;
+  width: 465px;
+  height: 97px;
+  border-radius: 33px;
+}
+.brillo-icono { filter: drop-shadow(0 0 3px rgba(204, 75, 255, .8)); }
+.opcion:hover .marco,
+.opcion[aria-pressed="true"] .marco { filter: drop-shadow(0 0 10px var(--violeta)) drop-shadow(0 0 4px var(--violeta)); }
+.opcion[aria-pressed="true"] { animation: latido var(--pulso, .65s) ease-out infinite; }
+@keyframes latido {
+  0% { transform: scale(1.03); }
+  100% { transform: scale(1); }
+}
+
+/* ---------- Anterior / siguiente ---------- */
+
+[data-pasos] { position: absolute; }
+.paso {
+  position: absolute;
+  top: 0;
+  width: 104.712px;
+  height: 142.309px;
+  opacity: .9;
+  transition: opacity .2s, filter .2s;
+}
+.paso img { width: 100%; height: 100%; }
+.paso:hover { opacity: 1; filter: drop-shadow(0 0 8px var(--violeta)); }
+
+/* ---------- Pantallas de capas ---------- */
+
+.boton-play img {
+  position: absolute;
+  top: -.98px;
+  left: 0;
+  width: 65px;
+  height: 61.96px;
+  max-width: none;
+}
+.boton-play:hover,
+.boton-play[aria-pressed="true"] { filter: drop-shadow(0 0 8px var(--violeta)); }
+.boton-play[aria-pressed="true"] { animation: latido .65s ease-out infinite; }
+
+.boton-sonido img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 0 3px rgba(204, 75, 255, .9));
+}
+.boton-sonido[aria-pressed="true"] img { opacity: .3; }
+
+.etiquetas {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.etiqueta {
+  position: relative;
+  width: 182px;
+  height: 54px;
+  border-radius: 8px;
+  background: var(--pista);
+  display: grid;
+  place-items: center;
+  font-size: 32px;
+  line-height: normal;
+  text-shadow: 0 0 7px var(--violeta);
+}
+#percusion .etiqueta::before {
+  content: "";
+  position: absolute;
+  left: 11px;
+  top: 18px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--violeta);
+  box-shadow: 0 0 4px var(--violeta);
+}
+.secciones .etiqueta { text-shadow: 0 0 10px var(--violeta); transition: color .2s, text-shadow .2s; }
+.secciones .etiqueta.sonando { color: var(--verde); text-shadow: 0 0 10px var(--verde); }
+
+/* Secuenciador de percusión */
+.secuenciador {
+  display: grid;
+  grid-template-columns: repeat(12, 54px);
+  grid-auto-rows: 54px;
+  gap: 5px;
+}
+.celda {
+  border-radius: 15px;
+  background: var(--celda);
+  transition: background .12s, box-shadow .12s, filter .12s;
+}
+.celda.on { background: var(--violeta); box-shadow: 0 0 9px var(--violeta); }
+.celda:hover { filter: brightness(1.35); }
+.celda.paso-actual { background: #4b1792; }
+.celda.on.paso-actual { background: #e3a0ff; box-shadow: 0 0 16px var(--violeta), 0 0 4px #fff; }
+
+/* LEDs y pistas del bajo */
+.led {
+  position: absolute;
+  left: 11px;
+  top: 18px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--violeta);
+  box-shadow: 0 0 4px var(--violeta);
+}
+.led.apagado { background: transparent; box-shadow: none; }
+.led.apagado::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--violeta);
+  filter: blur(2px);
+}
+.pista-encabezado {
+  height: 54px;
+  border-radius: 8px;
+  background: var(--pista);
+  border: 1px solid #e677eb;
+}
+.pista-encabezado .led { left: 10px; top: 17px; }
+.pista-encabezado .texto { left: 39px; top: 4px; }
+.pista-led {
+  width: 61px;
+  height: 54px;
+  border-radius: 8px;
+  background: var(--pista);
+}
+
+/* Piano roll (bajo y melodía) */
+.rollo .pista,
+.pistas-estructura .pista {
+  position: absolute;
+  left: 0;
+  border-radius: 8px;
+  background: var(--pista);
+}
+.nota {
+  position: absolute;
+  border-radius: 8px;
+  background: var(--violeta);
+  transition: background .12s, box-shadow .12s;
+}
+.rollo[data-rollo="bajo"] .nota { box-shadow: 0 0 6px var(--violeta); }
+.rollo[data-rollo="melodia"] .nota { filter: blur(2.8px); }
+.nota.sonando { background: #e9b3ff; box-shadow: 0 0 16px var(--violeta), 0 0 4px #fff; }
+
+.cabezal {
+  position: absolute;
+  top: -6px;
+  width: 3px;
+  border-radius: 2px;
+  background: var(--verde);
+  box-shadow: 0 0 8px var(--verde);
+  pointer-events: none;
+}
+
+/* Iconos de melodía */
+.mini-piano { width: 121px; height: 82px; display: flex; }
+.mini-piano i {
+  width: 17px;
+  height: 82px;
+  background: #fff;
+  border-left: 1px solid #000;
+}
+.mini-piano i:nth-child(2),
+.mini-piano i:nth-child(6) { width: 18px; }
+.mini-piano i:first-child { border-left: 0; border-radius: 4px 0 0 4px; }
+.mini-piano i:nth-child(7) { border-radius: 0 4px 4px 0; }
+.mini-piano b {
+  position: absolute;
+  top: 0;
+  width: 7px;
+  height: 58px;
+  border-radius: 0 0 1px 1px;
+  background: var(--violeta);
+}
+.mini-piano b.v { background: var(--verde); box-shadow: 0 0 4px var(--verde); }
+
+.teclado { width: 129px; height: 225px; }
+.teclado i {
+  position: absolute;
+  left: 0;
+  width: 129px;
+  height: 45px;
+  background: #d9d9d9;
+  border-top: 3px solid #000;
+}
+.teclado b {
+  position: absolute;
+  left: 0;
+  width: 90px;
+  height: 21px;
+  border-radius: 0 5px 5px 0;
+  background: #000;
+}
+
+/* Estructuración */
+.pistas-estructura { width: 707px; height: 172px; }
+.pistas-estructura .pista { width: 707px; height: 54px; }
+.pistas-estructura .pista:nth-child(2) { top: 59px; }
+.pistas-estructura .pista:nth-child(3) { top: 118px; }
+.onda {
+  position: absolute;
+  width: 189px;
+  height: 63px;
+  object-fit: cover;
+  filter: drop-shadow(0 0 3px rgba(204, 75, 255, .9));
+}
+
+/* Mezcla */
+.caja-oscura { border-radius: 8px; background: var(--pista); }
+
+.fader {
+  position: absolute;
+  top: 494px;
+  width: 44px;
+  height: 186px;
+  cursor: ns-resize;
+  touch-action: none;
+}
+.fader .riel {
+  position: absolute;
+  top: 20px;
+  height: 146px;
+  background: #7c4b8f;
+}
+.fader .relleno {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--violeta);
+}
+.fader .perilla-fader {
+  position: absolute;
+  width: 28.745px;
+  height: 40.081px;
+  max-width: none;
+  pointer-events: none;
+}
+.fader:focus-visible { outline: 3px solid var(--verde); outline-offset: 0; }
+
+.canal {
+  position: absolute;
+  top: 672px;
+  width: 45px;
+  height: 43px;
+}
+.canal img { position: absolute; max-width: none; }
+.canal .icono { object-fit: contain; }
+.canal[aria-pressed="true"] { opacity: .35; }
+.canal:hover { filter: drop-shadow(0 0 6px var(--violeta)); }
+
+.efecto-fondo {
+  position: absolute;
+  left: 1427px;
+  height: 33px;
+  border-radius: 8px;
+  background: radial-gradient(ellipse at center, #2f0668 0%, #2c0d57 100%);
+}
+.efecto-nombre { font-size: 24px; }
+.perilla {
+  position: absolute;
+  left: 1623px;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  cursor: ns-resize;
+  touch-action: none;
+}
+.perilla svg { overflow: visible; }
+.perilla:hover svg { filter: drop-shadow(0 0 4px var(--violeta)); }
+
+/* ---------- FL Studio y Bizarrap ---------- */
+
+.captura { border-radius: 33px; object-fit: cover; }
+
+.foto-bizarrap {
+  position: absolute;
+  margin: 0;
+  width: 608px;
+  aspect-ratio: 1900 / 1069;
+}
+.foto-bizarrap img { width: 100%; height: 100%; object-fit: cover; }
+.foto-bizarrap .marco { --grad: linear-gradient(170deg, #cc4bff 0%, #cc4bff 55%, #c99bc9 100%); }
+
+/* ---------- Cierre ---------- */
+
+.circulo {
+  position: absolute;
+  width: 209px;
+  height: 209px;
+  border-radius: 50%;
+  transition: filter .2s, transform .2s;
+}
+.circulo img { width: 209px; height: 209px; }
+.circulo:not(:disabled):hover { filter: drop-shadow(0 0 14px var(--violeta)); transform: scale(1.03); }
+
+.desenfocado { filter: blur(2px); }
+
+@media (prefers-reduced-motion: reduce) {
+  .screen { transition: none; }
+  .onda-logo.animada i,
+  .opcion[aria-pressed="true"],
+  .boton-play[aria-pressed="true"] { animation: none; }
+}

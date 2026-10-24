@@ -1,0 +1,26 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="129" height="124" viewBox="0 0 129 124" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Group 8" filter="url(#filter0_f_0_19)">
+<rect id="Rectangle 62" x="13" y="15" width="27" height="27" fill="#CC4BFF"/>
+<rect id="Rectangle 65" x="13" y="48" width="27" height="27" fill="#CC4BFF"/>
+<rect id="Rectangle 68" x="13" y="81" width="27" height="27" fill="#CC4BFF"/>
+<rect id="Rectangle 63" x="46" y="15" width="27" height="27" fill="#CC4BFF"/>
+<rect id="Rectangle 66" x="46" y="48" width="27" height="27" fill="#1FD97F"/>
+<rect id="Rectangle 69" x="46" y="81" width="27" height="27" fill="#CC4BFF"/>
+<rect id="Rectangle 64" x="79" y="15" width="27" height="27" fill="#CC4BFF"/>
+<rect id="Rectangle 67" x="79" y="48" width="27" height="27" fill="#CC4BFF"/>
+<rect id="Rectangle 70" x="79" y="81" width="27" height="27" fill="#CC4BFF"/>
+<rect id="Rectangle 71" x="112" y="15" width="5" height="27" fill="#CC4BFF"/>
+<rect id="Rectangle 72" x="112" y="48" width="5" height="27" fill="#CC4BFF"/>
+<circle id="Ellipse 37" cx="114.5" cy="83.5" r="2.5" fill="#CC4BFF"/>
+<circle id="Ellipse 38" cx="114.5" cy="105.5" r="2.5" fill="#CC4BFF"/>
+<circle id="Ellipse 39" cx="114.5" cy="94.5" r="2.5" fill="#CC4BFF"/>
+<path id="Rectangle 73" d="M13 5H116C120.418 5 124 8.58172 124 13V111C124 115.418 120.418 119 116 119H13C8.58172 119 5 115.418 5 111V13C5 8.58172 8.58172 5 13 5Z" stroke-width="2" stroke="#CC4BFF"/>
+</g>
+<defs>
+<filter id="filter0_f_0_19" x="0" y="0" width="129" height="124" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feGaussianBlur stdDeviation="2" result="effect1_foregroundBlur_0_19"/>
+</filter>
+</defs>
+</svg>
