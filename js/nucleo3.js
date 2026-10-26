@@ -433,18 +433,23 @@ const Nucleo3 = (() => {
     clearTimeout(timerReinicio);
     boton.classList.remove("confirmar");
     texto.textContent = "Empezar un beat nuevo";
-    Sonido.detener();
-    const inicial = MotorBeat.vacioInicial();
-    Object.assign(estado, inicial);
+    vaciar();
+    location.hash = "#inicio";
+  }
+
+  // Deja el núcleo 3 vacío, como lo encuentra una persona nueva (también al volver al inicio desde el cierre).
+  function vaciar() {
+    cortar();
+    Object.assign(estado, MotorBeat.vacioInicial());
     propuesta = null;
     historial = [];
     alcanzado = -1;
     piezaActiva = "bombo";
     notaActiva.bajo = notaActiva.melodia = "Re";
     bpmTocado = false;
+    pausadoEn = 0;
     Object.keys(byte).forEach((paso) => { byte[paso] = "pregunta"; delete aviso[paso]; });
     pintarTodo();
-    location.hash = "#inicio";
   }
 
   // ---------- Motor de ideas de Byte ----------
@@ -1155,6 +1160,7 @@ const Nucleo3 = (() => {
     // La pausa de la barra superior: en tu beat recuerda la casilla; el pulso y las demos solo se detienen.
     pausar: () => (modo === "beat" ? pausar() : cortar()),
     frenaAvance,
+    vaciar,
     pedirIdea: () => Boolean(actual) && pedirIdea(),
     maneja: (id) => PANTALLAS.includes(id),
   };

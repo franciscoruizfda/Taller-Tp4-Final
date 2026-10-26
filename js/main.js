@@ -512,6 +512,8 @@ function reproducirPantalla() {
 
 function ir(id) {
   if (!PANTALLAS.includes(id)) id = "inicio";
+  // Volver al inicio desde el cierre es el turno de otra persona: su beat del núcleo 3 arranca vacío.
+  if (actual === "cierre" && id === "inicio") Nucleo3.vaciar();
   Sonido.detener();
   Nucleo2.alSalir();
   Nucleo3.alSalir();
