@@ -540,6 +540,17 @@ function avanzar(direccion) {
   if (destino) ir(destino);
 }
 
+// Teclas que manda la interfaz física (Arduino + teclado).
+const TECLA_AVANZAR = ",";
+const TECLA_RETROCEDER = "m";
+// Opciones 1 a 4, de izquierda a derecha; el color de cada una coincide en las dos pantallas.
+// La opción 2 todavía no tiene botón: cuando lo tenga, reemplazar null por su tecla.
+const TECLAS_OPCION = [".", null, "8", "F12"];
+const OPCIONES = {
+  selecciona: ["redondos", "duki", "miranda", "mattioli"].map((id) => `[data-cancion="${id}"]`),
+  "crea-estilo": ["trap", "pop", "cumbia", "electronica"].map((id) => `[data-estilo="${id}"]`),
+};
+
 function escuchar() {
   stage.addEventListener("click", (e) => {
     const destino = e.target.closest("[data-ir]");
@@ -601,18 +612,19 @@ function escuchar() {
     const enControl = e.target.closest?.("button, [role='slider']");
     const activaControl = enControl && (e.key === " " || e.key === "Enter");
 
-    // Atajos: N avanza y 0 (fila de números o teclado numérico) retrocede en cualquier pantalla.
-    const retroceder = e.key === "0" || e.code === "Numpad0";
-    if (e.key.toLowerCase() === "n" || retroceder) {
+    // Avanzar y retroceder funcionan en cualquier pantalla.
+    const tecla = e.key.toLowerCase();
+    if (tecla === TECLA_AVANZAR || tecla === TECLA_RETROCEDER) {
       e.preventDefault();
-      avanzar(retroceder ? -1 : 1);
+      avanzar(tecla === TECLA_RETROCEDER ? -1 : 1);
       return;
     }
 
-    // ATAJO TEMPORAL para probar: 3 salta directo al núcleo 3. Borrar este bloque antes de la entrega.
-    if (e.key === "3" || e.code === "Numpad3") {
+    // Las opciones tocan la tarjeta como un clic: eligen la canción o el estilo (y suena su demo).
+    const opcion = TECLAS_OPCION.indexOf(e.key);
+    if (opcion !== -1 && OPCIONES[actual]) {
       e.preventDefault();
-      ir("crea");
+      document.querySelector(`#${actual} ${OPCIONES[actual][opcion]}`)?.click();
       return;
     }
 
