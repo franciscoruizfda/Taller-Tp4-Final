@@ -1,1 +1,8 @@
 .DS_Store
+
+# Canciones originales completas: el núcleo 2 usa solo las 4 pistas separadas de cada una
+assets/canciones/*/*.mp3
+!assets/canciones/*/voz.mp3
+!assets/canciones/*/bajo.mp3
+!assets/canciones/*/melodia.mp3
+!assets/canciones/*/bateria.mp3

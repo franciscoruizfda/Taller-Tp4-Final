@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0d0d46">
+  <title>Mi primer beat · DM-BEAT</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Akshar:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* Página que se abre con el QR del núcleo 3: arma el beat en el celular y lo deja escuchar y descargar. */
+    :root {
+      --violeta: #cc4bff;
+      --verde: #00ff89;
+      --azul: #0084ff;
+      --caja: #210a41;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; }
+    body {
+      font-family: "Akshar", sans-serif;
+      color: #fff;
+      background: linear-gradient(180deg, #406889 0%, #293a57 45%, #0d0d46 100%) fixed;
+      display: grid;
+      place-items: center;
+      padding: 24px 16px 40px;
+      -webkit-font-smoothing: antialiased;
+    }
+    main {
+      width: 100%;
+      max-width: 420px;
+      padding: 28px 22px 26px;
+      border-radius: 27px;
+      background: var(--caja);
+      box-shadow: 0 0 28px rgba(204, 75, 255, .35);
+      text-align: center;
+    }
+    .marca {
+      margin: 0;
+      font-size: 34px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: transparent;
+      background-image: linear-gradient(180deg, #fff 19.774%, var(--violeta) 204.24%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      filter: drop-shadow(0 1px 0 #cc4bff) drop-shadow(0 1px 0 #0084ff) drop-shadow(0 1px 0 #00ff89);
+    }
+    .byte { display: block; width: 130px; height: 196px; margin: 14px auto 6px; object-fit: contain; }
+    h1 {
+      margin: 0;
+      font-size: 44px;
+      font-weight: 700;
+      line-height: 1.05;
+      color: transparent;
+      background-image: linear-gradient(180deg, #fff 0%, var(--violeta) 271.47%);
+      -webkit-background-clip: text;
+      background-clip: text;
+    }
+    .detalle { margin: 6px 0 0; font-size: 20px; font-weight: 300; color: #fee2ff; }
+    .estado { min-height: 26px; margin: 18px 0 10px; font-size: 20px; color: #fee2ff; }
+    audio { width: 100%; margin: 4px 0 16px; }
+    .boton {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      min-height: 52px;
+      margin-top: 12px;
+      border: 0;
+      border-radius: 26px;
+      background: radial-gradient(ellipse at center, #cc4bff 0%, #af41da 25%, #9138b4 50%, #742e8f 75%, #56246a 100%);
+      box-shadow: 0 6px 14px rgba(0, 0, 0, .3);
+      color: #fff;
+      font: 500 22px "Akshar", sans-serif;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .boton.verde {
+      background: radial-gradient(ellipse at center, #00ff89 27%, #07d978 46%, #0eb467 64%, #158e56 82%, #1c6845 100%);
+      text-shadow: 0 1px 2px rgba(0, 0, 0, .7);
+    }
+    .boton[hidden], audio[hidden] { display: none; }
+    .nota { margin: 20px 0 0; font-size: 16px; font-weight: 300; line-height: 1.35; color: rgba(255, 255, 255, .75); }
+  </style>
+</head>
+<body>
+  <main>
+    <p class="marca">DM-BEAT</p>
+    <img class="byte" src="assets/personaje-tu-beat.png" alt="Byte, la mascota de DM-BEAT, festejando">
+    <h1>Mi primer beat</h1>
+    <p class="detalle" data-detalle></p>
+    <p class="estado" data-estado role="status">Preparando tu beat…</p>
+    <audio controls hidden></audio>
+    <a class="boton" data-descargar download="Mi primer beat.wav" hidden>Descargar mi beat</a>
+    <button class="boton verde" data-compartir hidden>Guardar o compartir</button>
+    <p class="nota">Lo creaste en la infografía interactiva <strong>DM-BEAT</strong>, eligiendo el estilo, la velocidad, el ritmo, el bajo y la melodía con la ayuda de Byte.</p>
+  </main>
+
+  <script src="js/audio.js"></script>
+  <script src="js/motor-beat.js"></script>
+  <script>
+    (async () => {
+      const estado = document.querySelector("[data-estado]");
+      const datos = MotorBeat.decodificar(location.hash.slice(1));
+      if (!datos) {
+        estado.textContent = "Este enlace no tiene un beat. Escaneá de nuevo el código de la pantalla.";
+        return;
+      }
+      document.querySelector("[data-detalle]").textContent = `${MotorBeat.SONIDOS[datos.estilo].nombre} · ${datos.bpm} BPM`;
+      try {
+        const wav = await MotorBeat.aWav(datos);
+        const archivo = new File([wav], "Mi primer beat.wav", { type: "audio/wav" });
+        const url = URL.createObjectURL(wav);
+        const audio = document.querySelector("audio");
+        audio.src = url;
+        audio.hidden = false;
+        const descargar = document.querySelector("[data-descargar]");
+        descargar.href = url;
+        descargar.hidden = false;
+        // En celulares que lo permiten, compartir deja guardarlo en Archivos, mandarlo por WhatsApp, etc.
+        const compartir = document.querySelector("[data-compartir]");
+        if (navigator.canShare?.({ files: [archivo] })) {
+          compartir.hidden = false;
+          compartir.addEventListener("click", () => navigator.share({ files: [archivo], title: "Mi primer beat" }).catch(() => {}));
+        }
+        estado.textContent = "¡Tu beat está listo!";
+      } catch (e) {
+        console.error(e);
+        estado.textContent = "No pudimos preparar el audio en este navegador. Probá abrirlo con Chrome o Safari.";
+      }
+    })();
+  </script>
+</body>
+</html>

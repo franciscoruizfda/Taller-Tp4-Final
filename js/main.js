@@ -3,7 +3,10 @@
 const PANTALLAS = [
   "inicio", "carga", "que-es",
   "percusion", "bajo", "melodia", "estructura", "mezcla",
-  "fl-studio", "bizarrap", "cierre",
+  "fl-studio", "bizarrap",
+  "modifica", "selecciona", "cancion",
+  ...Nucleo3.PANTALLAS,
+  "cierre",
 ];
 const DURACION_CARGA = 2800;
 
@@ -26,12 +29,13 @@ const patron = [
 const ROLLOS = {
   bajo: {
     ancho: 827,
+    anchoPista: 870,
     instrumento: "bajo",
     canal: "bajo",
     filas: [
-      { top: 0, alto: 54, frecuencia: 98.0 },   // Sol
-      { top: 59, alto: 54, frecuencia: 77.78 }, // Mi bemol
-      { top: 118, alto: 54, frecuencia: 65.41 }, // Do
+      { top: 0, alto: 67.7, frecuencia: 98.0 },   // Sol
+      { top: 73.96, alto: 67.7, frecuencia: 77.78 }, // Mi bemol
+      { top: 147.93, alto: 67.7, frecuencia: 65.41 }, // Do
     ],
     notas: [
       { fila: 0, x: 0, w: 220 },
@@ -41,39 +45,43 @@ const ROLLOS = {
     ],
   },
   melodia: {
-    ancho: 765,
+    ancho: 786,
     instrumento: "teclas",
     canal: "melodia",
     filas: [
-      { top: 0, alto: 45, frecuencia: 659.25 }, // Mi
-      { top: 48, alto: 42, frecuencia: 587.33 }, // Re
-      { top: 93, alto: 42, frecuencia: 523.25 }, // Do
-      { top: 138, alto: 42, frecuencia: 440.0 }, // La
-      { top: 183, alto: 42, frecuencia: 392.0 }, // Sol
+      { top: 0, alto: 59.34, frecuencia: 659.25, ancho: 786 }, // Mi
+      { top: 63, alto: 54.81, frecuencia: 587.33, ancho: 765 }, // Re
+      { top: 121.8, alto: 55.17, frecuencia: 523.25, ancho: 786 }, // Do
+      { top: 180.46, alto: 54.81, frecuencia: 440.0, ancho: 765 }, // La
+      { top: 239.43, alto: 54.13, frecuencia: 392.0, ancho: 786 }, // Sol
     ],
     notas: [
       { fila: 0, x: 0, w: 351 },
       { fila: 2, x: 0, w: 210 },
       { fila: 2, x: 351, w: 210 },
       { fila: 4, x: 351, w: 210 },
-      { fila: 1, x: 561, w: 204 },
-      { fila: 3, x: 561, w: 204 },
+      { fila: 1, x: 561, w: 225 },
+      { fila: 3, x: 561, w: 225 },
     ],
   },
 };
 
+// Geometría de la pantalla de mezcla tomada del Figma.
+const ALTO_RIEL = 183.04;
+
 const CANALES_MEZCLA = [
-  { canal: "melodia", nombre: "Melodía", icono: "mix-music.png", riel: 985, ancho: 11, valor: 77 / 146, boton: 969, ico: [4, 4, 36, 34] },
-  { canal: "general", nombre: "Volumen general", icono: "mix-audio.png", riel: 1097, ancho: 10, valor: 123 / 146, boton: 1080, ico: [7, 7, 30, 29] },
-  { canal: "bajo", nombre: "Bajo", icono: "mix-guitar.png", riel: 1209, ancho: 10, valor: 49 / 146, boton: 1192, ico: [5, 4, 35, 34] },
-  { canal: "bateria", nombre: "Batería", icono: "mix-drums.png", riel: 1320, ancho: 11, valor: 87 / 146, boton: 1303, ico: [6, 6, 33, 31] },
+  { canal: "melodia", nombre: "Melodía", icono: "mix-music.png", riel: [931, 594, 11], valor: 96.53 / ALTO_RIEL, boton: [915, 792.08], ico: [4, 5.02, 36, 42.63] },
+  { canal: "general", nombre: "Volumen general", icono: "mix-audio.png", riel: [1055, 592, 10], valor: 154.2 / ALTO_RIEL, boton: [1038, 790.08], ico: [7, 8.78, 30, 36.36] },
+  { canal: "bajo", nombre: "Bajo", icono: "mix-guitar.png", riel: [1178, 594, 10], valor: 61.43 / ALTO_RIEL, boton: [1161, 792.08], ico: [5, 5.02, 35, 42.63] },
+  { canal: "bateria", nombre: "Batería", icono: "mix-drums.png", riel: [1301, 592, 11], valor: 109.07 / ALTO_RIEL, boton: [1284, 790.08], ico: [6, 7.52, 33, 38.86] },
 ];
 
+// fondo: [left, top, ancho, alto]; texto: [left, top]; perilla: top del círculo de 28 px.
 const EFECTOS_MEZCLA = [
-  { clave: "reverb", nombre: "Reverb", valor: 0.88, fondo: [525, 91], texto: 525, perilla: 520 },
-  { clave: "delay", nombre: "Delay", valor: 0.25, fondo: [578, 72], texto: 577, perilla: 572 },
-  { clave: "eq", nombre: "EQ", valor: 0.5, fondo: [629, 43], texto: 629, perilla: 624 },
-  { clave: "compresor", nombre: "Compresor", valor: 0, fondo: [681, 123], texto: 680, perilla: 675.5 },
+  { clave: "reverb", nombre: "Reverb", valor: 0.88, fondo: [1427, 606, 101, 41], texto: [1438, 606], perilla: 614 },
+  { clave: "delay", nombre: "Delay", valor: 0.25, fondo: [1427, 672, 84, 41], texto: [1436, 672], perilla: 680 },
+  { clave: "eq", nombre: "EQ", valor: 0.5, fondo: [1427, 736, 52, 41], texto: [1441, 736], perilla: 745 },
+  { clave: "compresor", nombre: "Compresor", valor: 0, fondo: [1427, 801, 133, 42], texto: [1433, 802], perilla: 808 },
 ];
 
 const ONDAS = {
@@ -87,6 +95,11 @@ const ONDAS = {
     ancho: [30, 30, 27, 30, 30, 30, 30, 30, 30],
     alto: [56, 92, 104, 146, 56, 182, 134, 224, 77],
   },
+  mini: {
+    x: [0, 9.64, 19.27, 28.23, 37.87, 47.51, 57.14, 66.61, 76.25],
+    ancho: [5.07, 5.07, 4.57, 5.07, 5.07, 5.07, 5.07, 5.07, 5.07],
+    alto: [9.47, 15.55, 17.58, 24.68, 9.47, 30.77, 22.65, 37.87, 13.02],
+  },
 };
 const COLORES_ONDA = ["#e678eb", "#e678eb", "#e678eb", "#787eeb", "#787eeb", "#787eeb", "#00ff89", "#00ff89", "#00ff89"];
 
@@ -98,9 +111,20 @@ function montarPlantillas() {
 
   const nav = document.getElementById("tpl-nav");
   document.querySelectorAll("[data-nav]").forEach((el) => el.replaceWith(nav.content.cloneNode(true)));
+  document.querySelectorAll(".screen").forEach((s) => {
+    const seccion = s.dataset.seccion || "inicio";
+    s.querySelectorAll(".nav-link").forEach((l) => l.classList.toggle("activo", l.dataset.seccion === seccion));
+  });
 
   const pasos = document.getElementById("tpl-pasos");
   document.querySelectorAll("[data-pasos]").forEach((el) => el.append(pasos.content.cloneNode(true)));
+
+  const silencio = document.getElementById("tpl-silencio");
+  document.querySelectorAll("[data-silencio-en]").forEach((el) => {
+    const boton = silencio.content.firstElementChild.cloneNode(true);
+    boton.style.cssText = el.style.cssText;
+    el.replaceWith(boton);
+  });
 }
 
 function armarTitulos() {
@@ -160,7 +184,7 @@ function armarSecuenciador() {
       celda.style.gridRow = f + 1;
       celda.style.gridColumn = paso + 1;
       celda.dataset.fila = f;
-      celda.dataset.paso = paso;
+      celda.dataset.columna = paso; // no usar data-paso: es el atributo de las flechas anterior/siguiente
       celda.setAttribute("aria-label", `${NOMBRES_PERCUSION[f]}, paso ${paso + 1}`);
       grilla.append(celda);
     });
@@ -168,9 +192,9 @@ function armarSecuenciador() {
   grilla.addEventListener("click", (e) => {
     const celda = e.target.closest(".celda");
     if (!celda) return;
-    const { fila, paso } = celda.dataset;
-    patron[fila][paso] = patron[fila][paso] ? 0 : 1;
-    if (patron[fila][paso] && !Sonido.sonando) Sonido.tocar(FILAS_PERCUSION[fila], "bateria");
+    const { fila, columna } = celda.dataset;
+    patron[fila][columna] = patron[fila][columna] ? 0 : 1;
+    if (patron[fila][columna] && !Sonido.sonando) Sonido.tocar(FILAS_PERCUSION[fila], "bateria");
     pintarSecuenciador();
   });
   pintarSecuenciador();
@@ -178,7 +202,7 @@ function armarSecuenciador() {
 
 function pintarSecuenciador() {
   document.querySelectorAll("#percusion .celda").forEach((celda) => {
-    const on = patron[celda.dataset.fila][celda.dataset.paso] === 1;
+    const on = patron[celda.dataset.fila][celda.dataset.columna] === 1;
     celda.classList.toggle("on", on);
     celda.setAttribute("aria-pressed", on);
   });
@@ -186,7 +210,7 @@ function pintarSecuenciador() {
 
 function marcarPaso(paso) {
   document.querySelectorAll("#percusion .celda").forEach((celda) => {
-    celda.classList.toggle("paso-actual", Number(celda.dataset.paso) === paso);
+    celda.classList.toggle("paso-actual", Number(celda.dataset.columna) === paso);
   });
 }
 
@@ -195,44 +219,48 @@ function armarRollos() {
     const rollo = ROLLOS[el.dataset.rollo];
     const ultima = rollo.filas.at(-1);
     const alto = ultima.top + ultima.alto;
-    el.style.width = `${rollo.ancho}px`;
+    const anchoPista = (f) => f.ancho || rollo.anchoPista || rollo.ancho;
+    el.style.width = `${Math.max(...rollo.filas.map(anchoPista))}px`;
     el.style.height = `${alto}px`;
     el.setAttribute("aria-hidden", "true");
     el.innerHTML =
-      rollo.filas.map((f) => `<div class="pista" style="top:${f.top}px;width:${rollo.ancho}px;height:${f.alto}px"></div>`).join("") +
+      rollo.filas.map((f) => `<div class="pista" style="top:${f.top}px;width:${anchoPista(f)}px;height:${f.alto}px"></div>`).join("") +
       rollo.notas.map((n) => {
         const f = rollo.filas[n.fila];
         return `<div class="nota" style="left:${n.x}px;top:${f.top}px;width:${n.w}px;height:${f.alto}px"></div>`;
       }).join("") +
       `<span class="cabezal" hidden style="height:${alto + 12}px"></span>`;
   });
-  document.querySelector(".pistas-estructura .cabezal").style.height = "184px";
+  document.querySelector(".pistas-estructura .cabezal").style.height = "290px";
 }
 
 function armarMezcla() {
   const faders = document.querySelector("#mezcla .faders");
   faders.style.cssText = "left:0;top:0";
-  faders.innerHTML = CANALES_MEZCLA.map((c, i) => `
+  faders.innerHTML = CANALES_MEZCLA.map((c, i) => {
+    const [x, y, ancho] = c.riel;
+    return `
     <div class="fader" role="slider" tabindex="0" aria-label="${c.nombre}" aria-valuemin="0" aria-valuemax="100"
-         data-canal="${i}" style="left:${c.riel + c.ancho / 2 - 22}px">
-      <div class="riel" style="left:${22 - c.ancho / 2}px;width:${c.ancho}px"><div class="relleno"></div></div>
+         data-canal="${i}" style="left:${x + ancho / 2 - 22}px;top:${y - 24}px;height:${ALTO_RIEL + 48}px">
+      <div class="riel" style="left:${22 - ancho / 2}px;width:${ancho}px;height:${ALTO_RIEL}px"><div class="relleno"></div></div>
       <img class="perilla-fader" src="assets/fader.svg" alt="">
     </div>
-    <button class="canal" data-canal="${i}" aria-pressed="false" aria-label="Silenciar ${c.nombre.toLowerCase()}" style="left:${c.boton}px">
-      <img src="assets/mix-boton.svg" alt="" style="left:0;top:0;width:45px;height:43px">
+    <button class="canal" data-canal="${i}" aria-pressed="false" aria-label="Silenciar ${c.nombre.toLowerCase()}" style="left:${c.boton[0]}px;top:${c.boton[1]}px">
+      <img src="assets/mix-boton.svg" alt="" style="left:0;top:0;width:45px;height:53.91px">
       <img class="icono" src="assets/${c.icono}" alt="" style="left:${c.ico[0]}px;top:${c.ico[1]}px;width:${c.ico[2]}px;height:${c.ico[3]}px">
-    </button>`).join("");
+    </button>`;
+  }).join("");
 
   const efectos = document.querySelector("#mezcla .efectos");
   efectos.style.cssText = "left:0;top:0";
   efectos.innerHTML = EFECTOS_MEZCLA.map((ef, i) => `
-    <div class="efecto-fondo" style="top:${ef.fondo[0]}px;width:${ef.fondo[1]}px"></div>
-    <p class="texto efecto-nombre" style="left:1436px;top:${ef.texto}px">${ef.nombre}</p>
+    <div class="efecto-fondo" style="left:${ef.fondo[0]}px;top:${ef.fondo[1]}px;width:${ef.fondo[2]}px;height:${ef.fondo[3]}px"></div>
+    <p class="texto efecto-nombre" style="left:${ef.texto[0]}px;top:${ef.texto[1]}px">${ef.nombre}</p>
     <div class="perilla" role="slider" tabindex="0" aria-label="${ef.nombre}" aria-valuemin="0" aria-valuemax="100"
-         data-efecto="${i}" style="top:${ef.perilla}px">
-      <svg width="26" height="24" viewBox="0 0 26 24" fill="none" aria-hidden="true">
-        <ellipse cx="13" cy="12" rx="11" ry="10" stroke="#210A41" stroke-width="4"/>
-        <path class="arco" d="M13 2A11 10 0 1 0 13 22A11 10 0 1 0 13 2" stroke="#CC4BFF" stroke-width="4" pathLength="100"/>
+         data-efecto="${i}" style="top:${ef.perilla - 8}px">
+      <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+        <circle cx="14" cy="14" r="12" stroke="#210A41" stroke-width="4"/>
+        <path class="arco" d="M14 2A12 12 0 1 0 14 26A12 12 0 1 0 14 2" stroke="#CC4BFF" stroke-width="4" pathLength="100"/>
       </svg>
     </div>`).join("");
 
@@ -302,10 +330,10 @@ function armarMezcla() {
 function pintarFader(i) {
   const c = CANALES_MEZCLA[i];
   const el = document.querySelector(`#mezcla .fader[data-canal="${i}"]`);
-  el.querySelector(".relleno").style.height = `${c.valor * 146}px`;
+  el.querySelector(".relleno").style.height = `${c.valor * ALTO_RIEL}px`;
   const perilla = el.querySelector(".perilla-fader");
   perilla.style.left = `${22 - 14.37}px`;
-  perilla.style.top = `${20 + (1 - c.valor) * 146 - 20.04}px`;
+  perilla.style.top = `${24 + (1 - c.valor) * ALTO_RIEL - 24.11}px`;
   el.setAttribute("aria-valuenow", Math.round(c.valor * 100));
 }
 
@@ -389,7 +417,7 @@ function seguirRollo(nombre, posicion) {
 function seguirEstructura(posicion, seccion) {
   const cabezal = document.querySelector(".pistas-estructura .cabezal");
   cabezal.hidden = posicion < 0;
-  cabezal.style.left = `${posicion * 707 - 1.5}px`;
+  cabezal.style.left = `${posicion * 726.66 - 1.5}px`;
   document.querySelectorAll("#estructura .etiqueta").forEach((el) => {
     el.classList.toggle("sonando", Number(el.dataset.seccion) === seccion);
   });
@@ -469,7 +497,11 @@ function alternar(nombre, boton) {
 // Qué suena al usar el play de la barra superior o la barra espaciadora.
 function reproducirPantalla() {
   const pantalla = document.getElementById(actual);
-  if (REPRODUCTORES[actual]) {
+  if (actual === "cancion") {
+    Nucleo2.alternar();
+  } else if (Nucleo3.maneja(actual)) {
+    Nucleo3.alternar();
+  } else if (REPRODUCTORES[actual]) {
     alternar(actual, pantalla.querySelector("[data-play]"));
   } else if (actual === "que-es") {
     alternar("instrumental", pantalla.querySelector('[data-sonido="instrumental"]'));
@@ -481,6 +513,8 @@ function reproducirPantalla() {
 function ir(id) {
   if (!PANTALLAS.includes(id)) id = "inicio";
   Sonido.detener();
+  Nucleo2.alSalir();
+  Nucleo3.alSalir();
   clearTimeout(timerCarga);
   actual = id;
   document.querySelectorAll(".screen").forEach((s) => {
@@ -488,6 +522,8 @@ function ir(id) {
     s.classList.toggle("activa", activa);
     s.inert = !activa;
   });
+  if (id === "cancion") Nucleo2.alEntrar();
+  if (Nucleo3.maneja(id)) Nucleo3.alEntrar(id);
   history.replaceState(null, "", `#${id}`);
   aplicarVolumenes();
   aplicarEfectos();
@@ -495,6 +531,7 @@ function ir(id) {
 }
 
 function avanzar(direccion) {
+  if (Nucleo3.maneja(actual) && Nucleo3.frenaAvance(direccion)) return;
   let destino = PANTALLAS[PANTALLAS.indexOf(actual) + direccion];
   if (destino === "carga" && direccion < 0) destino = "inicio";
   if (!destino && direccion > 0) destino = "inicio"; // después del cierre se vuelve a empezar
@@ -506,6 +543,12 @@ function escuchar() {
     const destino = e.target.closest("[data-ir]");
     if (destino && !destino.disabled) {
       ir(destino.dataset.ir);
+      return;
+    }
+    const cancion = e.target.closest("[data-cancion]");
+    if (cancion) {
+      Nucleo2.elegir(cancion.dataset.cancion);
+      ir("cancion");
       return;
     }
     const paso = e.target.closest("[data-paso]");
@@ -534,8 +577,15 @@ function escuchar() {
     }
     const transporte = e.target.closest("[data-transporte]");
     if (transporte) {
-      if (transporte.dataset.transporte === "play") {
+      const accion = transporte.dataset.transporte;
+      if (actual === "cancion") {
+        if (accion === "play") Nucleo2.reproducir();
+        else if (accion === "pausa") Nucleo2.pausar();
+        else Nucleo2.detener();
+      } else if (accion === "play") {
         if (!Sonido.sonando) reproducirPantalla();
+      } else if (accion === "pausa" && Nucleo3.maneja(actual)) {
+        Nucleo3.pausar();
       } else {
         Sonido.detener();
       }
@@ -545,6 +595,7 @@ function escuchar() {
   // La interfaz física envía teclas: flechas para moverse, espacio/enter para reproducir.
   document.addEventListener("keydown", (e) => {
     if (e.repeat || e.metaKey || e.ctrlKey || e.altKey || e.key === "Tab") return;
+    if (e.target.closest?.("input, textarea")) return; // escribir el nombre del beat no navega
     const enControl = e.target.closest?.("button, [role='slider']");
     const activaControl = enControl && (e.key === " " || e.key === "Enter");
 
@@ -553,6 +604,19 @@ function escuchar() {
     if (e.key.toLowerCase() === "n" || retroceder) {
       e.preventDefault();
       avanzar(retroceder ? -1 : 1);
+      return;
+    }
+
+    // ATAJO TEMPORAL para probar: 3 salta directo al núcleo 3. Borrar este bloque antes de la entrega.
+    if (e.key === "3" || e.code === "Numpad3") {
+      e.preventDefault();
+      ir("crea");
+      return;
+    }
+
+    // I le pide una idea a Byte en los pasos que la tienen. Solo la prepara: aceptarla es siempre un clic.
+    if (e.key.toLowerCase() === "i" && Nucleo3.maneja(actual) && Nucleo3.pedirIdea()) {
+      e.preventDefault();
       return;
     }
 
@@ -597,12 +661,14 @@ function limitar(valor) {
 // ---------- Arranque ----------
 
 montarPlantillas();
+Nucleo3.armar();
 armarTitulos();
 armarOndas();
 armarParlantes();
 armarSecuenciador();
 armarRollos();
 armarMezcla();
+Nucleo2.armar();
 escuchar();
 ajustarEscala();
 window.addEventListener("resize", ajustarEscala);

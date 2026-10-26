@@ -1,16 +1,16 @@
 <svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="209" height="209" viewBox="0 0 209 209" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g id="Group 91">
-<path id="Ellipse 68" d="M205.5 104.5C205.5 160.281 160.281 205.5 104.5 205.5C48.7192 205.5 3.5 160.281 3.5 104.5C3.5 48.7192 48.7192 3.5 104.5 3.5C160.281 3.5 205.5 48.7192 205.5 104.5Z" fill="url(#paint0_linear_0_20)" stroke-width="7" stroke="url(#paint1_linear_0_20)"/>
+<path id="Ellipse 68" d="M205.5 104.5C205.5 160.281 160.281 205.5 104.5 205.5C48.7192 205.5 3.5 160.281 3.5 104.5C3.5 48.7192 48.7192 3.5 104.5 3.5C160.281 3.5 205.5 48.7192 205.5 104.5Z" fill="url(#paint0_linear_0_27)" stroke-width="7" stroke="url(#paint1_linear_0_27)"/>
 <g id="boxicons:education">
 <path id="Vector" d="M163.095 79.8131L110.238 53.3843C109.426 52.9808 108.531 52.7708 107.624 52.7708C106.717 52.7708 105.823 52.9808 105.011 53.3843L69.7723 71.0035L52.1531 79.8131L46.28 82.7496C45.3115 83.2377 44.497 83.9844 43.9268 84.907C43.3567 85.8296 43.0531 86.8921 43.0498 87.9767V123.215H54.796V91.618L66.5421 97.491V119.985C66.5421 132.083 84.866 146.766 107.654 146.766C130.441 146.766 148.765 132.142 148.765 119.985V97.491L163.154 90.3259C165.151 89.3275 166.384 87.2719 166.384 85.0989C166.384 82.9258 165.151 80.8703 163.154 79.8718L163.095 79.8131ZM74.9993 81.5163L107.595 65.1892L147.297 85.0401L107.595 104.891L67.8929 85.0401L74.9993 81.4576V81.5163ZM136.96 119.985C136.96 124.448 124.568 135.02 107.595 135.02C90.6216 135.02 78.2295 124.507 78.2295 119.985V103.364L104.952 116.755C105.774 117.166 106.655 117.401 107.595 117.401C108.534 117.401 109.415 117.166 110.238 116.755L136.96 103.364V119.985Z" fill="white"/>
 </g>
 </g>
 <defs>
-<linearGradient id="paint0_linear_0_20" x1="104.5" y1="0" x2="104.5" y2="209" gradientUnits="userSpaceOnUse">
+<linearGradient id="paint0_linear_0_27" x1="104.5" y1="0" x2="104.5" y2="209" gradientUnits="userSpaceOnUse">
 <stop stop-color="#787EEB"/>
 <stop offset="1" stop-color="#210A41"/>
 </linearGradient>
-<linearGradient id="paint1_linear_0_20" x1="104.5" y1="0" x2="104.5" y2="209" gradientUnits="userSpaceOnUse">
+<linearGradient id="paint1_linear_0_27" x1="104.5" y1="0" x2="104.5" y2="209" gradientUnits="userSpaceOnUse">
 <stop stop-color="#B696B8"/>
 <stop offset="1" stop-color="#6A00FF"/>
 </linearGradient>
