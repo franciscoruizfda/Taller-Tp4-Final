@@ -1,9 +1,10 @@
-/* DM-BEAT · Consola física: qué tecla manda cada control y cómo llegan los faders.
+/* DM-BEAT · Consola física: qué hace cada control.
    La consola tiene un analógico, dos botones laterales (avanzar / volver), 4 botones de color,
-   4 faders y play / pausa. El Arduino emula un teclado; los faders llegarán por Web Serial. */
+   4 faders y play / pausa. Los botones y faders ya conectados llegan del Arduino por Web Serial
+   (ver arduino/consola_dmbeat); lo que falta conectar (analógico, F3, F4) se prueba con el teclado. */
 
 const Consola = (() => {
-  // Teclas que manda el Arduino. Cuando cambie el cableado, se toca solo esto.
+  // Teclas para probar sin el Arduino (y para lo que todavía no está conectado).
   const TECLAS = {
     avanzar: ",",
     retroceder: "m",
@@ -48,33 +49,87 @@ const Consola = (() => {
     return () => oyentes.delete(fn);
   }
 
-  // valor de 0 a 1. Lo llama la lectura por Web Serial (o la consola del navegador para probar).
+  // valor de 0 a 1. Lo llama la lectura del Arduino (o la consola del navegador para probar: Consola.moverFader("voz", .5)).
   function moverFader(nombre, valor) {
     if (!FADERS.includes(nombre)) return;
     const v = Math.min(1, Math.max(0, valor));
     oyentes.forEach((fn) => fn(nombre, v));
   }
 
-  // Web Serial: el Arduino manda una línea por cambio, por ejemplo "voz:512" (0 a 1023).
-  // Chrome pide un clic para elegir el puerto, así que hay que llamarla desde un botón.
-  // Pendiente de probar con el Arduino real: ajustar el formato si manda otra cosa.
-  async function conectarSerial({ baudios = 9600, maximo = 1023 } = {}) {
-    if (!("serial" in navigator)) throw new Error("Este navegador no tiene Web Serial (usar Chrome).");
-    const puerto = await navigator.serial.requestPort();
-    await puerto.open({ baudRate: baudios });
+  // ---------- Arduino por Web Serial ----------
+  /* El sketch arduino/consola_dmbeat manda una línea por evento:
+       "B3"     botón apretado (B1 a B8)
+       "F1:57"  fader movido, posición de 0 a 100
+       "# ..."  comentarios para el Monitor Serie (se ignoran) */
+
+  const COLOR = (color) => ({ tipo: "color", indice: COLORES.indexOf(color), color });
+  const BOTONES = {
+    B1: { tipo: "retroceder" },
+    B2: COLOR("azul"),
+    B3: { tipo: "avanzar" },
+    B4: COLOR("verde"),
+    B5: COLOR("violeta"),
+    B6: { tipo: "pausa" },
+    B7: COLOR("gris"),
+    B8: { tipo: "play" },
+  };
+  // F1 y F2 son los de arriba (izquierda y derecha); F3 y F4, los de abajo, todavía sin conectar.
+  const FADERS_ARDUINO = { F1: "voz", F2: "bajo", F3: "melodia", F4: "bateria" };
+  const BAUDIOS = 115200; // igual que Serial.begin() en el sketch
+
+  const oyentesAccion = new Set();
+
+  // main.js se suscribe para recibir los botones del Arduino como si fueran teclas.
+  function alAccion(fn) {
+    oyentesAccion.add(fn);
+  }
+
+  function leerLinea(linea) {
+    const texto = linea.trim();
+    if (!texto || texto.startsWith("#")) return;
+    const [nombre, numero] = texto.split(":");
+    if (BOTONES[nombre]) oyentesAccion.forEach((fn) => fn(BOTONES[nombre]));
+    else if (FADERS_ARDUINO[nombre] && numero !== undefined) moverFader(FADERS_ARDUINO[nombre], Number(numero) / 100);
+  }
+
+  let puertoAbierto = null;
+
+  async function escucharPuerto(puerto) {
+    if (puertoAbierto) return;
+    await puerto.open({ baudRate: BAUDIOS });
+    puertoAbierto = puerto;
+    console.info("DM-BEAT: consola conectada.");
     const lector = puerto.readable.pipeThrough(new TextDecoderStream()).getReader();
     let resto = "";
-    for (;;) {
-      const { value, done } = await lector.read();
-      if (done) break;
-      resto += value;
-      const lineas = resto.split(/\r?\n/);
-      resto = lineas.pop();
-      for (const linea of lineas) {
-        const [nombre, numero] = linea.trim().split(":");
-        if (numero !== undefined) moverFader(nombre, Number(numero) / maximo);
+    try {
+      for (;;) {
+        const { value, done } = await lector.read();
+        if (done) break;
+        resto += value;
+        const lineas = resto.split(/\r?\n/);
+        resto = lineas.pop();
+        lineas.forEach(leerLinea);
       }
+    } catch (error) {
+      console.warn("DM-BEAT: se cortó la consola.", error.message);
+    } finally {
+      lector.releaseLock();
+      await puerto.close().catch(() => {});
+      puertoAbierto = null;
     }
+  }
+
+  // La primera vez Chrome pide elegir el puerto (hace falta una tecla o un clic: en main.js es la C).
+  async function conectarSerial() {
+    if (!("serial" in navigator)) throw new Error("Este navegador no tiene Web Serial: abrir la experiencia en Chrome.");
+    if (puertoAbierto) return;
+    escucharPuerto(await navigator.serial.requestPort());
+  }
+
+  // Con un puerto ya autorizado, se conecta solo al abrir la página y cada vez que se enchufa el Arduino.
+  if ("serial" in navigator) {
+    navigator.serial.getPorts().then(([puerto]) => puerto && escucharPuerto(puerto)).catch(() => {});
+    navigator.serial.addEventListener("connect", (e) => escucharPuerto(e.target).catch(() => {}));
   }
 
   // ---------- Analógico ----------
@@ -114,5 +169,5 @@ const Consola = (() => {
     el?.classList.add("elegido");
   }
 
-  return { TECLAS, COLORES, FADERS, leer, alMoverFader, moverFader, conectarSerial, registrarAnalogo, analogo, elegir };
+  return { TECLAS, COLORES, FADERS, leer, alAccion, leerLinea, alMoverFader, moverFader, conectarSerial, registrarAnalogo, analogo, elegir };
 })();

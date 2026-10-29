@@ -577,70 +577,89 @@ function escuchar() {
     }
   });
 
-  // La consola física manda teclas (ver js/consola.js).
+  // La consola física llega como teclas (teclado o analógico) o por el puerto serie (js/consola.js).
   document.addEventListener("keydown", (e) => {
     if (e.repeat || e.metaKey || e.ctrlKey || e.altKey || e.key === "Tab") return;
     if (e.target.closest?.("input, textarea")) return; // escribir el nombre del beat no navega
-    if (CARGAS[actual]) return;
-    const accion = Consola.leer(e);
-    const pantalla = document.getElementById(actual);
-
-    // Pantallas "Presioná cualquier botón": el analógico puede tener un uso propio (el cierre elige núcleo).
-    if (pantalla.hasAttribute("data-cualquier-boton")) {
+    // C conecta el Arduino la primera vez (Chrome pide elegir el puerto); después se reconecta solo.
+    if (e.key === "c" || e.key === "C") {
       e.preventDefault();
-      if ((accion?.tipo === "mover" || accion?.tipo === "presionar") && Consola.analogo(actual, accion)) return;
-      const continuar = pantalla.querySelector("[data-continuar]");
-      if (accion?.tipo === "retroceder") avanzar(-1);
-      else if (continuar) continuar.click();
-      else avanzar(1);
+      Consola.conectarSerial().catch((error) => console.warn("DM-BEAT:", error.message));
       return;
     }
-
-    if (accion?.tipo === "avanzar" || accion?.tipo === "retroceder") {
-      e.preventDefault();
-      avanzar(accion.tipo === "retroceder" ? -1 : 1);
-      return;
-    }
-
-    // Botones de color: eligen la opción de ese color (canción, estilo) o tocan el botón de ese color.
-    if (accion?.tipo === "color") {
-      e.preventDefault();
-      const destino = OPCIONES[actual]
-        ? pantalla.querySelector(OPCIONES[actual][accion.indice])
-        : [...pantalla.querySelectorAll(`[data-color="${accion.color}"]`)].find((el) => !el.disabled && el.offsetParent);
-      destino?.click();
-      return;
-    }
-
-    if (accion?.tipo === "mover" || accion?.tipo === "presionar") {
-      if (e.target.closest?.("[role='slider']") && accion.tipo === "mover") return; // el slider con foco usa sus flechas
-      if (Consola.analogo(actual, accion)) {
-        e.preventDefault();
-        return;
-      }
-    }
-
-    // I le pide una idea a Byte en los pasos que la tienen. Solo la prepara: aceptarla es siempre un clic.
-    if (e.key.toLowerCase() === "i" && Nucleo3.maneja(actual) && Nucleo3.pedirIdea()) {
-      e.preventDefault();
-      return;
-    }
-
-    if (accion?.tipo === "pausa") {
-      e.preventDefault();
-      if (actual === "cancion") Nucleo2.pausar();
-      else if (Nucleo3.maneja(actual)) Nucleo3.pausar();
-      else Sonido.detener();
-    } else if (accion?.tipo === "play" || ((e.key === " " || e.key === "Enter") && !e.target.closest?.("button, [role='slider']"))) {
-      e.preventDefault();
-      reproducirPantalla();
-    }
+    manejarConsola(Consola.leer(e), e);
   });
+  Consola.alAccion((accion) => manejarConsola(accion, null));
 
   window.addEventListener("hashchange", () => {
     const id = location.hash.slice(1);
     if (id !== actual) ir(id);
   });
+}
+
+// Qué hace cada control de la consola en la pantalla actual. e es la tecla, o null si llegó por el puerto serie.
+function manejarConsola(accion, e) {
+  if (CARGAS[actual]) return;
+  const pantalla = document.getElementById(actual);
+  const tecla = e?.key || "";
+  const enBoton = e?.target.closest?.("button, [role='slider']");
+  const atender = () => e?.preventDefault();
+
+  // Pantallas "Presioná cualquier botón": el analógico puede tener un uso propio (el cierre elige núcleo).
+  if (pantalla.hasAttribute("data-cualquier-boton")) {
+    atender();
+    if ((accion?.tipo === "mover" || accion?.tipo === "presionar") && Consola.analogo(actual, accion)) return;
+    const continuar = pantalla.querySelector("[data-continuar]");
+    if (accion?.tipo === "retroceder") avanzar(-1);
+    else if (continuar) continuar.click();
+    else avanzar(1);
+    return;
+  }
+
+  if (accion?.tipo === "avanzar" || accion?.tipo === "retroceder") {
+    atender();
+    avanzar(accion.tipo === "retroceder" ? -1 : 1);
+    return;
+  }
+
+  // Botones de color: eligen la opción de ese color (canción, estilo) o tocan el botón de ese color.
+  if (accion?.tipo === "color") {
+    atender();
+    const destino = OPCIONES[actual]
+      ? pantalla.querySelector(OPCIONES[actual][accion.indice])
+      : [...pantalla.querySelectorAll(`[data-color="${accion.color}"]`)].find((el) => !el.disabled && el.offsetParent);
+    destino?.click();
+    return;
+  }
+
+  if (accion?.tipo === "mover" || accion?.tipo === "presionar") {
+    if (e?.target.closest?.("[role='slider']") && accion.tipo === "mover") return; // el slider con foco usa sus flechas
+    if (Consola.analogo(actual, accion)) {
+      atender();
+      return;
+    }
+  }
+
+  // I le pide una idea a Byte en los pasos que la tienen. Solo la prepara: aceptarla es siempre un clic.
+  if (tecla.toLowerCase() === "i" && Nucleo3.maneja(actual) && Nucleo3.pedirIdea()) {
+    atender();
+    return;
+  }
+
+  if (accion?.tipo === "pausa") {
+    atender();
+    if (actual === "cancion") Nucleo2.pausar();
+    else if (Nucleo3.maneja(actual)) Nucleo3.pausar();
+    else Sonido.detener();
+  } else if (accion?.tipo === "play") {
+    // El play físico solo arranca: para cortar está la pausa.
+    atender();
+    if (actual === "cancion") Nucleo2.reproducir();
+    else if (!Sonido.sonando) reproducirPantalla();
+  } else if ((tecla === " " || tecla === "Enter") && !enBoton) {
+    atender();
+    reproducirPantalla();
+  }
 }
 
 // ---------- Escala del lienzo ----------
