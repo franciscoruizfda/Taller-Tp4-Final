@@ -1,0 +1,120 @@
+/* DM-BEAT · nucleo3 (rediseño Figma, octubre 2026). Se carga después de styles.css.
+   Introducción del núcleo 3, paso 1 (estilo), paso 2 (velocidad) y el menú lateral de los 7 pasos. */
+
+/* ---------- Botones "PRESIONA!" de la introducción ----------
+   Cada pantalla tiene un botón de color distinto; algunos tonos del Figma difieren del componente compartido. */
+#crea-tiempo .boton-color { --borde-boton: #a290b7; --fondo-boton: #675180; }
+#crea-base .boton-color { --borde-boton: #b3fedb; --fondo-boton: #00ff89; }
+#crea-etapas .boton-color { --borde-boton: #c9e2ff; --fondo-boton: #9ec5f4; }
+
+/* ---------- Acá empieza tu primera base: teclado de la receta ---------- */
+.teclado-n3 { width: 121px; height: 102.801px; }
+.teclado-n3 i { position: absolute; top: 0; }
+.teclado-n3 .blanca { height: 102.801px; background: #fff; border-left: 1px solid #000; }
+.teclado-n3 .blanca:first-child { border-left: 0; border-radius: 4px 0 0 4px; }
+.teclado-n3 .blanca:nth-child(7) { border-radius: 0 4px 4px 0; }
+.teclado-n3 .negra { width: 7px; height: 72.713px; border-radius: 0 0 1px 1px; background: #cc4bff; }
+.teclado-n3 .negra.verde { background: #00ff89; box-shadow: 0 0 4px #00ff89; }
+
+/* ---------- Menú lateral: "|◁ PASO ANTERIOR" ---------- */
+.lateral-anterior {
+  position: absolute;
+  left: 165.47px;
+  top: 929.8px;
+  width: 271.6px;
+  height: 115.38px;
+  transition: filter .2s;
+}
+.lateral-anterior[hidden] { display: none; }
+.lateral-anterior .icono { position: absolute; left: 0; top: 0; width: 84.9px; height: 115.38px; max-width: none; opacity: .9; }
+.lateral-anterior .rotulo {
+  position: absolute;
+  left: 42.78px;
+  top: 14.8px;
+  width: 228.8px;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 65px;
+  text-align: center;
+  white-space: nowrap;
+}
+.lateral-anterior:hover { filter: brightness(1.15) drop-shadow(0 0 6px var(--verde)); }
+
+/* ---------- Paso 1 · estilos ----------
+   Tarjetas con el borde del color del botón físico que las elige (azul, violeta, verde, gris). */
+#crea-estilo .estilo { border-width: 5px; }
+#crea-estilo .estilo img {
+  position: absolute;
+  max-width: none;
+  width: var(--ancho-foto, auto);
+  height: var(--alto-foto, 100%);
+  left: var(--x-foto, 0);
+  top: var(--y-foto, 0);
+  object-fit: fill;
+}
+#crea-estilo .estilo .franja {
+  left: -5px;
+  right: -5px;
+  bottom: -5px;
+  top: auto;
+  height: 31.7%;
+  border: 5px solid var(--color);
+  border-radius: 10px;
+  background: rgba(0, 0, 0, .84);
+}
+#crea-estilo .estilo .franja.difusa {
+  border: 0;
+  background: none;
+}
+#crea-estilo .estilo .franja.difusa img {
+  left: -29.57%;
+  top: -95.7%;
+  width: 159.14%;
+  height: 291.4%;
+}
+#crea-estilo .estilo .nombre {
+  left: 13px;
+  bottom: auto;
+  top: 231px;
+  text-shadow: 0 0 8px #cc4bff, 1px -1px 10px rgba(123, 24, 156, .5);
+}
+#crea-estilo .estilo[data-estilo="electronica"] .nombre { top: 243.5px; }
+
+/* ---------- Paso 2 · analógico de velocidad ---------- */
+.analogo-bpm { cursor: grab; touch-action: none; border-radius: 50%; }
+.analogo-bpm:active { cursor: grabbing; }
+.analogo-bpm:focus-visible { outline: 3px solid var(--verde); outline-offset: 4px; }
+.analogo-bpm img { max-width: none; pointer-events: none; }
+.analogo-palanca { transition: transform .15s ease-out; }
+/* Al mover el analógico, la palanca se inclina un instante hacia ese lado. */
+.analogo-bpm.izquierda .analogo-palanca { transform: translateX(-16px) rotate(-6deg); }
+.analogo-bpm.derecha .analogo-palanca { transform: translateX(16px) rotate(6deg); }
+.analogo-bpm.latiendo .analogo-palanca img:first-child { animation: latido var(--pulso, .65s) ease-out infinite; }
+.analogo-bpm.latiendo { filter: drop-shadow(0 0 12px rgba(204, 75, 255, .55)); }
+
+#crea-velocidad .bpm-valor { text-shadow: 0 0 5px #cc4bff, 0 0 2.5px #cc4bff; }
+
+/* Botón "Escuchar el pulso" / "Detener pulso" */
+.boton-pulso {
+  width: 251.59px;
+  height: 54px;
+  border-radius: 40.5px;
+  background: linear-gradient(90deg, #8e00c6, #320078);
+  box-shadow: 0 0 8.7px #cc4bff;
+  transition: filter .2s;
+}
+.boton-pulso:hover { filter: brightness(1.15); }
+.boton-pulso img { position: absolute; left: 30.4px; top: 15px; max-width: none; }
+.boton-pulso .icono-pausa { left: 32px; display: none; }
+.boton-pulso[aria-pressed="true"] .icono-play { display: none; }
+.boton-pulso[aria-pressed="true"] .icono-pausa { display: block; }
+.boton-pulso .rotulo {
+  position: absolute;
+  left: 69px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 20px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.boton-pulso[aria-pressed="true"] .rotulo { left: 83px; }

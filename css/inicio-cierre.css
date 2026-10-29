@@ -1,0 +1,158 @@
+/* DM-BEAT · inicio-cierre (rediseño Figma, octubre 2026). Se carga después de styles.css.
+   Inicio, tutorial de la consola (5 pantallas), cargas y cierre. */
+
+/* ---------- Botón grande (componente "BOTON INICIO" del Figma) ----------
+   Ahora es un rectángulo de esquinas suaves con texto en negrita. */
+#inicio .cta,
+#cierre .cta,
+.cta.tut-boton {
+  height: 78px;
+  border-radius: 10px;
+  font-weight: 700;
+}
+.cta.tut-boton { letter-spacing: 0; padding-left: 0; }
+
+/* ---------- Tutorial ---------- */
+
+/* Globos de texto: el texto va sobre el SVG del globo. */
+.tut-panel { border-radius: 8px; background: #100520; }
+
+/* Personajes recortados como en el Figma */
+.tut-recorte { overflow: hidden; }
+.tut-recorte img { position: absolute; top: 0; max-width: none; }
+
+/* Botones laterales (avanzar / volver): capa verde con otra celeste encima */
+.tut-lateral.encima,
+.tut-consola .lateral.encima { opacity: .5; }
+.tut-lateral { filter: drop-shadow(0 0 5px rgba(61, 217, 185, .7)); }
+
+/* Rayitas de progreso: 5 pasos, las hechas van rellenas con el degradado. */
+.tut-progreso { position: absolute; width: 485px; height: 9px; }
+.tut-progreso i {
+  position: absolute;
+  top: 0;
+  width: 63.85px;
+  height: 9px;
+  border-radius: 4.5px;
+  background: linear-gradient(180deg, #fff 0%, #cc4bff 25%, #0084ff 50%, #00ff89 100%);
+}
+.tut-progreso i:nth-child(1) { left: 0; }
+.tut-progreso i:nth-child(2) { left: 105.1px; }
+.tut-progreso i:nth-child(3) { left: 210.6px; }
+.tut-progreso i:nth-child(4) { left: 315.6px; }
+.tut-progreso i:nth-child(5) { left: 421px; }
+.tut-progreso i.hecho { background: linear-gradient(180deg, #fff 0%, #cc4bff 50%, #0084ff 75%, #00ff89 100%); }
+/* Las que faltan son solo el contorno */
+.tut-progreso i:not(.hecho) {
+  padding: 1px;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+}
+
+/* ---------- Dibujo de la consola (523 × 543) ---------- */
+
+.tut-consola { position: absolute; width: 523px; height: 543px; }
+.tut-consola > * { position: absolute; }
+.marco-consola {
+  inset: 0;
+  border: 7px solid #cc4bff;
+  border-radius: 33px;
+  box-shadow: 0 0 8px #cc4bff, inset 0 0 8px #cc4bff;
+}
+.tut-consola .lateral { top: 37px; width: 73.61px; height: 100.04px; max-width: none; }
+
+/* Botones de color de la consola */
+.tut-consola .tecla {
+  top: 191px;
+  width: 81px;
+  height: 80px;
+  border: 3px solid var(--borde);
+  border-radius: 10px;
+  background: var(--fondo);
+}
+.tecla[data-tecla="azul"] { --fondo: #185a9f; --borde: #0084ff; }
+.tecla[data-tecla="violeta"] { --fondo: #675180; --borde: #cc4bff; }
+.tecla[data-tecla="verde"] { --fondo: #189571; --borde: #03fe89; }
+.tecla[data-tecla="gris"] { --fondo: #57667c; --borde: #9ec5f4; }
+/* En "Los colores te guían" los botones bajan un poco y el azul aparece iluminado. */
+#tutorial-colores .tut-consola .tecla { top: 205.77px; }
+#tutorial-colores .tecla[data-tecla="azul"] { box-shadow: 0 0 24px #2f89ff; }
+
+/* ---------- Analógico dibujado (132 × 134) ---------- */
+
+.tut-palanca { position: absolute; width: 132px; height: 134px; transform-origin: 0 0; }
+.tut-palanca img { position: absolute; max-width: none; }
+.tut-palanca .flecha { width: 17.4px; height: 17.4px; }
+.tut-palanca .cabeza { position: absolute; inset: 0; transition: transform .15s ease-out; }
+.tut-palanca[data-inclina="izquierda"] .cabeza { transform: translateX(-8px); }
+.tut-palanca[data-inclina="derecha"] .cabeza { transform: translateX(8px); }
+.tut-palanca[data-inclina="arriba"] .cabeza { transform: translateY(-8px); }
+.tut-palanca[data-inclina="abajo"] .cabeza { transform: translateY(8px); }
+
+/* ---------- Faders dibujados (211 × 32, el grande es 2,27 veces más grande) ---------- */
+
+.tut-fader {
+  --largo: 174.85px;
+  --inicio: 26px;
+  position: absolute;
+  width: 211px;
+  height: 32.13px;
+  transform-origin: 0 0;
+}
+.tut-fader > * { position: absolute; }
+.tut-fader .brillo,
+.tut-fader .pista { inset: 0; border-radius: 84px; }
+.tut-fader .brillo { background: var(--brillo); filter: blur(var(--desenfoque, 10.2px)); }
+.tut-fader .pista { background: var(--pista); }
+.tut-fader .linea,
+.tut-fader .relleno { left: var(--inicio); top: 14.06px; height: 4px; }
+.tut-fader .linea { width: var(--largo); background: var(--linea); }
+.tut-fader .relleno { width: calc(var(--valor) * var(--largo)); background: var(--color); }
+.tut-fader .perilla {
+  left: calc(var(--inicio) + var(--valor) * var(--largo) - 2px);
+  top: 12px;
+  width: 4px;
+  height: 8px;
+  background: var(--perilla, var(--color));
+}
+.tut-fader .icono { object-fit: contain; }
+
+.tut-fader[data-fader="voz"] {
+  --color: #00ff89;
+  --brillo: #00ff89;
+  --linea: #002413;
+  --pista: radial-gradient(50% 50% at 50% 50%, #387056 0%, #255e44 50%, #124d32 100%);
+}
+.tut-fader[data-fader="voz"] .icono { left: .14px; top: 2.68px; width: 26.78px; height: 26.78px; }
+
+.tut-fader[data-fader="bajo"] {
+  --inicio: 29.45px;
+  --color: #0084ff;
+  --brillo: #0084ff;
+  --linea: #020c16;
+  --pista: radial-gradient(50% 50% at 50% 50%, #174167 0%, #0e3254 50%, #062441 100%);
+}
+.tut-fader[data-fader="bajo"] .icono { left: 4.15px; top: 4.56px; width: 23.03px; height: 23.03px; }
+
+.tut-fader[data-fader="melodia"] {
+  --color: #cc4bff;
+  --perilla: #675180;
+  --brillo: rgba(204, 75, 255, .36);
+  --linea: #b696b8;
+  --pista: radial-gradient(50% 50% at 50% 50%, #40295b 0%, #2b1446 50%, #210a3b 75%, #170031 100%);
+}
+.tut-fader[data-fader="melodia"] .icono { left: 1.74px; top: 4.28px; width: 23.56px; height: 23.56px; }
+
+.tut-fader[data-fader="bateria"] {
+  --inicio: 29.45px;
+  --color: #9ec5f4;
+  --brillo: #9ec5f4;
+  --linea: #b696b8;
+  --pista: radial-gradient(50% 50% at 50% 50%, #708daf 0%, #425771 100%);
+}
+.tut-fader[data-fader="bateria"] .icono { left: 5.22px; top: 5.63px; width: 20.89px; height: 20.89px; }
+
+/* Faders grandes de la pantalla "faders": mismo dibujo escalado; se pueden arrastrar con el mouse. */
+.tut-fader.grande { transform: scale(2.2707); --desenfoque: 4.5px; cursor: ew-resize; touch-action: none; }
+.tut-fader.grande[data-fader="melodia"] { --brillo: #cc4bff; }

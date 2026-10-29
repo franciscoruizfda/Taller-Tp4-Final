@@ -1,0 +1,157 @@
+/* DM-BEAT · nucleo2 (rediseño Figma, octubre 2026). Se carga después de styles.css. */
+
+/* ---------- Modifica una canción ---------- */
+
+/* Byte DJ en un recuadro oscuro con borde violeta neón (borde nítido + copia difuminada) */
+.n2-recuadro-dj { background: #1e0e1e; }
+.n2-recuadro-dj::before {
+  content: "";
+  position: absolute;
+  left: 3px;
+  top: 3px;
+  width: 546px;
+  height: 456px;
+  box-sizing: border-box;
+  border: 7px solid var(--violeta);
+  filter: blur(6.85px);
+}
+.n2-recuadro-dj img {
+  position: absolute;
+  left: 25.72px;
+  top: 19.84px;
+  width: 506.782px;
+  height: 422.318px;
+  box-sizing: border-box;
+  border: 7px solid var(--violeta);
+  object-fit: cover;
+}
+
+/* ---------- Seleccioná una canción ---------- */
+
+.n2-explicacion {
+  background: #210a41;
+  border: 7px solid var(--violeta);
+  box-sizing: border-box;
+  box-shadow: 0 0 8px var(--violeta), inset 0 0 8px var(--violeta);
+}
+.n2-byte-consola {
+  position: absolute;
+  left: 110.87px;
+  top: 18.96px;
+  width: 302.771px;
+  height: 263.079px;
+  object-fit: cover;
+  object-position: 66% center; /* el recorte del Figma: imagen al 130% corrida 20% a la izquierda */
+}
+
+/* Tarjetas: borde y recuadro del color del botón físico que la elige */
+.n2-tarjetas {
+  display: flex;
+  gap: 40px;
+  align-items: flex-start;
+  transform: translateX(-50%);
+}
+.n2-tarjeta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 370px;
+  font-size: 26px;
+  line-height: normal;
+  text-align: center;
+}
+.n2-tarjeta[data-color="azul"] { --color: #0084ff; --fondo: #185a9f; }
+.n2-tarjeta[data-color="violeta"] { --color: #cc4bff; --fondo: #675180; }
+.n2-tarjeta[data-color="verde"] { --color: #03fe89; --fondo: #189571; }
+.n2-tarjeta[data-color="gris"] { --color: #9ec5f4; --fondo: #57667c; }
+.n2-tarjeta .tapa {
+  display: block;
+  margin-bottom: 22px;
+  padding: 10px 12px;
+  border: 5px solid var(--color);
+  border-radius: 12px;
+  background: var(--fondo);
+  box-shadow: 0 0 10px var(--color);
+  transition: box-shadow .2s, transform .2s;
+}
+.n2-tarjeta .tapa img { width: 236px; height: 236px; border-radius: 5px; object-fit: cover; }
+.n2-tarjeta .titulo { margin-bottom: 7px; }
+.n2-tarjeta .artista { font-weight: 300; }
+.n2-tarjeta:hover .tapa,
+.n2-tarjeta:focus-visible .tapa,
+.n2-tarjeta.elegido .tapa { box-shadow: 0 0 26px var(--color); transform: translateY(-4px); }
+.n2-tarjeta.elegida .tapa { box-shadow: 0 0 18px var(--color); }
+.n2-tarjeta:focus-visible,
+.n2-tarjeta[data-analogo].elegido { outline: none; filter: none; }
+
+/* ---------- Mezclador de la canción ---------- */
+
+/* Faders horizontales con los colores de la consola física */
+.n2-fader-caja {
+  position: absolute;
+  width: 788px;
+  height: 120px;
+  border-radius: 84px;
+  background: radial-gradient(50% 50% at 50% 50%, var(--c0), var(--c1) 50%, var(--c2) 100%);
+  box-shadow: 0 0 20px var(--glow);
+}
+.n2-fader-caja[data-stem="voz"] {
+  --glow: #00ff89; --c0: #387056; --c1: #255e44; --c2: #124d32;
+  --riel: #002413; --relleno: #00ff89; --perilla: #00ff89;
+}
+.n2-fader-caja[data-stem="bajo"] {
+  --glow: #0084ff; --c0: #174167; --c1: #0e3254; --c2: #062441;
+  --riel: #020c16; --relleno: #0084ff; --perilla: #0084ff;
+}
+.n2-fader-caja[data-stem="melodia"] {
+  --glow: rgba(204, 75, 255, .36); --c0: #40295b; --c1: #2b1446; --c2: #170031;
+  --riel: #b696b8; --relleno: #cc4bff; --perilla: #675180;
+}
+.n2-fader-caja[data-stem="bateria"] {
+  --glow: #9ec5f4; --c0: #708daf; --c1: #59728f; --c2: #425771;
+  --riel: #b696b8; --relleno: #9ec5f4; --perilla: #9ec5f4;
+}
+
+.n2-fader-icono { position: absolute; transition: opacity .2s, filter .2s; }
+.n2-fader-icono img { width: 100%; height: 100%; object-fit: contain; }
+.n2-fader-icono:hover,
+.n2-fader-icono[aria-pressed="true"] { filter: drop-shadow(0 0 6px #fff); }
+
+.n2-fader {
+  position: absolute;
+  top: 36.5px;
+  width: 653px;
+  height: 47px;
+  cursor: ew-resize;
+  touch-action: none;
+}
+.n2-fader .riel,
+.n2-fader .relleno { position: absolute; left: 0; top: 19.5px; height: 8px; }
+.n2-fader .riel { right: 0; background: var(--riel); }
+/* El relleno termina en el centro de la perilla */
+.n2-fader .relleno { width: calc(var(--v, 1) * (100% - 23px) + 11.5px); background: var(--relleno); }
+.n2-fader .perilla {
+  position: absolute;
+  top: 0;
+  left: calc(var(--v, 1) * (100% - 23px));
+  width: 23px;
+  height: 47px;
+  background: var(--perilla);
+}
+.n2-fader:focus-visible { outline: 3px solid #fff; outline-offset: 6px; border-radius: 6px; }
+
+.n2-fader-caja.apagado .n2-fader,
+.n2-fader-caja.apagado .n2-fader-icono { opacity: .35; }
+
+/* Botones de abajo: más anchos que el botón de color estándar (465×81, borde 5, puntas redondeadas) */
+.boton-color.n2-boton-ancho {
+  width: 465px;
+  height: 81px;
+  border-width: 5px;
+  border-radius: 10px;
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 71px;
+  box-shadow: 0 0 9px var(--fondo-boton);
+}
+.boton-color.n2-boton-ancho[data-color="azul"] { --borde-boton: #08275c; }

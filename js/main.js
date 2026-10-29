@@ -1,7 +1,10 @@
 /* Beatmind · Núcleo 1: navegación entre pantallas e interacción de las capas del beat. */
 
+const TUTORIAL = ["tutorial-bienvenida", "tutorial-colores", "tutorial-analogo", "tutorial-faders", "tutorial-listo"];
+// Cada pantalla de carga pasa sola a la siguiente.
+const CARGAS = { carga: TUTORIAL[0], "carga-experiencia": "que-es" };
 const PANTALLAS = [
-  "inicio", "carga", "que-es",
+  "inicio", "carga", ...TUTORIAL, "carga-experiencia", "que-es",
   "percusion", "bajo", "melodia", "estructura", "mezcla",
   "fl-studio", "bizarrap",
   "modifica", "selecciona", "cancion",
@@ -33,9 +36,9 @@ const ROLLOS = {
     instrumento: "bajo",
     canal: "bajo",
     filas: [
-      { top: 0, alto: 67.7, frecuencia: 98.0 },   // Sol
-      { top: 73.96, alto: 67.7, frecuencia: 77.78 }, // Mi bemol
-      { top: 147.93, alto: 67.7, frecuencia: 65.41 }, // Do
+      { top: 0, alto: 82.588, frecuencia: 98.0 },   // Sol
+      { top: 90.23, alto: 82.588, frecuencia: 77.78 }, // Mi bemol
+      { top: 180.47, alto: 82.588, frecuencia: 65.41 }, // Do
     ],
     notas: [
       { fila: 0, x: 0, w: 220 },
@@ -66,22 +69,19 @@ const ROLLOS = {
   },
 };
 
-// Geometría de la pantalla de mezcla tomada del Figma.
-const ALTO_RIEL = 183.04;
-
+// Mezcla: faders horizontales con los colores de la consola física (posiciones del Figma).
+// circulo: [left, top, ancho, alto] del círculo con el ícono; ico: [left, top, ancho, alto] dentro del círculo;
+// riel: [left, top, ancho, alto]; perilla: [ancho, alto]. fader: nombre del fader físico que lo mueve
+// (por posición y color, igual que en la consola: arriba verde y azul, abajo violeta y gris).
 const CANALES_MEZCLA = [
-  { canal: "melodia", nombre: "Melodía", icono: "mix-music.png", riel: [931, 594, 11], valor: 96.53 / ALTO_RIEL, boton: [915, 792.08], ico: [4, 5.02, 36, 42.63] },
-  { canal: "general", nombre: "Volumen general", icono: "mix-audio.png", riel: [1055, 592, 10], valor: 154.2 / ALTO_RIEL, boton: [1038, 790.08], ico: [7, 8.78, 30, 36.36] },
-  { canal: "bajo", nombre: "Bajo", icono: "mix-guitar.png", riel: [1178, 594, 10], valor: 61.43 / ALTO_RIEL, boton: [1161, 792.08], ico: [5, 5.02, 35, 42.63] },
-  { canal: "bateria", nombre: "Batería", icono: "mix-drums.png", riel: [1301, 592, 11], valor: 109.07 / ALTO_RIEL, boton: [1284, 790.08], ico: [6, 7.52, 33, 38.86] },
-];
-
-// fondo: [left, top, ancho, alto]; texto: [left, top]; perilla: top del círculo de 28 px.
-const EFECTOS_MEZCLA = [
-  { clave: "reverb", nombre: "Reverb", valor: 0.88, fondo: [1427, 606, 101, 41], texto: [1438, 606], perilla: 614 },
-  { clave: "delay", nombre: "Delay", valor: 0.25, fondo: [1427, 672, 84, 41], texto: [1436, 672], perilla: 680 },
-  { clave: "eq", nombre: "EQ", valor: 0.5, fondo: [1427, 736, 52, 41], texto: [1441, 736], perilla: 745 },
-  { clave: "compresor", nombre: "Compresor", valor: 0, fondo: [1427, 801, 133, 42], texto: [1433, 802], perilla: 808 },
+  { canal: "melodia", nombre: "Melodía", fader: "voz", color: "#00ff89", icono: "mix-music.png",
+    circulo: [870, 587, 67.395, 69.51], ico: [5.99, 6.47, 53.916, 54.961], riel: [953.87, 614.79, 274.13, 14.184], perilla: [60.235, 26.749], valor: 144.575 / 274.13 },
+  { canal: "general", nombre: "Volumen general", fader: "bajo", color: "#0084ff", icono: "mix-audio.png",
+    circulo: [1289, 583, 61.441, 64], ico: [9.56, 10.42, 40.961, 43.163], riel: [1364.09, 609.5, 249.909, 11.872], perilla: [54.913, 24.629], valor: 210.54 / 249.909 },
+  { canal: "bajo", nombre: "Bajo", fader: "melodia", color: "#675180", icono: "mix-guitar.png",
+    circulo: [870, 701.72, 68.901, 72.189], ico: [7.66, 6.71, 53.59, 57.08], riel: [955.74, 731.42, 280.255, 13.391], perilla: [61.581, 27.78], valor: 94.058 / 280.255 },
+  { canal: "bateria", nombre: "Batería", fader: "bateria", color: "#9ec5f4", icono: "mix-drums.png",
+    circulo: [1289, 702, 59.361, 62], ico: [7.92, 8.65, 43.532, 44.698], riel: [1361.55, 728.29, 241.452, 12.651], perilla: [53.054, 23.859], valor: 143.879 / 241.452 },
 ];
 
 const ONDAS = {
@@ -106,9 +106,6 @@ const COLORES_ONDA = ["#e678eb", "#e678eb", "#e678eb", "#787eeb", "#787eeb", "#7
 // ---------- Armado del DOM ----------
 
 function montarPlantillas() {
-  const capaBase = document.getElementById("tpl-capa-base");
-  document.querySelectorAll("[data-capa-base]").forEach((el) => el.replaceWith(capaBase.content.cloneNode(true)));
-
   const nav = document.getElementById("tpl-nav");
   document.querySelectorAll("[data-nav]").forEach((el) => el.replaceWith(nav.content.cloneNode(true)));
   document.querySelectorAll(".screen").forEach((s) => {
@@ -119,9 +116,9 @@ function montarPlantillas() {
   const pasos = document.getElementById("tpl-pasos");
   document.querySelectorAll("[data-pasos]").forEach((el) => el.append(pasos.content.cloneNode(true)));
 
-  const silencio = document.getElementById("tpl-silencio");
-  document.querySelectorAll("[data-silencio-en]").forEach((el) => {
-    const boton = silencio.content.firstElementChild.cloneNode(true);
+  const siguiente = document.getElementById("tpl-siguiente");
+  document.querySelectorAll("[data-siguiente]").forEach((el) => {
+    const boton = siguiente.content.firstElementChild.cloneNode(true);
     boton.style.cssText = el.style.cssText;
     el.replaceWith(boton);
   });
@@ -235,46 +232,34 @@ function armarRollos() {
 }
 
 function armarMezcla() {
-  const faders = document.querySelector("#mezcla .faders");
+  const faders = document.querySelector("#mezcla .n1-faders");
   faders.style.cssText = "left:0;top:0";
   faders.innerHTML = CANALES_MEZCLA.map((c, i) => {
-    const [x, y, ancho] = c.riel;
+    const [cx, cy, cw, ch] = c.circulo;
+    const [ix, iy, iw, ih] = c.ico;
+    const [x, y, ancho, alto] = c.riel;
+    const [pw, ph] = c.perilla;
+    // El área del fader es más alta que el riel para que sea fácil agarrarlo con el mouse.
     return `
-    <div class="fader" role="slider" tabindex="0" aria-label="${c.nombre}" aria-valuemin="0" aria-valuemax="100"
-         data-canal="${i}" style="left:${x + ancho / 2 - 22}px;top:${y - 24}px;height:${ALTO_RIEL + 48}px">
-      <div class="riel" style="left:${22 - ancho / 2}px;width:${ancho}px;height:${ALTO_RIEL}px"><div class="relleno"></div></div>
-      <img class="perilla-fader" src="assets/fader.svg" alt="">
-    </div>
-    <button class="canal" data-canal="${i}" aria-pressed="false" aria-label="Silenciar ${c.nombre.toLowerCase()}" style="left:${c.boton[0]}px;top:${c.boton[1]}px">
-      <img src="assets/mix-boton.svg" alt="" style="left:0;top:0;width:45px;height:53.91px">
-      <img class="icono" src="assets/${c.icono}" alt="" style="left:${c.ico[0]}px;top:${c.ico[1]}px;width:${c.ico[2]}px;height:${c.ico[3]}px">
-    </button>`;
+    <button class="n1-canal" data-canal="${i}" aria-pressed="false" aria-label="Silenciar ${c.nombre.toLowerCase()}"
+            style="left:${cx}px;top:${cy}px;width:${cw}px;height:${ch}px;--color:${c.color}">
+      <img src="assets/${c.icono}" alt="" style="left:${ix}px;top:${iy}px;width:${iw}px;height:${ih}px">
+    </button>
+    <div class="n1-fader" role="slider" tabindex="0" aria-label="${c.nombre}" aria-valuemin="0" aria-valuemax="100"
+         data-canal="${i}" style="left:${x}px;top:${y + alto / 2 - 20}px;width:${ancho}px;--color:${c.color}">
+      <div class="riel" style="height:${alto}px;top:${20 - alto / 2}px"><div class="relleno"></div></div>
+      <span class="perilla-fader" style="width:${pw}px;height:${ph}px;top:${20 - ph / 2}px"></span>
+    </div>`;
   }).join("");
 
-  const efectos = document.querySelector("#mezcla .efectos");
-  efectos.style.cssText = "left:0;top:0";
-  efectos.innerHTML = EFECTOS_MEZCLA.map((ef, i) => `
-    <div class="efecto-fondo" style="left:${ef.fondo[0]}px;top:${ef.fondo[1]}px;width:${ef.fondo[2]}px;height:${ef.fondo[3]}px"></div>
-    <p class="texto efecto-nombre" style="left:${ef.texto[0]}px;top:${ef.texto[1]}px">${ef.nombre}</p>
-    <div class="perilla" role="slider" tabindex="0" aria-label="${ef.nombre}" aria-valuemin="0" aria-valuemax="100"
-         data-efecto="${i}" style="top:${ef.perilla - 8}px">
-      <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
-        <circle cx="14" cy="14" r="12" stroke="#210A41" stroke-width="4"/>
-        <path class="arco" d="M14 2A12 12 0 1 0 14 26A12 12 0 1 0 14 2" stroke="#CC4BFF" stroke-width="4" pathLength="100"/>
-      </svg>
-    </div>`).join("");
-
   CANALES_MEZCLA.forEach((_, i) => pintarFader(i));
-  EFECTOS_MEZCLA.forEach((_, i) => pintarPerilla(i));
 
-  // Faders: arrastrar en vertical o usar flechas arriba/abajo
-  faders.querySelectorAll(".fader").forEach((el) => {
+  // Faders en pantalla: arrastrar en horizontal o usar las flechas.
+  faders.querySelectorAll(".n1-fader").forEach((el) => {
     const i = Number(el.dataset.canal);
     const desdePuntero = (e) => {
-      const riel = el.querySelector(".riel").getBoundingClientRect();
-      CANALES_MEZCLA[i].valor = limitar(1 - (e.clientY - riel.top) / riel.height);
-      pintarFader(i);
-      aplicarVolumenes();
+      const riel = el.getBoundingClientRect();
+      moverFaderMezcla(i, (e.clientX - riel.left) / riel.width);
     };
     el.addEventListener("pointerdown", (e) => {
       el.setPointerCapture(e.pointerId);
@@ -283,80 +268,50 @@ function armarMezcla() {
     el.addEventListener("pointermove", (e) => {
       if (el.hasPointerCapture(e.pointerId)) desdePuntero(e);
     });
-    el.addEventListener("keydown", (e) => ajustarConTeclas(e, CANALES_MEZCLA[i], () => {
-      pintarFader(i);
-      aplicarVolumenes();
-    }));
+    el.addEventListener("keydown", (e) => {
+      const pasos = { ArrowUp: 0.05, ArrowRight: 0.05, ArrowDown: -0.05, ArrowLeft: -0.05 };
+      if (!(e.key in pasos)) return;
+      e.preventDefault();
+      e.stopPropagation();
+      moverFaderMezcla(i, CANALES_MEZCLA[i].valor + pasos[e.key]);
+    });
   });
 
-  faders.querySelectorAll(".canal").forEach((el) => {
+  // El círculo con el ícono silencia ese canal.
+  faders.querySelectorAll(".n1-canal").forEach((el) => {
     el.addEventListener("click", () => {
       el.setAttribute("aria-pressed", el.getAttribute("aria-pressed") !== "true");
       aplicarVolumenes();
     });
   });
 
-  // Perillas: arrastrar hacia arriba/abajo, clic para sumar un cuarto, o flechas
-  efectos.querySelectorAll(".perilla").forEach((el) => {
-    const efecto = EFECTOS_MEZCLA[Number(el.dataset.efecto)];
-    let inicio = null;
-    el.addEventListener("pointerdown", (e) => {
-      el.setPointerCapture(e.pointerId);
-      inicio = { y: e.clientY, valor: efecto.valor, movio: false };
-    });
-    el.addEventListener("pointermove", (e) => {
-      if (!inicio) return;
-      const delta = (inicio.y - e.clientY) / (150 * escala());
-      if (Math.abs(delta) > 0.02) inicio.movio = true;
-      efecto.valor = limitar(inicio.valor + delta);
-      pintarPerilla(Number(el.dataset.efecto));
-      aplicarEfectos();
-    });
-    el.addEventListener("pointerup", () => {
-      if (inicio && !inicio.movio) {
-        efecto.valor = efecto.valor >= 1 ? 0 : limitar(Math.round((efecto.valor + 0.25) * 4) / 4);
-        pintarPerilla(Number(el.dataset.efecto));
-        aplicarEfectos();
-      }
-      inicio = null;
-    });
-    el.addEventListener("keydown", (e) => ajustarConTeclas(e, efecto, () => {
-      pintarPerilla(Number(el.dataset.efecto));
-      aplicarEfectos();
-    }));
+  // Faders físicos de la consola: solo mueven la mezcla mientras está en pantalla.
+  Consola.alMoverFader((nombre, valor) => {
+    if (actual !== "mezcla") return;
+    const i = CANALES_MEZCLA.findIndex((c) => c.fader === nombre);
+    if (i !== -1) moverFaderMezcla(i, valor);
   });
+}
+
+function moverFaderMezcla(i, valor) {
+  CANALES_MEZCLA[i].valor = limitar(valor);
+  pintarFader(i);
+  aplicarVolumenes();
 }
 
 function pintarFader(i) {
   const c = CANALES_MEZCLA[i];
-  const el = document.querySelector(`#mezcla .fader[data-canal="${i}"]`);
-  el.querySelector(".relleno").style.height = `${c.valor * ALTO_RIEL}px`;
-  const perilla = el.querySelector(".perilla-fader");
-  perilla.style.left = `${22 - 14.37}px`;
-  perilla.style.top = `${24 + (1 - c.valor) * ALTO_RIEL - 24.11}px`;
+  const el = document.querySelector(`#mezcla .n1-fader[data-canal="${i}"]`);
+  const ancho = c.riel[2];
+  el.querySelector(".relleno").style.width = `${c.valor * ancho}px`;
+  el.querySelector(".perilla-fader").style.left = `${c.valor * ancho - c.perilla[0] / 2}px`;
   el.setAttribute("aria-valuenow", Math.round(c.valor * 100));
-}
-
-function pintarPerilla(i) {
-  const ef = EFECTOS_MEZCLA[i];
-  const el = document.querySelector(`#mezcla .perilla[data-efecto="${i}"]`);
-  el.querySelector(".arco").setAttribute("stroke-dasharray", `${ef.valor * 100} 100`);
-  el.setAttribute("aria-valuenow", Math.round(ef.valor * 100));
-}
-
-function ajustarConTeclas(e, objeto, alCambiar) {
-  const pasos = { ArrowUp: 0.05, ArrowRight: 0.05, ArrowDown: -0.05, ArrowLeft: -0.05 };
-  if (!(e.key in pasos)) return;
-  e.preventDefault();
-  e.stopPropagation();
-  objeto.valor = limitar(objeto.valor + pasos[e.key]);
-  alCambiar();
 }
 
 function aplicarVolumenes() {
   const enMezcla = actual === "mezcla";
   CANALES_MEZCLA.forEach((c, i) => {
-    const silenciado = document.querySelector(`#mezcla .canal[data-canal="${i}"]`).getAttribute("aria-pressed") === "true";
+    const silenciado = document.querySelector(`#mezcla .n1-canal[data-canal="${i}"]`).getAttribute("aria-pressed") === "true";
     // Fuera de la mezcla todos los canales suenan parejo.
     let valor = 1;
     if (enMezcla) valor = silenciado ? 0 : c.valor * (c.canal === "general" ? 1.1 : 1.5);
@@ -364,14 +319,31 @@ function aplicarVolumenes() {
   });
 }
 
+// La mezcla ya no tiene efectos (reverb, delay, EQ, compresor): siempre quedan neutros.
 function aplicarEfectos() {
-  if (actual !== "mezcla") {
-    Sonido.aplicarEfectos(Sonido.efectosNeutros);
-    return;
-  }
-  const valores = {};
-  EFECTOS_MEZCLA.forEach((ef) => { valores[ef.clave] = ef.valor; });
-  Sonido.aplicarEfectos(valores);
+  Sonido.aplicarEfectos(Sonido.efectosNeutros);
+}
+
+// Rayitas de progreso de las capas: las que ya pasaste y la actual quedan llenas.
+function armarProgreso() {
+  const xs = [0.5, 105.854, 210.776, 315.854, 421.5];
+  document.querySelectorAll("[data-progreso]").forEach((el) => {
+    const hasta = Number(el.dataset.progreso);
+    el.setAttribute("aria-label", `Capa ${hasta} de ${xs.length}`);
+    el.setAttribute("role", "img");
+    el.innerHTML = `<svg width="485.846" height="10" viewBox="0 0 485.846 10" fill="none" aria-hidden="true">
+      <defs>
+        <linearGradient id="n1-lleno-${hasta}" x1="0" y1="0" x2="0" y2="1">
+          <stop stop-color="#fff"/><stop offset=".5" stop-color="#cc4bff"/><stop offset=".75" stop-color="#0084ff"/><stop offset="1" stop-color="#00ff89"/>
+        </linearGradient>
+        <linearGradient id="n1-borde-${hasta}" x1="0" y1="0" x2="0" y2="1">
+          <stop stop-color="#fff"/><stop offset=".25" stop-color="#cc4bff"/><stop offset=".5" stop-color="#0084ff"/><stop offset="1" stop-color="#00ff89"/>
+        </linearGradient>
+      </defs>
+      ${xs.map((x, i) => `<rect x="${x}" y=".5" width="63.846" height="9" rx="4.5" stroke="url(#n1-borde-${hasta})"` +
+        (i < hasta ? ` fill="url(#n1-lleno-${hasta})"` : "") + "/>").join("")}
+    </svg>`;
+  });
 }
 
 // ---------- Sonido de cada pantalla ----------
@@ -471,6 +443,9 @@ const REPRODUCTORES = {
   mezcla: { alCompas: (_, t, salidas) => programarTodo(t, salidas) },
 };
 
+// Pantallas de capas: cada una arranca su sonido al entrar.
+const CAPAS = ["percusion", "bajo", "melodia", "estructura", "mezcla"];
+
 let reproductorActivo = null;
 
 function alternar(nombre, boton) {
@@ -529,23 +504,20 @@ function ir(id) {
   history.replaceState(null, "", `#${id}`);
   aplicarVolumenes();
   aplicarEfectos();
-  if (id === "carga") timerCarga = setTimeout(() => ir("que-es"), DURACION_CARGA);
+  if (CAPAS.includes(id)) alternar(id); // cada capa suena sola al entrar (y se corta al salir)
+  if (CARGAS[id]) timerCarga = setTimeout(() => ir(CARGAS[id]), DURACION_CARGA);
 }
 
 function avanzar(direccion) {
   if (Nucleo3.maneja(actual) && Nucleo3.frenaAvance(direccion)) return;
-  let destino = PANTALLAS[PANTALLAS.indexOf(actual) + direccion];
-  if (destino === "carga" && direccion < 0) destino = "inicio";
+  let i = PANTALLAS.indexOf(actual) + direccion;
+  while (direccion < 0 && CARGAS[PANTALLAS[i]]) i--; // volviendo, las cargas se saltean
+  let destino = PANTALLAS[i];
   if (!destino && direccion > 0) destino = "inicio"; // después del cierre se vuelve a empezar
   if (destino) ir(destino);
 }
 
-// Teclas que manda la interfaz física (Arduino + teclado).
-const TECLA_AVANZAR = ",";
-const TECLA_RETROCEDER = "m";
-// Opciones 1 a 4, de izquierda a derecha; el color de cada una coincide en las dos pantallas.
-// La opción 2 todavía no tiene botón: cuando lo tenga, reemplazar null por su tecla.
-const TECLAS_OPCION = [".", null, "8", "F12"];
+// Opciones 1 a 4 de la consola (botones de color), de izquierda a derecha.
 const OPCIONES = {
   selecciona: ["redondos", "duki", "miranda", "mattioli"].map((id) => `[data-cancion="${id}"]`),
   "crea-estilo": ["trap", "pop", "cumbia", "electronica"].map((id) => `[data-estilo="${id}"]`),
@@ -605,27 +577,47 @@ function escuchar() {
     }
   });
 
-  // La interfaz física envía teclas: flechas para moverse, espacio/enter para reproducir.
+  // La consola física manda teclas (ver js/consola.js).
   document.addEventListener("keydown", (e) => {
     if (e.repeat || e.metaKey || e.ctrlKey || e.altKey || e.key === "Tab") return;
     if (e.target.closest?.("input, textarea")) return; // escribir el nombre del beat no navega
-    const enControl = e.target.closest?.("button, [role='slider']");
-    const activaControl = enControl && (e.key === " " || e.key === "Enter");
+    if (CARGAS[actual]) return;
+    const accion = Consola.leer(e);
+    const pantalla = document.getElementById(actual);
 
-    // Avanzar y retroceder funcionan en cualquier pantalla.
-    const tecla = e.key.toLowerCase();
-    if (tecla === TECLA_AVANZAR || tecla === TECLA_RETROCEDER) {
+    // Pantallas "Presioná cualquier botón": el analógico puede tener un uso propio (el cierre elige núcleo).
+    if (pantalla.hasAttribute("data-cualquier-boton")) {
       e.preventDefault();
-      avanzar(tecla === TECLA_RETROCEDER ? -1 : 1);
+      if ((accion?.tipo === "mover" || accion?.tipo === "presionar") && Consola.analogo(actual, accion)) return;
+      const continuar = pantalla.querySelector("[data-continuar]");
+      if (accion?.tipo === "retroceder") avanzar(-1);
+      else if (continuar) continuar.click();
+      else avanzar(1);
       return;
     }
 
-    // Las opciones tocan la tarjeta como un clic: eligen la canción o el estilo (y suena su demo).
-    const opcion = TECLAS_OPCION.indexOf(e.key);
-    if (opcion !== -1 && OPCIONES[actual]) {
+    if (accion?.tipo === "avanzar" || accion?.tipo === "retroceder") {
       e.preventDefault();
-      document.querySelector(`#${actual} ${OPCIONES[actual][opcion]}`)?.click();
+      avanzar(accion.tipo === "retroceder" ? -1 : 1);
       return;
+    }
+
+    // Botones de color: eligen la opción de ese color (canción, estilo) o tocan el botón de ese color.
+    if (accion?.tipo === "color") {
+      e.preventDefault();
+      const destino = OPCIONES[actual]
+        ? pantalla.querySelector(OPCIONES[actual][accion.indice])
+        : [...pantalla.querySelectorAll(`[data-color="${accion.color}"]`)].find((el) => !el.disabled && el.offsetParent);
+      destino?.click();
+      return;
+    }
+
+    if (accion?.tipo === "mover" || accion?.tipo === "presionar") {
+      if (e.target.closest?.("[role='slider']") && accion.tipo === "mover") return; // el slider con foco usa sus flechas
+      if (Consola.analogo(actual, accion)) {
+        e.preventDefault();
+        return;
+      }
     }
 
     // I le pide una idea a Byte en los pasos que la tienen. Solo la prepara: aceptarla es siempre un clic.
@@ -634,19 +626,12 @@ function escuchar() {
       return;
     }
 
-    if (actual === "inicio" || actual === "cierre") {
-      if (activaControl) return;
+    if (accion?.tipo === "pausa") {
       e.preventDefault();
-      ir(actual === "inicio" ? "carga" : "inicio");
-    } else if (actual === "carga") {
-      return;
-    } else if (e.key === "ArrowRight") {
-      e.preventDefault();
-      avanzar(1);
-    } else if (e.key === "ArrowLeft") {
-      e.preventDefault();
-      avanzar(-1);
-    } else if ((e.key === " " || e.key === "Enter") && !enControl) {
+      if (actual === "cancion") Nucleo2.pausar();
+      else if (Nucleo3.maneja(actual)) Nucleo3.pausar();
+      else Sonido.detener();
+    } else if (accion?.tipo === "play" || ((e.key === " " || e.key === "Enter") && !e.target.closest?.("button, [role='slider']"))) {
       e.preventDefault();
       reproducirPantalla();
     }
@@ -682,6 +667,7 @@ armarParlantes();
 armarSecuenciador();
 armarRollos();
 armarMezcla();
+armarProgreso();
 Nucleo2.armar();
 escuchar();
 ajustarEscala();

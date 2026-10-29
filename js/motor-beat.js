@@ -14,9 +14,14 @@ const MotorBeat = (() => {
   const VOLUMEN_INICIAL = 70;
   const FRECUENCIA = { Re: 293.66, Mi: 329.63, Fa: 349.23, Sol: 392.0, La: 440.0 }; // octava 4
   const frecuencia = (nota, octava) => FRECUENCIA[nota] * 2 ** (octava - 4);
+  // Semitonos hasta la tercera de abajo dentro de Re menor (La→Fa, Sol→Mi, Fa→Re, Mi→Do, Re→Si bemol).
+  const TERCERA_ABAJO = { Re: 4, Mi: 4, Fa: 3, Sol: 3, La: 4 };
 
   /* raiz: frecuencia medida de cada sample (en Hz), para afinarlo a la nota pedida.
-     desde: segundos de silencio al comienzo del archivo. max: corte de los golpes largos. */
+     desde: segundos de silencio al comienzo del archivo. max: corte de los golpes largos.
+     acento: golpe fuerte en cada tiempo y suaves entre medio ({ debil, velocidadFuerte }; el güiro "chi-ki-chi").
+     terceras: ganancia de una segunda voz una tercera abajo (el acordeón de la cumbia).
+     largo: cuántos pasos puede durar como mucho una nota (notas cortas = más rebote). */
   const SONIDOS = {
     trap: {
       nombre: "Trap", bpm: 140,
@@ -38,9 +43,10 @@ const MotorBeat = (() => {
       nombre: "Cumbia", bpm: 96,
       bombo: { ganancia: 0.9 },
       caja: { ganancia: 0.8 },
-      hihat: { ganancia: 9, desde: 0.025 }, // güiro grabado muy bajo: se compensa acá
-      bajo: { ganancia: 0.8, raiz: 55.2, octava: 2 },
-      melodia: { ganancia: 0.4, raiz: 788.4, octava: 5 },
+      // Güiro grabado muy bajo: se compensa con la ganancia. En cada tiempo va el raspado largo y fuerte.
+      hihat: { ganancia: 9, desde: 0.025, acento: { debil: 0.5, velocidadFuerte: 0.82 } },
+      bajo: { ganancia: 0.9, raiz: 55.2, octava: 2, largo: 2 },
+      melodia: { ganancia: 0.36, raiz: 788.4, octava: 5, terceras: 0.7, largo: 2 },
     },
     electronica: {
       nombre: "Electrónica", bpm: 124,
@@ -118,7 +124,8 @@ const MotorBeat = (() => {
     melodia: (t, d, nota, dur) => Sonido.instrumentos.teclas(t, d, frecuencia(nota, 4), dur),
   };
 
-  function disparar(datos, pieza, t, destino, nota, duracion = 0) {
+  // paso: casilla del compás (para los acentos); sin paso suena como golpe fuerte.
+  function disparar(datos, pieza, t, destino, nota, duracion = 0, paso = 0) {
     const ganancia = nivel(datos, pieza);
     if (!ganancia) return;
     const estilo = estiloDe(datos);
@@ -129,12 +136,22 @@ const MotorBeat = (() => {
       return;
     }
     const m = SONIDOS[estilo][pieza];
-    Sonido.instrumentos.muestra(t, salida, buffer, {
-      velocidad: nota ? frecuencia(nota, m.octava) / m.raiz : 1,
-      ganancia: m.ganancia,
+    const fuerte = paso % 4 === 0;
+    const velocidad = nota ? frecuencia(nota, m.octava) / m.raiz : (m.acento && fuerte ? m.acento.velocidadFuerte : 1);
+    const opciones = {
+      velocidad,
+      ganancia: m.ganancia * (m.acento && !fuerte ? m.acento.debil : 1),
       duracion: nota ? duracion : m.max || 0,
       desde: m.desde || 0,
-    });
+    };
+    Sonido.instrumentos.muestra(t, salida, buffer, opciones);
+    if (nota && m.terceras) {
+      Sonido.instrumentos.muestra(t, salida, buffer, {
+        ...opciones,
+        velocidad: velocidad * 2 ** (-TERCERA_ABAJO[nota] / 12),
+        ganancia: m.ganancia * m.terceras,
+      });
+    }
   }
 
   // Cuántos pasos dura una nota: hasta la siguiente, con un máximo.
@@ -147,13 +164,14 @@ const MotorBeat = (() => {
   // Lo que suena en un paso del compás.
   function tocarPaso(datos, paso, t, salidas) {
     const seg = segundosPorPaso(datos);
+    const sonidos = SONIDOS[estiloDe(datos)];
     for (const pieza of ["bombo", "caja", "hihat"]) {
-      if (datos.ritmo[pieza][paso]) disparar(datos, pieza, t, salidas.bateria);
+      if (datos.ritmo[pieza][paso]) disparar(datos, pieza, t, salidas.bateria, null, 0, paso);
     }
     const bajo = datos.bajo[paso];
-    if (bajo) disparar(datos, "bajo", t, salidas.bajo, bajo, largoNota(datos.bajo, paso, 4) * seg * 0.95);
+    if (bajo) disparar(datos, "bajo", t, salidas.bajo, bajo, largoNota(datos.bajo, paso, sonidos.bajo.largo || 4) * seg * 0.95, paso);
     const melodia = datos.melodia[paso];
-    if (melodia) disparar(datos, "melodia", t, salidas.melodia, melodia, largoNota(datos.melodia, paso, 2) * seg * 0.95);
+    if (melodia) disparar(datos, "melodia", t, salidas.melodia, melodia, largoNota(datos.melodia, paso, sonidos.melodia.largo || 2) * seg * 0.95, paso);
   }
 
   // El beat repetido en un WAV.

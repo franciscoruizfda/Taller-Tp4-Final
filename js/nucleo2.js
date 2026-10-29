@@ -1,5 +1,6 @@
-/* Beatmind · Núcleo 2: mezclador de stems de canciones reales.
-   Cada canción se separa en 4 archivos: assets/canciones/<id>/{voz,bajo,melodia,bateria}.mp3 */
+/* DM-BEAT · Núcleo 2: mezclador de stems de canciones reales.
+   Cada canción se separa en 4 archivos: assets/canciones/<id>/{voz,bajo,melodia,bateria}.mp3
+   La canción arranca sola al entrar a #cancion y se mezcla con los faders (mouse o consola física). */
 
 const Nucleo2 = (() => {
   const CANCIONES = {
@@ -9,14 +10,14 @@ const Nucleo2 = (() => {
     mattioli: { titulo: "Tramposa Y Mentirosa", artista: "Leo Mattioli", portada: "portada-mattioli.png" },
   };
 
-  // Posiciones tomadas del Figma (caja, ícono y comienzo del riel).
+  // Posiciones del Figma: caja del fader, ícono [left, top, ancho, alto] y comienzo del riel (relativo a la caja).
+  // Mismo orden que los faders de la consola. Los colores están en css/nucleo2.css.
   const STEMS = [
-    { id: "voz", nombre: "la voz", icono: "stem-voz.png", color: "#00ff89", caja: [154, 581.47], ico: [160.5, 610.47], riel: 251.5 },
-    { id: "bajo", nombre: "el bajo", icono: "stem-guitarra.png", color: "#0084ff", caja: [962.5, 581.47], ico: [983.5, 610.47], riel: 1072.5 },
-    { id: "melodia", nombre: "la melodía", icono: "stem-melodia.png", color: "#675180", caja: [154, 721.47], ico: [159.5, 750.47], riel: 251.5 },
-    { id: "bateria", nombre: "la batería", icono: "stem-bateria.png", color: "#9ec5f4", caja: [962.5, 721.47], ico: [983.5, 750.47], riel: 1072.5 },
+    { id: "voz", nombre: "la voz", caja: [162, 554.47], ico: [20, 17, 80.5, 93], riel: 97 },
+    { id: "bajo", nombre: "el bajo", caja: [970, 554.47], ico: [19.5, 21, 82, 82], riel: 110 },
+    { id: "melodia", nombre: "la melodía", caja: [162, 707.47], ico: [20, 16, 74.5, 88], riel: 97 },
+    { id: "bateria", nombre: "la batería", caja: [970, 707.47], ico: [19.5, 16, 78, 83], riel: 110 },
   ];
-  const ANCHO_RIEL = 653;
   const DESFASE_MAXIMO = 0.08; // segundos que se tolera entre pistas antes de resincronizar
 
   const niveles = { voz: 1, bajo: 1, melodia: 1, bateria: 1 };
@@ -24,37 +25,44 @@ const Nucleo2 = (() => {
   let actual = null;
   let pistas = {};
   let faltan = [];
+  let cargada = false; // las 4 pistas ya respondieron (cargaron o fallaron)
+  let quiereSonar = false; // se entró a la pantalla y hay que arrancar apenas cargue
   let sonando = false;
   let raf = 0;
 
   const pantalla = () => document.getElementById("cancion");
+  const enPantalla = () => pantalla().classList.contains("activa");
 
   // ---------- Armado ----------
 
   function armar() {
     const contenedor = pantalla().querySelector("[data-stems]");
     contenedor.outerHTML = STEMS.map((s) => `
-      <div class="stem-caja" style="left:${s.caja[0]}px;top:${s.caja[1]}px"></div>
-      <button class="stem-icono" data-solo="${s.id}" aria-pressed="false" aria-label="Escuchar solo ${s.nombre}"
-              style="left:${s.ico[0]}px;top:${s.ico[1]}px"><img src="assets/${s.icono}" alt=""></button>
-      <div class="stem-fader" data-stem="${s.id}" role="slider" tabindex="0" aria-label="Volumen de ${s.nombre}"
-           aria-valuemin="0" aria-valuemax="100"
-           style="left:${s.riel}px;top:${s.caja[1] + 36.5}px;width:${ANCHO_RIEL}px;--color:${s.color}">
-        <div class="riel"></div><div class="relleno"></div><div class="perilla"></div>
+      <div class="n2-fader-caja" data-stem="${s.id}" style="left:${s.caja[0]}px;top:${s.caja[1]}px">
+        <button class="n2-fader-icono" data-solo="${s.id}" aria-pressed="false" aria-label="Escuchar solo ${s.nombre}"
+                style="left:${s.ico[0]}px;top:${s.ico[1]}px;width:${s.ico[2]}px;height:${s.ico[3]}px">
+          <img src="assets/n2-icono-${s.id}.png" alt=""></button>
+        <div class="n2-fader" role="slider" tabindex="0" aria-label="Volumen de ${s.nombre}"
+             aria-valuemin="0" aria-valuemax="100" style="left:${s.riel}px">
+          <div class="riel"></div><div class="relleno"></div><div class="perilla"></div>
+        </div>
       </div>`).join("");
 
     const p = pantalla();
-    p.querySelectorAll(".stem-fader").forEach((el) => {
-      const id = el.dataset.stem;
-      arrastrable(el, (fraccion) => { niveles[id] = fraccion; pintarStem(id); aplicarVolumenes(); });
-      el.addEventListener("keydown", (e) => {
+    p.querySelectorAll(".n2-fader-caja").forEach((caja) => {
+      const id = caja.dataset.stem;
+      const fader = caja.querySelector(".n2-fader");
+      arrastrable(fader, (fraccion) => nivel(id, fraccion));
+      fader.addEventListener("keydown", (e) => {
         const valor = conTeclas(e, niveles[id], 0.05, 1);
-        if (valor === null) return;
-        niveles[id] = valor;
-        pintarStem(id);
-        aplicarVolumenes();
+        if (valor !== null) nivel(id, valor);
       });
       pintarStem(id);
+    });
+
+    // Faders físicos de la consola: solo mueven la mezcla mientras se ve el mezclador.
+    Consola.alMoverFader((nombre, valor) => {
+      if (enPantalla() && nombre in niveles) nivel(nombre, valor);
     });
 
     p.querySelectorAll("[data-solo]").forEach((el) => {
@@ -65,14 +73,18 @@ const Nucleo2 = (() => {
       });
     });
 
-    p.querySelector(".play-cancion").addEventListener("click", alternar);
-
     const progreso = p.querySelector(".progreso");
     arrastrable(progreso, (fraccion) => buscar(fraccion * duracion()));
     progreso.addEventListener("keydown", (e) => {
       const valor = conTeclas(e, maestro()?.currentTime ?? 0, 5, duracion());
       if (valor !== null) buscar(valor);
     });
+  }
+
+  function nivel(id, valor) {
+    niveles[id] = valor;
+    pintarStem(id);
+    aplicarVolumenes();
   }
 
   // Arrastre horizontal con el mouse (o el dedo) sobre un riel.
@@ -94,24 +106,23 @@ const Nucleo2 = (() => {
     };
     if (!(e.key in cambios)) return null;
     e.preventDefault();
-    e.stopPropagation(); // que las flechas no cambien de pantalla
+    e.stopPropagation(); // que las flechas no muevan el analógico
     return Math.min(maximo, Math.max(0, cambios[e.key]));
   }
 
   // ---------- Dibujo ----------
 
   function pintarStem(id) {
-    const el = pantalla().querySelector(`.stem-fader[data-stem="${id}"]`);
-    el.style.setProperty("--v", niveles[id]);
-    el.setAttribute("aria-valuenow", Math.round(niveles[id] * 100));
+    const caja = pantalla().querySelector(`.n2-fader-caja[data-stem="${id}"]`);
+    caja.style.setProperty("--v", niveles[id]);
+    caja.querySelector(".n2-fader").setAttribute("aria-valuenow", Math.round(niveles[id] * 100));
   }
 
   function pintarSolo() {
-    pantalla().querySelectorAll("[data-solo]").forEach((el) => {
-      const id = el.dataset.solo;
-      el.setAttribute("aria-pressed", solo === id);
-      el.classList.toggle("apagado", solo !== null && solo !== id);
-      pantalla().querySelector(`.stem-fader[data-stem="${id}"]`).classList.toggle("apagado", solo !== null && solo !== id);
+    pantalla().querySelectorAll(".n2-fader-caja").forEach((caja) => {
+      const id = caja.dataset.stem;
+      caja.querySelector("[data-solo]").setAttribute("aria-pressed", solo === id);
+      caja.classList.toggle("apagado", solo !== null && solo !== id);
     });
   }
 
@@ -138,12 +149,6 @@ const Nucleo2 = (() => {
     el.setAttribute("aria-valuetext", `${minutos(t)} de ${minutos(total)}`);
   }
 
-  function pintarBoton() {
-    const boton = pantalla().querySelector(".play-cancion");
-    boton.setAttribute("aria-pressed", sonando);
-    boton.setAttribute("aria-label", sonando ? "Pausar canción" : "Reproducir canción");
-  }
-
   function estado(texto) {
     pantalla().querySelector(".estado-cancion").textContent = texto;
   }
@@ -159,6 +164,7 @@ const Nucleo2 = (() => {
     actual = id;
     pistas = {};
     faltan = [];
+    cargada = false;
     pintarCabecera();
     pintarProgreso();
     estado("Cargando la canción…");
@@ -173,8 +179,10 @@ const Nucleo2 = (() => {
       } else {
         estado("");
       }
+      cargada = true;
       aplicarVolumenes();
       pintarProgreso();
+      if (quiereSonar && enPantalla()) reproducir();
     };
 
     STEMS.forEach((s) => {
@@ -221,9 +229,9 @@ const Nucleo2 = (() => {
       a.currentTime = t;
       a.play().catch(() => {});
     });
-    m.onended = detener;
+    // Al terminar vuelve a empezar: la canción sigue sonando mientras se mezcla.
+    m.onended = () => { pausar(); buscar(0); reproducir(); };
     sonando = true;
-    pintarBoton();
     const cuadro = () => {
       const tm = m.currentTime;
       Object.values(pistas).forEach((a) => {
@@ -239,7 +247,6 @@ const Nucleo2 = (() => {
     Object.values(pistas).forEach((a) => a.pause());
     cancelAnimationFrame(raf);
     sonando = false;
-    pintarBoton();
   }
 
   function detener() {
@@ -259,6 +266,19 @@ const Nucleo2 = (() => {
     pintarProgreso();
   }
 
+  // Al entrar suena sola desde el principio (si todavía está cargando, arranca cuando termine).
+  function alEntrar() {
+    if (!actual) elegir("redondos");
+    quiereSonar = true;
+    detener();
+    if (cargada) reproducir();
+  }
+
+  function alSalir() {
+    quiereSonar = false;
+    pausar();
+  }
+
   return {
     armar,
     elegir,
@@ -266,8 +286,9 @@ const Nucleo2 = (() => {
     pausar,
     detener,
     alternar,
-    alEntrar: () => { if (!actual) elegir("redondos"); },
-    alSalir: pausar,
+    alEntrar,
+    alSalir,
     get sonando() { return sonando; },
+    get niveles() { return { ...niveles }; },
   };
 })();

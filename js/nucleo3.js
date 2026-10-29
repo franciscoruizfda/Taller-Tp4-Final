@@ -14,7 +14,6 @@ const Nucleo3 = (() => {
   const PANTALLAS = ["crea", "crea-tiempo", "crea-base", "crea-etapas", ...PANTALLAS_PASOS];
   const BPM_MIN = 60;
   const BPM_MAX = 160;
-  const NOMBRE_BEAT = "Mi primer beat"; // la instalación no tiene teclado: todos los beats se llaman igual
 
   /* Dirección pública del sitio, para el QR cuando la infografía se abre en esta compu (localhost o archivo).
      Si se abre desde una dirección de la red o de internet, el QR usa esa misma dirección. */
@@ -25,8 +24,8 @@ const Nucleo3 = (() => {
      quinta: qué tanto el bajo alterna con la quinta (en la cumbia, mucho). */
   const ESTILOS = {
     trap: {
-      nombre: "TRAP", color: "#00ff89", foto: "estilo-trap.png", posicion: "44% center",
-      left: 480, top: 285.11,
+      nombre: "TRAP", color: "#0084ff", foto: "estilo-trap.png",
+      left: 480, top: 588.47, ancho: 303, alto: 301.6, recorte: ["182.01%", "100%", "-36.32%", "0"],
       ideasRitmo: {
         bombo: [[0, 7, 10], [0, 3, 10], [0, 6, 11, 14], [0, 10], [0, 7, 9, 14]],
         caja: [[8], [8, 15], [4, 12], [8, 14]],
@@ -42,8 +41,8 @@ const Nucleo3 = (() => {
       mezclaTexto: "En el trap manda el 808: subo el bajo y bajo un poco los hi-hats y la melodía.",
     },
     pop: {
-      nombre: "POP", color: "#0084ff", foto: "estilo-pop.png", posicion: "54% center",
-      left: 809, top: 286.93,
+      nombre: "POP", color: "#675180", foto: "estilo-pop.png",
+      left: 809, top: 590.29, ancho: 302, alto: 301.7, recorte: ["177.6%", "100%", "-42.1%", "0"],
       ideasRitmo: {
         bombo: [[0, 8, 10], [0, 6, 8], [0, 3, 8, 11], [0, 4, 8, 12], [0, 7, 8]],
         caja: [[4, 12], [4, 12, 15], [4, 10, 12], [4, 12, 14]],
@@ -59,16 +58,19 @@ const Nucleo3 = (() => {
       mezclaTexto: "En el pop la melodía tiene que destacarse: la subo y dejo el bajo de apoyo.",
     },
     cumbia: {
-      nombre: "CUMBIA", color: "#675180", foto: "estilo-cumbia.jpg", posicion: "42% center",
-      left: 1140.5, top: 287.69,
+      nombre: "CUMBIA", color: "#00ff89", foto: "estilo-cumbia.jpg", franja: "estilo-cumbia-franja.svg",
+      left: 1140.5, top: 591.05, ancho: 301, alto: 302, recorte: ["158.94%", "100%", "-24.74%", "-0.08%"],
+      /* Cumbia argentina: güiro "chi-ki-chi" en cada tiempo, la conga marca el 1 y el 3 con el rebote
+         del "y" del 2 y del 4, el timbal en el 2 y el 4, y el bajo salta entre la tónica y la quinta. */
       ideasRitmo: {
-        bombo: [[0, 3, 8, 11], [0, 8], [0, 4, 8, 12], [0, 3, 4, 8, 11, 12]],
-        caja: [[4, 12, 14], [4, 12], [2, 6, 10, 14], [4, 7, 12, 15]],
-        hihat: [[0, 2, 3, 4, 6, 7, 8, 10, 11, 12, 14, 15], [0, 2, 4, 6, 8, 10, 12, 14], [0, 3, 4, 7, 8, 11, 12, 15], [2, 3, 6, 7, 10, 11, 14, 15]],
+        bombo: [[0, 6, 8, 14], [0, 8], [0, 8, 14], [0, 6, 8, 11, 14]],
+        caja: [[4, 12], [4, 12, 15], [4, 10, 12], [4, 12, 14, 15]],
+        hihat: [[0, 2, 3, 4, 6, 7, 8, 10, 11, 12, 14, 15], [0, 3, 4, 7, 8, 11, 12, 15], [0, 2, 4, 6, 8, 10, 12, 14], [0, 2, 3, 4, 6, 7, 8, 10, 11, 12, 13, 14, 15]],
       },
       demo: {
-        bajo: { 0: "Re", 4: "La", 8: "Re", 12: "La" },
-        melodia: { 0: "La", 2: "Sol", 4: "Fa", 6: "Mi", 8: "Fa", 10: "Sol", 12: "La", 14: "Re" },
+        bajo: { 0: "Re", 6: "La", 8: "Re", 14: "La" },
+        // Frase sincopada en Re menor que baja, como el teclado o el acordeón (suena en terceras).
+        melodia: { 0: "La", 3: "La", 4: "Sol", 6: "Fa", 8: "Mi", 11: "Fa", 12: "Mi", 14: "Re" },
       },
       ritmosBajo: ["cumbia", "negras", "galope", "sincopa"],
       quinta: 0.65,
@@ -76,8 +78,8 @@ const Nucleo3 = (() => {
       mezclaTexto: "En la cumbia el güiro y el acordeón son protagonistas: les doy más presencia.",
     },
     electronica: {
-      nombre: "ELECTRÓNICA", color: "#9ec5f4", foto: "estilo-electronica.png", posicion: "57% 37.5%",
-      left: 1471, top: 286.93, tamano: 36,
+      nombre: "ELECTRÓNICA", color: "#9ec5f4", foto: "estilo-electronica.png",
+      left: 1471, top: 590.29, ancho: 300, alto: 301.7, recorte: ["133%", "166.06%", "-18.95%", "-24.78%"], tamano: 36,
       ideasRitmo: {
         bombo: [[0, 4, 8, 12], [0, 4, 8, 12, 14], [0, 4, 7, 8, 12], [0, 4, 8, 11, 12]],
         caja: [[4, 12], [4, 12, 13], [4, 11, 12], [4, 12, 15]],
@@ -94,20 +96,23 @@ const Nucleo3 = (() => {
     },
   };
 
+  // boton: el botón de color de la consola que elige cada pestaña (el violeta todavía no tiene tecla: anda con clic).
   const PIEZAS_RITMO = [
-    { id: "bombo", nombre: "BOMBO", articulo: "el bombo", color: "#cc4bff", left: 528.1, texto: "Suele marcar los apoyos principales del ritmo. Probá un golpe al principio y otro en la mitad." },
-    { id: "caja", nombre: "CAJA", articulo: "la caja", color: "#0084ff", left: 941.56, texto: "Le responde al bombo y marca acentos. Probá ponerla entre los golpes profundos." },
-    { id: "hihat", nombre: "HI-HAT", articulo: "el hi-hat", color: "#00ff89", left: 1355.37, texto: "Son pequeños golpes que dan movimiento. Pueden sonar más seguido que el bombo y la caja." },
+    { id: "bombo", nombre: "BOMBO", articulo: "el bombo", color: "#cc4bff", boton: "violeta", left: 528.1, texto: "Suele marcar los apoyos principales del ritmo. Probá un golpe al principio y otro en la mitad." },
+    { id: "caja", nombre: "CAJA", articulo: "la caja", color: "#0084ff", boton: "azul", left: 941.56, texto: "Le responde al bombo y marca acentos. Probá ponerla entre los golpes profundos." },
+    { id: "hihat", nombre: "HI-HAT", articulo: "el hi-hat", color: "#00ff89", boton: "verde", left: 1355.37, texto: "Son pequeños golpes que dan movimiento. Pueden sonar más seguido que el bombo y la caja." },
   ];
 
-  // Filas de la pantalla de equilibrio: y = centro de la fila.
-  const CANALES = [
-    { id: "bombo", nombre: "BOMBO", color: "#00ff89", y: 425 },
-    { id: "caja", nombre: "CAJA", color: "#e678eb", y: 488 },
-    { id: "hihat", nombre: "HI-HAT", color: "#0084ff", y: 551 },
-    { id: "bajo", nombre: "BAJO", color: "#675180", y: 614 },
-    { id: "melodia", nombre: "MELODÍA", color: "#9ec5f4", y: 677 },
+  /* Filas de la pantalla de equilibrio (4, como los faders de la consola). y = borde superior de la perilla.
+     canales: qué canales del beat mueve cada fila (el bombo arrastra a la caja: los dos son los golpes graves).
+     fader: qué fader físico la mueve, por color (cada fila tiene el color de su fader en la consola). */
+  const FILAS = [
+    { id: "bombo", canales: ["bombo", "caja"], nombre: "BOMBO", color: "#00ff89", y: 425.12, fader: "voz" },
+    { id: "hihat", canales: ["hihat"], nombre: "HI-HAT", color: "#0084ff", y: 504.12, fader: "bajo" },
+    { id: "bajo", canales: ["bajo"], nombre: "BAJO", color: "#675180", y: 577.12, fader: "melodia" },
+    { id: "melodia", canales: ["melodia"], nombre: "MELODÍA", color: "#9ec5f4", y: 648.12, fader: "bateria" },
   ];
+  const CANALES = FILAS.flatMap((f) => f.canales);
   const RIEL = { left: 907.88, ancho: 647, perilla: 19 };
 
   // ---------- Material del motor de ideas ----------
@@ -122,7 +127,7 @@ const Nucleo3 = (() => {
     sincopa: { texto: "Va sincopado, con golpes corridos", pasos: () => [0, 3, 6, 8, 11, 14] },
     largas: { texto: "Sostiene todo con pocas notas largas", pasos: () => elegir([[0, 8], [0, 6, 8], [0, 10]]) },
     galope: { texto: "Galopa y empuja hacia adelante", pasos: () => [0, 3, 4, 7, 8, 11, 12, 15] },
-    cumbia: { texto: "Rebota como en la cumbia", pasos: () => elegir([[0, 4, 6, 8, 12, 14], [0, 4, 8, 12], [0, 3, 4, 8, 11, 12]]) },
+    cumbia: { texto: "Rebota como en la cumbia, saltando a la quinta", pasos: () => elegir([[0, 6, 8, 14], [0, 4, 6, 8, 12, 14], [0, 8, 14]]) },
   };
 
   // Recorridos de notas: una nota base por cada tiempo del compás.
@@ -191,7 +196,10 @@ const Nucleo3 = (() => {
   let marcada = -1; // casilla resaltada en pantalla
   let pedido = 0;
   let esperando = false; // se tocó play y se están terminando de cargar los sonidos
-  let timerReinicio = 0;
+  // Analógico: casilla elegida en cada grilla y fila elegida en equilibrio.
+  const cursor = { ritmo: 0, bajo: 0, melodia: 0 };
+  let filaElegida = 0;
+  let gestoFader = 0; // un movimiento seguido de un fader físico cuenta como un solo cambio para deshacer
 
   const $ = (sel, raiz = document) => raiz.querySelector(sel);
   const $$ = (sel, raiz = document) => [...raiz.querySelectorAll(sel)];
@@ -352,7 +360,7 @@ const Nucleo3 = (() => {
       alternar("pulso");
     } else if (actual === "crea-estilo") {
       if (estado.estilo) alternarDemo(estado.estilo);
-      else $("[data-estilo-texto]").textContent = "Tocá una tarjeta para escuchar ese estilo. Después, con play lo volvés a escuchar.";
+      else $("[data-estilo-texto]").textContent = "Elegí un estilo con el botón de su color o con el analógico, y escuchalo. Después, con play lo volvés a escuchar.";
     } else {
       alternar("beat");
     }
@@ -364,33 +372,8 @@ const Nucleo3 = (() => {
     Sonido.alInstante(canal, (t, destino) => MotorBeat.disparar(estado, pieza, t, destino, nota, MotorBeat.segundosPorPaso(estado) * 2));
   }
 
-  async function guardar(boton) {
-    const texto = $("[data-guardar-texto]", boton);
-    if (MotorBeat.beatVacio(estado)) {
-      pintarTuBeat();
-      return;
-    }
-    boton.disabled = true;
-    texto.textContent = "Preparando el audio…";
-    try {
-      const enlace = document.createElement("a");
-      enlace.href = URL.createObjectURL(await MotorBeat.aWav(estado));
-      enlace.download = `${NOMBRE_BEAT}.wav`;
-      document.body.append(enlace);
-      enlace.click();
-      enlace.remove();
-      setTimeout(() => URL.revokeObjectURL(enlace.href), 4000);
-      texto.textContent = "¡Listo! Tu beat se descargó";
-      $("[data-tu-beat-texto]").textContent = "¡Lo hiciste vos! Yo solo te acompañé.";
-    } catch (e) {
-      console.error(e);
-      texto.textContent = "No se pudo guardar. Probá de nuevo";
-    }
-    boton.disabled = false;
-    setTimeout(() => { texto.textContent = "Guardar mi beat como audio"; }, 3500);
-  }
-
-  // ---------- QR y reinicio ----------
+  // ---------- QR ----------
+  // En Tu beat solo queda el QR: el audio se descarga desde beat.html, en el celular.
 
   function direccionCompartir() {
     const { protocol, hostname } = location;
@@ -399,42 +382,23 @@ const Nucleo3 = (() => {
     return `${base}beat.html#${MotorBeat.codificar(estado)}`;
   }
 
+  // Con el beat vacío no hay nada para llevarse: el recuadro queda punteado y Byte avisa en su texto.
   function pintarQr() {
     const caja = $("[data-qr]");
-    const texto = $("[data-qr-texto]");
+    if (!caja) return;
+    delete caja.dataset.url;
     if (MotorBeat.beatVacio(estado) || typeof qrcode !== "function") {
       caja.innerHTML = "";
       caja.classList.add("vacio");
-      texto.textContent = "Cuando tu beat tenga sonidos, acá aparece el código para llevártelo.";
       return;
     }
+    const direccion = direccionCompartir();
     const qr = qrcode(0, "M");
-    qr.addData(direccionCompartir());
+    qr.addData(direccion);
     qr.make();
     caja.classList.remove("vacio");
     caja.innerHTML = qr.createSvgTag({ cellSize: 6, margin: 0, scalable: true });
-    caja.dataset.url = direccionCompartir();
-    texto.textContent = "Escaneá con tu celular para escuchar y descargar tu beat";
-  }
-
-  // Deja todo como al principio para la próxima persona y vuelve a la portada.
-  function reiniciar(boton) {
-    const texto = $("[data-reiniciar-texto]", boton);
-    if (!boton.classList.contains("confirmar")) {
-      boton.classList.add("confirmar");
-      texto.textContent = "¿Seguro? Tocá de nuevo para empezar de cero";
-      clearTimeout(timerReinicio);
-      timerReinicio = setTimeout(() => {
-        boton.classList.remove("confirmar");
-        texto.textContent = "Empezar un beat nuevo";
-      }, 4000);
-      return;
-    }
-    clearTimeout(timerReinicio);
-    boton.classList.remove("confirmar");
-    texto.textContent = "Empezar un beat nuevo";
-    vaciar();
-    location.hash = "#inicio";
+    caja.dataset.url = direccion;
   }
 
   // Deja el núcleo 3 vacío, como lo encuentra una persona nueva (también al volver al inicio desde el cierre).
@@ -446,6 +410,8 @@ const Nucleo3 = (() => {
     alcanzado = -1;
     piezaActiva = "bombo";
     notaActiva.bajo = notaActiva.melodia = "Re";
+    cursor.ritmo = cursor.bajo = cursor.melodia = 0;
+    filaElegida = 0;
     bpmTocado = false;
     pausadoEn = 0;
     Object.keys(byte).forEach((paso) => { byte[paso] = "pregunta"; delete aviso[paso]; });
@@ -582,14 +548,17 @@ const Nucleo3 = (() => {
       cambios = { melodia: idea.valor };
       explicacion = `${idea.descripcion} Cambia solo tu melodía.`;
     } else {
-      cambios = { volumen: { ...e.mezcla }, silencio: Object.fromEntries(CANALES.map((c) => [c.id, false])) };
+      cambios = { volumen: { ...e.mezcla }, silencio: Object.fromEntries(CANALES.map((c) => [c, false])) };
       explicacion = `${e.mezclaTexto} Cambia solo los volúmenes.`;
     }
     return { paso, cambios, explicacion, origen: foto() };
   }
 
+  /* Byte propone solo en los pasos que tienen su tarjeta en pantalla ([data-byte]): ritmo, bajo, melodía y equilibrio. */
+  const conTarjeta = (paso) => Boolean($(`[data-byte="${paso}"]`));
+
   function pedirIdea(paso = pasoDe(actual)) {
-    if (!(paso in byte)) return false;
+    if (!(paso in byte) || !conTarjeta(paso)) return false;
     if (Sonido.sonando) Sonido.detener();
     propuesta = prepararPropuesta(paso);
     byte[paso] = "propuesta";
@@ -707,7 +676,7 @@ const Nucleo3 = (() => {
       return true;
     }
     if (actual === "crea-estilo" && direccion > 0 && !estado.estilo) {
-      $("[data-estilo-texto]").textContent = "Primero elegí un estilo tocando una tarjeta. Escuchar no lo agrega: se elige al tocarla.";
+      $("[data-estilo-texto]").textContent = "Primero elegí un estilo: apretá el botón del color de su borde, o movete con el analógico y presionalo.";
       return true;
     }
     if (actual === "crea-ritmo") {
@@ -718,8 +687,8 @@ const Nucleo3 = (() => {
         return true;
       }
       if (direccion > 0 && !golpesRitmo()) {
-        aviso.ritmo = { titulo: "Tu ritmo todavía está vacío.", texto: "Encendé al menos una casilla, o pedime una idea para empezar.", respuestas: [["idea", "Sí, mostrame una idea", ""]] };
-        pintarByte("ritmo");
+        aviso.ritmo = { titulo: "Tu ritmo todavía está vacío.", texto: "Encendé al menos una casilla para seguir, o pedime una idea." };
+        pintarRitmo();
         return true;
       }
     }
@@ -735,12 +704,12 @@ const Nucleo3 = (() => {
     armarRitmo();
     ["bajo", "melodia"].forEach(armarNotas);
     armarEquilibrio();
-    armarTuBeat();
+    armarConsola();
     $$("[data-escuchar]").forEach((b) => b.addEventListener("click", alternarPantalla));
     $$("[data-deshacer]").forEach((b) => b.addEventListener("click", deshacer));
     $$("[data-byte]").forEach((card) => {
       card.innerHTML = `
-        <img class="byte-pose" alt="">
+        <span class="byte-marco"><img class="byte-pose" alt=""></span>
         <div class="byte-globo" role="status">
           <p class="byte-mensaje"><strong class="byte-titulo"></strong> <span class="byte-texto"></span></p>
           <div class="byte-respuestas"></div>
@@ -758,17 +727,25 @@ const Nucleo3 = (() => {
     $$("[data-crea-lateral]").forEach((el) => el.replaceWith(plantilla.content.cloneNode(true)));
   }
 
+  // Tarjetas de estilo: se eligen con el botón de color de su borde (main.js) o con el analógico.
   function armarEstilos() {
     const contenedor = $("#crea-estilo .estilos");
-    contenedor.outerHTML = Object.entries(ESTILOS).map(([id, e]) => `
-      <button class="a estilo" data-estilo="${id}" aria-pressed="false" aria-label="Estilo ${e.nombre.toLowerCase()}"
-              style="left:${e.left}px;top:${e.top}px;--color:${e.color};--posicion:${e.posicion}">
+    contenedor.outerHTML = Object.entries(ESTILOS).map(([id, e]) => {
+      const [ancho, alto, x, y] = e.recorte;
+      const franja = e.franja
+        ? `<span class="franja difusa"><img class="a" src="assets/${e.franja}" alt=""></span>`
+        : `<span class="franja"></span>`;
+      return `
+      <button class="a estilo" data-estilo="${id}" data-analogo aria-pressed="false" aria-label="Estilo ${e.nombre.toLowerCase()}"
+              style="left:${e.left}px;top:${e.top}px;width:${e.ancho}px;height:${e.alto}px;--color:${e.color};--ancho-foto:${ancho};--alto-foto:${alto};--x-foto:${x};--y-foto:${y}">
         <img src="assets/${e.foto}" alt="">
-        <span class="franja"></span>
+        ${franja}
         <span class="nombre" style="font-size:${e.tamano || 48}px">${e.nombre}</span>
-      </button>`).join("");
+      </button>`;
+    }).join("");
     $$("#crea-estilo [data-estilo]").forEach((el) => {
       el.addEventListener("click", () => {
+        Consola.elegir(pantalla("crea-estilo"), el);
         elegirEstilo(el.dataset.estilo);
         alternarDemo(el.dataset.estilo);
       });
@@ -783,32 +760,62 @@ const Nucleo3 = (() => {
     pintarBpm();
   }
 
+  /* Paso 2: el analógico de la consola cambia la velocidad (izquierda / derecha) y presionarlo
+     hace sonar el pulso. Con mouse: las flechas, arrastrar la palanca o el botón «Escuchar el pulso». */
+  const PASO_BPM = 2;
+  let timerPalanca = 0;
+
+  function moverAnalogo(direccion) {
+    const sentido = { izquierda: -1, abajo: -1, derecha: 1, arriba: 1 }[direccion];
+    if (!sentido) return false;
+    cambiarBpm(estado.bpm + sentido * PASO_BPM);
+    inclinarPalanca(sentido < 0 ? "izquierda" : "derecha");
+    return true;
+  }
+
+  // La palanca dibujada se inclina un instante hacia el lado que moviste.
+  function inclinarPalanca(lado) {
+    const analogo = $("#crea-velocidad .analogo-bpm");
+    analogo.classList.remove("izquierda", "derecha");
+    analogo.classList.add(lado);
+    clearTimeout(timerPalanca);
+    timerPalanca = setTimeout(() => analogo.classList.remove(lado), 180);
+  }
+
   function armarVelocidad() {
-    const perilla = $("#crea-velocidad .perilla-bpm");
+    const analogo = $("#crea-velocidad .analogo-bpm");
     let inicio = null;
-    perilla.addEventListener("pointerdown", (e) => {
-      perilla.setPointerCapture(e.pointerId);
+    analogo.addEventListener("pointerdown", (e) => {
+      analogo.setPointerCapture(e.pointerId);
       inicio = { x: e.clientX, y: e.clientY, bpm: estado.bpm };
     });
-    perilla.addEventListener("pointermove", (e) => {
+    analogo.addEventListener("pointermove", (e) => {
       if (!inicio) return;
       // Arrastrar a la derecha o hacia arriba acelera.
       const delta = (e.clientX - inicio.x - (e.clientY - inicio.y)) / (3 * escalaLienzo());
       cambiarBpm(inicio.bpm + delta);
     });
     const soltar = () => { inicio = null; };
-    perilla.addEventListener("pointerup", soltar);
-    perilla.addEventListener("pointercancel", soltar);
-    perilla.addEventListener("keydown", (e) => {
-      const cambios = { ArrowRight: 1, ArrowUp: 1, ArrowLeft: -1, ArrowDown: -1, PageUp: 10, PageDown: -10 };
-      if (!(e.key in cambios)) return;
+    analogo.addEventListener("pointerup", soltar);
+    analogo.addEventListener("pointercancel", soltar);
+    analogo.addEventListener("keydown", (e) => {
+      const direccion = Consola.TECLAS.analogo[e.key];
+      if (!direccion) return;
       e.preventDefault();
       e.stopPropagation(); // que las flechas no cambien de pantalla
-      cambiarBpm(estado.bpm + cambios[e.key]);
+      moverAnalogo(direccion);
     });
     $$("#crea-velocidad [data-bpm]").forEach((b) => {
-      b.addEventListener("click", () => cambiarBpm(estado.bpm + Number(b.dataset.bpm)));
-    });  }
+      b.addEventListener("click", () => moverAnalogo(Number(b.dataset.bpm) < 0 ? "izquierda" : "derecha"));
+    });
+    Consola.registrarAnalogo("crea-velocidad", {
+      mover: moverAnalogo,
+      presionar() {
+        alternar("pulso");
+        return true;
+      },
+    });
+  }
 
   function cambiarBpm(valor) {
     estado.bpm = Math.min(BPM_MAX, Math.max(BPM_MIN, Math.round(valor)));
@@ -819,7 +826,7 @@ const Nucleo3 = (() => {
   function armarRitmo() {
     const p = pantalla("crea-ritmo");
     $(".pestanas", p).outerHTML = PIEZAS_RITMO.map((pieza) => `
-      <button class="a pestana" data-pieza="${pieza.id}" aria-pressed="false"
+      <button class="a pestana" data-pieza="${pieza.id}" data-color="${pieza.boton}" aria-pressed="false"
               style="left:${pieza.left}px;top:347.29px;--c:${pieza.color}">
         <span class="texto-degradado">${pieza.nombre}</span>
       </button>`).join("");
@@ -847,23 +854,28 @@ const Nucleo3 = (() => {
       `<button class="celda-crea" data-celda="${i}" aria-pressed="false"></button>`).join("");
     contenedor.addEventListener("click", (e) => {
       const celda = e.target.closest("[data-celda]");
-      if (!celda) return;
-      const i = Number(celda.dataset.celda);
-      antesDeCambiar();
-      if (capa === "ritmo") {
-        const fila = estado.ritmo[piezaActiva];
-        fila[i] = !fila[i];
-        if (fila[i] && !Sonido.sonando) previsualizar(piezaActiva);
-        if (aviso.ritmo && golpesRitmo()) delete aviso.ritmo;
-      } else {
-        const nota = notaActiva[capa];
-        estado[capa][i] = estado[capa][i] === nota ? null : nota;
-        if (estado[capa][i] && !Sonido.sonando) previsualizar(capa, nota);
-      }
-      pintarCeldas(capa);
-      pintarByte(capa);
-      pintarDeshacer();
+      if (celda) tocarCelda(capa, Number(celda.dataset.celda));
     });
+  }
+
+  // Enciende o apaga una casilla (clic o presionar el analógico). En bajo y melodía pone la nota elegida.
+  function tocarCelda(capa, i) {
+    cursor[capa] = i;
+    antesDeCambiar();
+    if (capa === "ritmo") {
+      const fila = estado.ritmo[piezaActiva];
+      fila[i] = !fila[i];
+      if (fila[i] && !Sonido.sonando) previsualizar(piezaActiva);
+      if (aviso.ritmo && golpesRitmo()) delete aviso.ritmo;
+    } else {
+      const nota = notaActiva[capa];
+      estado[capa][i] = estado[capa][i] === nota ? null : nota;
+      if (estado[capa][i] && !Sonido.sonando) previsualizar(capa, nota);
+    }
+    if (capa === "ritmo") pintarRitmo();
+    else pintarCeldas(capa);
+    pintarByte(capa);
+    pintarDeshacer();
   }
 
   function armarNotas(capa) {
@@ -875,40 +887,43 @@ const Nucleo3 = (() => {
       </button>`).join("");
     contenedor.addEventListener("click", (e) => {
       const boton = e.target.closest("[data-nota]");
-      if (!boton) return;
-      notaActiva[capa] = boton.dataset.nota;
-      pintarNotas(capa);
-      previsualizar(capa, notaActiva[capa]);
+      if (boton) elegirNota(capa, boton.dataset.nota);
     });
     armarCeldas(capa);
   }
 
+  function elegirNota(capa, nota) {
+    notaActiva[capa] = nota;
+    pintarNotas(capa);
+    previsualizar(capa, nota);
+  }
+
   function armarEquilibrio() {
     const p = pantalla("crea-equilibrio");
-    const separadores = CANALES.slice(1).map((c, i) =>
-      `<span class="a separador-crea" style="left:563.5px;top:${(CANALES[i].y + c.y) / 2}px;width:1245.5px"></span>`).join("");
-    $(".mezcla-crea", p).outerHTML = separadores + CANALES.map((c) => `
-      <p class="texto semi texto-degradado" style="left:617px;top:${c.y - 22}px;font-size:36px">${c.nombre}</p>
-      <p class="texto medio violeta" style="left:794px;top:${c.y - 15}px;font-size:25px">Suave</p>
-      <div class="a riel-crea" data-canal="${c.id}" role="slider" tabindex="0" aria-label="Volumen de ${c.nombre.toLowerCase()}"
-           aria-valuemin="0" aria-valuemax="100" style="left:${RIEL.left}px;top:${c.y - 17.5}px;width:${RIEL.ancho}px;--c:${c.color}">
+    const separadores = FILAS.slice(1).map((f, i) =>
+      `<span class="a separador-crea" style="left:563.5px;top:${(FILAS[i].y + f.y) / 2 + 17.5}px;width:1245.5px"></span>`).join("");
+    $(".mezcla-crea", p).outerHTML = separadores + FILAS.map((f) => `
+      <p class="texto semi texto-degradado n3p-fila-nombre" style="left:617px;top:${f.y - 10.25}px;font-size:36px">${f.nombre}</p>
+      <p class="texto medio violeta" style="left:794px;top:${f.y - 4.5}px;font-size:25px">Suave</p>
+      <div class="a riel-crea" data-fila="${f.id}" role="slider" tabindex="0" aria-label="Volumen de ${f.nombre.toLowerCase()}"
+           aria-valuemin="0" aria-valuemax="100" style="left:${RIEL.left}px;top:${f.y}px;width:${RIEL.ancho}px;--c:${f.color}">
         <span class="linea"></span><span class="relleno"></span><span class="perilla"></span>
       </div>
-      <p class="texto medio violeta" style="left:1583px;top:${c.y - 15}px;font-size:25px">Fuerte</p>
-      <p class="texto semi texto-degradado" data-valor="${c.id}" style="left:1693.5px;top:${c.y - 24}px;font-size:40px"></p>
-      <button class="a silencio-crea" data-silenciar="${c.id}" aria-pressed="false" aria-label="Silenciar ${c.nombre.toLowerCase()}"
-              style="left:1757px;top:${c.y - 13}px"><img src="assets/icono-volumen-chico.svg" alt=""></button>`).join("");
+      <p class="texto medio violeta" style="left:1583px;top:${f.y - 4.5}px;font-size:25px">Fuerte</p>
+      <p class="texto semi texto-degradado" data-valor="${f.id}" style="left:1693.5px;top:${f.y - 16.5}px;font-size:40px"></p>
+      <button class="a silencio-crea" data-silenciar="${f.id}" aria-pressed="false" aria-label="Silenciar ${f.nombre.toLowerCase()}"
+              style="left:1757px;top:${f.y - 0.5}px"><img src="assets/icono-volumen-chico.svg" alt=""></button>`).join("");
 
     $$(".riel-crea", p).forEach((el) => {
-      const canal = el.dataset.canal;
+      const fila = FILAS.find((f) => f.id === el.dataset.fila);
       const desdePuntero = (e) => {
         const r = el.getBoundingClientRect();
         const fraccion = (e.clientX - r.left - (RIEL.perilla / 2) * escalaLienzo()) / (r.width - RIEL.perilla * escalaLienzo());
-        estado.volumen[canal] = Math.round(Math.min(1, Math.max(0, fraccion)) * 100);
-        pintarEquilibrio();
+        ponerVolumen(fila, fraccion * 100);
       };
       el.addEventListener("pointerdown", (e) => {
         antesDeCambiar();
+        filaElegida = FILAS.indexOf(fila);
         el.setPointerCapture(e.pointerId);
         desdePuntero(e);
         pintarDeshacer();
@@ -920,24 +935,106 @@ const Nucleo3 = (() => {
         e.preventDefault();
         e.stopPropagation();
         if (!e.repeat) antesDeCambiar();
-        estado.volumen[canal] = Math.min(100, Math.max(0, estado.volumen[canal] + cambios[e.key]));
-        pintarEquilibrio();
+        ponerVolumen(fila, estado.volumen[fila.canales[0]] + cambios[e.key]);
         pintarDeshacer();
       });
     });
 
     $$("[data-silenciar]", p).forEach((b) => b.addEventListener("click", () => {
       antesDeCambiar();
-      estado.silencio[b.dataset.silenciar] = !estado.silencio[b.dataset.silenciar];
+      const fila = FILAS.find((f) => f.id === b.dataset.silenciar);
+      const silenciar = !estado.silencio[fila.canales[0]];
+      fila.canales.forEach((c) => { estado.silencio[c] = silenciar; });
       pintarEquilibrio();
       pintarDeshacer();
     }));
   }
 
-  function armarTuBeat() {
-    const p = pantalla("crea-tu-beat");
-    $("[data-guardar]", p).addEventListener("click", (e) => guardar(e.currentTarget));
-    $("[data-reiniciar]", p).addEventListener("click", (e) => reiniciar(e.currentTarget));
+  // Todos los canales de la fila quedan con el mismo volumen (0 a 100).
+  function ponerVolumen(fila, valor) {
+    const v = Math.round(Math.min(100, Math.max(0, valor)));
+    fila.canales.forEach((c) => { estado.volumen[c] = v; });
+    pintarEquilibrio();
+  }
+
+  /* Consola física. Analógico:
+     - Ritmo: izquierda/derecha elige la casilla, arriba/abajo cambia de sonido (bombo/caja/hi-hat), presionar la enciende o apaga.
+     - Bajo y melodía: izquierda/derecha elige la casilla, arriba/abajo cambia de nota (arriba = más aguda), presionar pone o saca la nota.
+     - Equilibrio: arriba/abajo elige la fila, izquierda/derecha la baja o la sube de a 5.
+     - Tu beat: presionar reproduce o pausa el beat.
+     Faders físicos: solo mientras está Equilibrio en pantalla (ver FILAS). */
+  function armarConsola() {
+    const pasoDeCasilla = (dir) => (dir === "izquierda" ? -1 : dir === "derecha" ? 1 : 0);
+    const moverCursor = (capa, paso) => {
+      cursor[capa] = (cursor[capa] + paso + PASOS) % PASOS;
+      marcarCursor(capa);
+    };
+
+    Consola.registrarAnalogo("crea-ritmo", {
+      mover(dir) {
+        if (pasoDeCasilla(dir)) moverCursor("ritmo", pasoDeCasilla(dir));
+        else {
+          const i = PIEZAS_RITMO.findIndex((x) => x.id === piezaActiva);
+          const destino = PIEZAS_RITMO[(i + (dir === "abajo" ? 1 : -1) + PIEZAS_RITMO.length) % PIEZAS_RITMO.length];
+          cambiarPieza(destino.id);
+          previsualizar(piezaActiva);
+        }
+        return true;
+      },
+      presionar() {
+        tocarCelda("ritmo", cursor.ritmo);
+        return true;
+      },
+    });
+
+    ["bajo", "melodia"].forEach((capa) => {
+      Consola.registrarAnalogo(`crea-${capa}`, {
+        mover(dir) {
+          if (pasoDeCasilla(dir)) moverCursor(capa, pasoDeCasilla(dir));
+          else elegirNota(capa, NOTAS[Math.min(NOTAS.length - 1, Math.max(0, NOTAS.indexOf(notaActiva[capa]) + (dir === "arriba" ? 1 : -1)))]);
+          return true;
+        },
+        presionar() {
+          tocarCelda(capa, cursor[capa]);
+          return true;
+        },
+      });
+    });
+
+    Consola.registrarAnalogo("crea-equilibrio", {
+      mover(dir) {
+        if (dir === "arriba" || dir === "abajo") {
+          filaElegida = (filaElegida + (dir === "abajo" ? 1 : -1) + FILAS.length) % FILAS.length;
+          pintarEquilibrio();
+        } else {
+          const fila = FILAS[filaElegida];
+          antesDeCambiar();
+          ponerVolumen(fila, estado.volumen[fila.canales[0]] + (dir === "derecha" ? 5 : -5));
+          pintarDeshacer();
+        }
+        return true;
+      },
+    });
+
+    Consola.registrarAnalogo("crea-tu-beat", {
+      presionar() {
+        alternarPantalla();
+        return true;
+      },
+    });
+
+    Consola.alMoverFader((nombre, valor) => {
+      if (actual !== "crea-equilibrio") return;
+      const fila = FILAS.find((f) => f.fader === nombre);
+      if (!fila) return;
+      // Un movimiento seguido (sin pausas de más de 0,8 s) se deshace de una sola vez.
+      const ahora = performance.now();
+      if (ahora - gestoFader > 800) antesDeCambiar();
+      gestoFader = ahora;
+      filaElegida = FILAS.indexOf(fila);
+      ponerVolumen(fila, valor * 100);
+      pintarDeshacer();
+    });
   }
 
   // ---------- Dibujo ----------
@@ -959,6 +1056,9 @@ const Nucleo3 = (() => {
     pintarByte(paso);
   }
 
+  // Cada respuesta de Byte se elige también con el botón físico de su color.
+  const COLOR_RESPUESTA = { idea: "violeta", usar: "violeta", libre: "verde", rechazar: "verde", escuchar: "azul" };
+
   function pintarByte(paso) {
     const card = $(`[data-byte="${paso}"]`);
     if (!card) return;
@@ -970,7 +1070,7 @@ const Nucleo3 = (() => {
     $(".byte-texto", card).textContent = m.texto;
     $(".byte-respuestas", card).innerHTML = m.respuestas.map(([accion, etiqueta, clase]) => {
       const icono = accion === "idea" ? "✦ " : accion === "usar" ? "✓ " : accion === "rechazar" ? "✕ " : accion === "escuchar" ? (modo === "propuesta" ? "❚❚ " : "▶ ") : "";
-      return `<button class="byte-respuesta ${clase}" data-responder="${accion}">${icono}${etiqueta}</button>`;
+      return `<button class="byte-respuesta ${clase}" data-responder="${accion}" data-color="${COLOR_RESPUESTA[accion]}">${icono}${etiqueta}</button>`;
     }).join("");
   }
 
@@ -985,6 +1085,7 @@ const Nucleo3 = (() => {
       if (i === indice) item.setAttribute("aria-current", "step");
       else item.removeAttribute("aria-current");
     });
+    $(".lateral-anterior", p).hidden = indice < 1; // desde el paso 2
   }
 
   function pintarEstilos() {
@@ -1010,15 +1111,13 @@ const Nucleo3 = (() => {
   function pintarBpm() {
     const p = pantalla("crea-velocidad");
     $("[data-bpm-texto]", p).textContent = `${estado.bpm} BPM`;
-    const perilla = $(".perilla-bpm", p);
-    perilla.setAttribute("aria-valuenow", estado.bpm);
-    perilla.setAttribute("aria-valuetext", `${estado.bpm} pulsos por minuto`);
-    const angulo = -135 + ((estado.bpm - BPM_MIN) / (BPM_MAX - BPM_MIN)) * 270;
-    perilla.style.setProperty("--angulo", `${angulo}deg`);
-    perilla.style.setProperty("--pulso", `${60 / estado.bpm}s`);
+    const analogo = $(".analogo-bpm", p);
+    analogo.setAttribute("aria-valuenow", estado.bpm);
+    analogo.setAttribute("aria-valuetext", `${estado.bpm} pulsos por minuto`);
+    analogo.style.setProperty("--pulso", `${60 / estado.bpm}s`);
     $("[data-velocidad-texto]", p).textContent = bpmTocado
       ? `${estado.bpm} BPM: ${comentarioBpm(estado.bpm)}`
-      : "¿Tranquilo o más rápido? Tocá play, mové la perilla y escuchá hasta que te guste.";
+      : "¿Tranquilo o más rápido? Movelo y escuchá hasta que te guste.";
   }
 
   function pintarRitmo() {
@@ -1052,6 +1151,12 @@ const Nucleo3 = (() => {
       const nombre = capa === "ritmo" ? PIEZAS_RITMO.find((x) => x.id === piezaActiva).nombre.toLowerCase() : capa === "bajo" ? "bajo" : "melodía";
       celda.setAttribute("aria-label", `${nombre}, paso ${i + 1}${nota ? `: ${nota}` : ""}${enPropuesta && on ? " (idea de Byte)" : ""}`);
     });
+    marcarCursor(capa);
+  }
+
+  // Casilla elegida con el analógico.
+  function marcarCursor(capa) {
+    $$(`[data-celdas="${capa}"] [data-celda]`).forEach((celda, i) => celda.classList.toggle("elegida", i === cursor[capa]));
   }
 
   function pintarNotas(capa) {
@@ -1062,17 +1167,20 @@ const Nucleo3 = (() => {
   function pintarEquilibrio() {
     const p = pantalla("crea-equilibrio");
     const datos = propuesta?.paso === "equilibrio" ? conPropuesta() : estado;
-    CANALES.forEach((c) => {
-      const v = datos.volumen[c.id];
-      const riel = $(`.riel-crea[data-canal="${c.id}"]`, p);
+    // Cada fila muestra su primer canal (en la de bombo, la caja va a la par).
+    FILAS.forEach((f, i) => {
+      const canal = f.canales[0];
+      const v = datos.volumen[canal];
+      const riel = $(`.riel-crea[data-fila="${f.id}"]`, p);
       riel.style.setProperty("--v", v / 100);
-      riel.classList.toggle("apagado", datos.silencio[c.id]);
+      riel.classList.toggle("apagado", datos.silencio[canal]);
       riel.classList.toggle("idea", propuesta?.paso === "equilibrio");
+      riel.classList.toggle("elegida", i === filaElegida);
       riel.setAttribute("aria-valuenow", v);
-      $(`[data-valor="${c.id}"]`, p).textContent = v;
-      const boton = $(`[data-silenciar="${c.id}"]`, p);
-      boton.setAttribute("aria-pressed", datos.silencio[c.id]);
-      boton.setAttribute("aria-label", `${datos.silencio[c.id] ? "Activar" : "Silenciar"} ${c.nombre.toLowerCase()}`);
+      $(`[data-valor="${f.id}"]`, p).textContent = v;
+      const boton = $(`[data-silenciar="${f.id}"]`, p);
+      boton.setAttribute("aria-pressed", datos.silencio[canal]);
+      boton.setAttribute("aria-label", `${datos.silencio[canal] ? "Activar" : "Silenciar"} ${f.nombre.toLowerCase()}`);
     });
   }
 
@@ -1081,9 +1189,10 @@ const Nucleo3 = (() => {
   }
 
   function pintarTuBeat() {
-    $("[data-tu-beat-texto]").textContent = MotorBeat.beatVacio(estado)
-      ? "Tu beat todavía está en silencio: volvé a Ritmo y encendé algunas casillas."
-      : "Este beat lleva tus decisiones.";
+    const texto = $("[data-tu-beat-texto]");
+    texto.innerHTML = MotorBeat.beatVacio(estado)
+      ? "<strong>Tu beat todavía está en silencio.</strong> Volvé a Ritmo y encendé algunas casillas para poder escucharlo y llevártelo."
+      : "<strong>¡Lo lograste!</strong> Creaste tu propio beat con ayuda de la IA. Ahora podés descargarlo y llevar tu creación a donde quieras.";
     pintarQr();
   }
 
@@ -1100,12 +1209,13 @@ const Nucleo3 = (() => {
       const suyo = MODO_PANTALLA[b.closest(".screen")?.id] || "beat";
       const sonando = modo === suyo;
       b.setAttribute("aria-pressed", sonando);
-      if (b.classList.contains("play-pausa")) {
+      if (b.classList.contains("play-pausa") || b.classList.contains("n3p-play")) {
         b.setAttribute("aria-label", ETIQUETAS_PLAY[suyo][sonando ? 1 : 0]);
         b.style.setProperty("--pulso", `${60 / estado.bpm}s`);
       }
     });
-    $(".perilla-bpm").classList.toggle("latiendo", modo === "pulso");
+    $(".analogo-bpm").classList.toggle("latiendo", modo === "pulso");
+    $("[data-pulso-texto]").textContent = modo === "pulso" ? "Detener pulso" : "Escuchar el pulso";
     pintarEstilos();
     if (propuesta) pintarByte(propuesta.paso);
   }
@@ -1131,6 +1241,8 @@ const Nucleo3 = (() => {
     if (indice < 0) return;
     alcanzado = Math.max(alcanzado, indice);
     pintarLateral(id);
+    // El analógico arranca parado sobre el estilo que ya elegiste.
+    if (id === "crea-estilo") Consola.elegir(pantalla(id), estado.estilo && $(`[data-estilo="${estado.estilo}"]`, pantalla(id)));
     const paso = pasoDe(id);
     if (paso in byte) {
       // Al volver a un paso, Byte vuelve a preguntar (salvo que hayas elegido probar por tu cuenta).

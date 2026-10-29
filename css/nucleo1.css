@@ -1,0 +1,83 @@
+/* DM-BEAT · nucleo1 (rediseño Figma, octubre 2026). Se carga después de styles.css. */
+
+/* ---------- ¿Qué es un beat? ---------- */
+
+/* "¿COMO ESTA COMPUESTO?": botón de color violeta más ancho y con esquinas redondeadas. */
+.boton-color.n1-compuesto {
+  width: 465px;
+  height: 81px;
+  border-width: 5px;
+  border-radius: 10px;
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 71px;
+  box-shadow: 0 0 10px var(--violeta);
+}
+
+/* ---------- Capas ---------- */
+
+/* Rayitas de progreso (5 capas) */
+.n1-progreso { width: 485.846px; height: 10px; }
+.n1-progreso svg { display: block; overflow: visible; }
+
+/* Bajo: pistas más altas que en el diseño anterior */
+#bajo .pista-led { height: 82.588px; }
+#bajo .led { left: 11px; top: 27.53px; height: 27.53px; }
+#bajo .pista-encabezado .led { left: 10px; top: 27.1px; }
+#bajo .pista-encabezado .texto { left: 42px; top: 6.3px; }
+
+/* ---------- Mezcla ---------- */
+
+.n1-caja-mezcla { border-radius: 8px; background: rgba(47, 7, 104, .6); }
+
+/* Círculo de color con el ícono del canal: silencia el canal */
+.n1-canal {
+  position: absolute;
+  border-radius: 50%;
+  background: var(--color);
+  transition: opacity .2s, filter .2s;
+}
+.n1-canal img { position: absolute; max-width: none; object-fit: contain; pointer-events: none; }
+.n1-canal:hover { filter: drop-shadow(0 0 8px var(--color)); }
+.n1-canal[aria-pressed="true"] { opacity: .35; }
+
+/* Fader horizontal: riel gris, relleno y perilla del color del fader físico */
+.n1-fader {
+  position: absolute;
+  height: 40px;
+  cursor: ew-resize;
+  touch-action: none;
+}
+.n1-fader .riel {
+  position: absolute;
+  left: 0;
+  right: 0;
+  background: #312e32;
+}
+.n1-fader .relleno {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background: var(--color);
+  box-shadow: 0 0 4px var(--color);
+}
+.n1-fader .perilla-fader {
+  position: absolute;
+  background: var(--color);
+  box-shadow: 0 0 4px var(--color);
+  pointer-events: none;
+}
+/* Las dos rayitas blancas de la perilla */
+.n1-fader .perilla-fader::before,
+.n1-fader .perilla-fader::after {
+  content: "";
+  position: absolute;
+  top: 12%;
+  bottom: 12%;
+  width: 2px;
+  background: #fff;
+}
+.n1-fader .perilla-fader::before { left: 40%; }
+.n1-fader .perilla-fader::after { left: 61%; }
+.n1-fader:focus-visible { outline: 3px solid var(--verde); outline-offset: 2px; }

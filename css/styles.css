@@ -288,6 +288,45 @@ img { display: block; }
 .paso { filter: drop-shadow(0 0 5px rgba(61, 217, 185, .7)); }
 .paso:hover { opacity: 1; filter: drop-shadow(0 0 8px var(--verde)); }
 
+/* ---------- Controles de la consola física ---------- */
+
+/* Botón de color: se activa con el botón físico del mismo color (data-color). 308×88 con borde de 4 px. */
+.boton-color {
+  position: absolute;
+  width: 308px;
+  height: 88px;
+  border: 4px solid var(--borde-boton);
+  background: var(--fondo-boton);
+  font-size: 40px;
+  font-weight: 600;
+  line-height: 65px;
+  text-align: center;
+  white-space: nowrap;
+  transition: filter .2s;
+}
+.boton-color:hover { filter: brightness(1.12); }
+.boton-color[data-color="azul"] { --borde-boton: #61b3ff; --fondo-boton: #0084ff; }
+.boton-color[data-color="violeta"] { --borde-boton: #5a087b; --fondo-boton: #cc4bff; }
+.boton-color[data-color="verde"] { --borde-boton: #b3fedb; --fondo-boton: rgba(5, 230, 126, .71); }
+.boton-color[data-color="gris"] { --borde-boton: #c9e2ff; --fondo-boton: #8badd6; }
+
+/* Botón "SIGUIENTE ▷|": lo activa el botón lateral de avanzar de la consola (data-paso="1"). 344×83. */
+.siguiente {
+  position: absolute;
+  width: 344px;
+  height: 83.21px;
+  transition: filter .2s;
+}
+.siguiente > img { position: absolute; max-width: none; }
+.siguiente .fondo-glow { left: -15px; top: -15px; width: 374px; height: 113px; }
+.siguiente .fondo { left: 0; top: 0; width: 344px; height: 83.21px; }
+.siguiente .rotulo { position: absolute; left: 40px; top: 12.16px; font-size: 36px; font-weight: 700; line-height: 65px; }
+.siguiente .icono { left: 218.8px; top: -16px; width: 84.9px; height: 115.38px; opacity: .9; }
+.siguiente:hover { filter: brightness(1.1); }
+
+/* Opción elegida con el analógico */
+[data-analogo].elegido { outline: 4px solid var(--verde); outline-offset: 6px; filter: drop-shadow(0 0 10px var(--verde)); }
+
 /* ---------- Pantallas de capas ---------- */
 
 .marco.panel { inset: auto; width: 1596px; height: 341px; --borde: 7px; }
