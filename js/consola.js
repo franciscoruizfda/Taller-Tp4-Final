@@ -13,15 +13,19 @@ const Consola = (() => {
     B3: () => avanzar(-1), // |◀ anterior
     B8: () => transporte("play"),
     B2: () => transporte("pausa"),
-    B6: () => color(1), // verde agua: opción azul / 1.er estilo
+    B6: () => color(1), // verde agua: 1.ª canción / opción azul / 1.er estilo
     B7: () => color(2), // violeta
     B5: () => color(3), // amarillo: opción verde
-    B4: () => color(4), // gris: 4.º estilo
+    B4: () => color(4), // gris: 4.ª canción / 4.º estilo
   };
 
-  // Los mismos 3 canales en todas las mezclas: F1 batería, F2 bajo, F3 melodía.
-  const FADERS = { F1: "bateria", F2: "bajo", F3: "melodia" };
-  const CANALES_EQUILIBRIO = { bateria: ["bombo", "hihat"], bajo: ["bajo"], melodia: ["melodia"] };
+  /* Los 4 faders están en dos filas, igual que los rieles en pantalla y con sus mismos colores:
+       F1 arriba izquierda (verde)    F3 arriba derecha (azul)
+       F2 abajo izquierda (violeta)   F4 abajo derecha (celeste)
+     Si al probar un fader mueve otro riel, alcanza con cambiar el orden acá. */
+  const FADERS = { F1: 0, F3: 1, F2: 2, F4: 3 }; // posición: 0 arriba izq, 1 arriba der, 2 abajo izq, 3 abajo der
+  const STEMS = ["voz", "bajo", "melodia", "bateria"]; // núcleo 2, la canción
+  const CANALES_EQUILIBRIO = ["bombo", "hihat", "bajo", "melodia"]; // núcleo 3, paso Equilibrio
 
   const BPM_POR_SEGUNDO = 20; // con el joystick a fondo
   const CADA = 100; // ms entre cada empujón del joystick a la perilla
@@ -34,7 +38,8 @@ const Consola = (() => {
   // ---------- Acciones ----------
 
   function color(n) {
-    if (Nucleo3.maneja(actual)) Nucleo3.teclaOpcion(String(n));
+    if (actual === "selecciona") elegirCancion(n);
+    else if (Nucleo3.maneja(actual)) Nucleo3.teclaOpcion(String(n));
   }
 
   function apretar(nombre) {
@@ -53,11 +58,10 @@ const Consola = (() => {
   }
 
   function moverFader(nombre, porcentaje) {
-    const canal = FADERS[nombre];
-    if (!canal) return;
-    if (actual === "mezcla") moverFaderMezcla(canal, porcentaje / 100);
-    else if (actual === "cancion") Nucleo2.ajustar(canal, porcentaje / 100);
-    else if (actual === "crea-equilibrio") Nucleo3.ajustarVolumen(CANALES_EQUILIBRIO[canal], porcentaje);
+    const posicion = FADERS[nombre];
+    if (posicion === undefined) return;
+    if (actual === "cancion") Nucleo2.ajustar(STEMS[posicion], porcentaje / 100);
+    else if (actual === "crea-equilibrio") Nucleo3.ajustarVolumen([CANALES_EQUILIBRIO[posicion]], porcentaje);
   }
 
   // Joystick a la derecha acelera y a la izquierda frena, mientras se lo mantenga.
@@ -77,7 +81,7 @@ const Consola = (() => {
   function procesar(linea) {
     let m;
     if ((m = /^B([1-8J])$/.exec(linea))) apretar(`B${m[1]}`);
-    else if ((m = /^(F[1-3]):(\d+)$/.exec(linea))) moverFader(m[1], Number(m[2]));
+    else if ((m = /^(F[1-4]):(\d+)$/.exec(linea))) moverFader(m[1], Number(m[2]));
     else if ((m = /^J:(-?\d+),(-?\d+)$/.exec(linea))) joyX = Number(m[1]);
   }
 

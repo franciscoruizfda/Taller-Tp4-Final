@@ -17,8 +17,12 @@ bool lecturaB[NB];
 unsigned long cambioB[NB];
 
 // ---------- FADERS ----------
-const int NF = 3;
-const int pinesF[NF] = {A0, A1, A2};
+// F1 arriba izquierda, F2 abajo izquierda, F3 arriba derecha, F4 abajo derecha.
+// F4 va en A5 (A3 y A4 son del joystick). Mientras no esté cableado queda en false:
+// un pin suelto lee valores al azar y movería el fader en pantalla solo.
+const int NF = 4;
+const int pinesF[NF] = {A0, A1, A2, A5};
+const bool conectadoF[NF] = {true, true, true, false};   // cuando conectes F4, pasalo a true
 
 // Valor crudo con el fader en la MITAD del recorrido (el mismo que en consola_debug.ino)
 const int MEDIO = 150;
@@ -93,6 +97,7 @@ int corregir(int crudo) {
 
 void revisarFaders() {
   for (int i = 0; i < NF; i++) {
+    if (!conectadoF[i]) continue;
     int pos = corregir(leerSuave(pinesF[i]));
     // Los extremos se mandan siempre, para poder llegar a 0 y a 100 justos.
     bool extremo = (pos == 0 || pos == 100) && pos != posF[i];

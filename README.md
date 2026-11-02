@@ -14,8 +14,10 @@ Página publicada: https://franciscoruizfda.github.io/Taller-Tp4-Final/
 |---|---|
 | B1 ▶\| / B3 \|◀ | Siguiente / anterior |
 | B8 ▶ / B2 ❚❚ | Play / pausa |
-| B6 verde agua, B7 violeta, B5 amarillo, B4 gris | Opciones de colores y estilos del núcleo 3 (1.ª a 4.ª) |
-| F1 / F2 / F3 | Volumen de batería / bajo / melodía en las mezclas |
+| B6 verde agua, B7 violeta, B5 amarillo, B4 gris | Elegir canción (núcleo 2) y opciones o estilos del núcleo 3 (1.ª a 4.ª) |
+| Faders (2 filas, como en pantalla) | Núcleo 2: voz, bajo, melodía y batería. Núcleo 3 (Equilibrio): bombo, hi-hat, bajo y melodía |
 | Joystick izquierda/derecha | Velocidad (BPM) en el paso Velocidad |
+
+El 4.º fader (abajo a la derecha) va en A5; cuando esté cableado, poné su valor en `true` en `conectadoF` del sketch y volvé a subirlo.
 
 Sin consola, todo funciona igual con el mouse y el teclado (flechas, espacio, N, 0, 1 a 4).

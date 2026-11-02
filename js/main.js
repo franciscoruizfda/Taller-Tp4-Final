@@ -530,12 +530,13 @@ function transporte(accion) {
   }
 }
 
-// Fader de la consola física sobre el canal de la mezcla del núcleo 1.
-function moverFaderMezcla(canal, valor) {
-  const i = CANALES_MEZCLA.findIndex((c) => c.canal === canal);
-  CANALES_MEZCLA[i].valor = limitar(valor);
-  pintarFader(i);
-  aplicarVolumenes();
+// Botones de colores (o teclas 1 a 4) en «Seleccioná una canción»: cada tarjeta tiene el color de un botón.
+function elegirCancion(n) {
+  const tarjeta = document.querySelectorAll("#selecciona [data-cancion]")[n - 1];
+  if (!tarjeta) return false;
+  Nucleo2.elegir(tarjeta.dataset.cancion);
+  ir("cancion");
+  return true;
 }
 
 // ---------- Navegación ----------
@@ -627,6 +628,10 @@ function escuchar() {
 
     // Botones de colores: 1 azul, 2 violeta, 3 verde eligen la opción de ese color en los pasos del núcleo 3.
     if (Nucleo3.maneja(actual) && Nucleo3.teclaOpcion(e.key)) {
+      e.preventDefault();
+      return;
+    }
+    if (actual === "selecciona" && /^[1-4]$/.test(e.key) && elegirCancion(Number(e.key))) {
       e.preventDefault();
       return;
     }
