@@ -190,6 +190,15 @@ const Nucleo3 = (() => {
     reproducir("beat");
   }
 
+  // Al llegar a Ritmo (o a cada uno de sus sonidos), Bajo o Melodía suena sola la opción elegida;
+  // si todavía no hay ninguna, la primera, para que se escuche enseguida qué sonido se está trabajando.
+  function sonarOpcion() {
+    const capa = capaDe(pasoDe(actual));
+    const i = elegidas[capa] ?? 0;
+    elegidas[capa] = null; // así elegir() la hace sonar en vez de pausarla
+    elegir(capa, i);
+  }
+
   // ---------- Sonido ----------
 
   function datosDemo(estilo) {
@@ -363,6 +372,7 @@ const Nucleo3 = (() => {
       if (destino) {
         piezaActiva = destino.id;
         pintarRitmo();
+        sonarOpcion();
         return true;
       }
     }
@@ -678,6 +688,7 @@ const Nucleo3 = (() => {
     const paso = pasoDe(id);
     if (paso === "ritmo") pintarRitmo();
     else if (paso === "bajo" || paso === "melodia") pintarOpciones(paso);
+    if (["ritmo", "bajo", "melodia"].includes(paso)) sonarOpcion();
     if (id === "crea-tu-beat") pintarQr();
   }
 

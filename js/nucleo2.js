@@ -19,6 +19,12 @@ const Nucleo2 = (() => {
   const ANCHO_RIEL = 653;
   const DESFASE_MAXIMO = 0.08; // segundos que se tolera entre pistas antes de resincronizar
 
+  /* Corrección de stems que vienen corridos de origen, en segundos: positivo adelanta esa pista
+     (suena antes), negativo la atrasa. Se encuentran a oído con la herramienta de afinación. */
+  const CORRIMIENTOS = {
+    miranda: { voz: 0, bajo: 0, melodia: 0, bateria: 0 },
+  };
+
   const niveles = { voz: 1, bajo: 1, melodia: 1, bateria: 1 };
   let solo = null;
   let actual = null;
@@ -70,7 +76,7 @@ const Nucleo2 = (() => {
     const progreso = p.querySelector(".progreso");
     arrastrable(progreso, (fraccion) => buscar(fraccion * duracion()));
     progreso.addEventListener("keydown", (e) => {
-      const valor = conTeclas(e, maestro()?.currentTime ?? 0, 5, duracion());
+      const valor = conTeclas(e, tiempo(), 5, duracion());
       if (valor !== null) buscar(valor);
     });
   }
@@ -128,8 +134,7 @@ const Nucleo2 = (() => {
   }
 
   function pintarProgreso() {
-    const m = maestro();
-    const t = m?.currentTime ?? 0;
+    const t = tiempo();
     const total = duracion();
     const el = pantalla().querySelector(".progreso");
     el.style.setProperty("--p", total ? t / total : 0);
@@ -197,6 +202,14 @@ const Nucleo2 = (() => {
 
   // La primera pista disponible marca el tiempo; las demás la siguen.
   const maestro = () => STEMS.map((s) => pistas[s.id]).find(Boolean);
+  const corrimiento = (id) => CORRIMIENTOS[actual]?.[id] || 0;
+  // Dónde tiene que estar cada pista para un momento t de la canción.
+  const posicion = (id, t) => Math.max(0, t + corrimiento(id));
+  // Momento de la canción según la pista que marca el tiempo.
+  const tiempo = () => {
+    const s = STEMS.find((x) => pistas[x.id]);
+    return s ? pistas[s.id].currentTime - corrimiento(s.id) : 0;
+  };
   const duracion = () => {
     const d = maestro()?.duration;
     return Number.isFinite(d) ? d : 0;
@@ -216,18 +229,21 @@ const Nucleo2 = (() => {
     if (!m || sonando) return;
     if (m.ended || m.currentTime >= duracion() - 0.05) buscar(0);
     Sonido.detener();
-    const t = m.currentTime;
-    Object.values(pistas).forEach((a) => {
-      a.currentTime = t;
+    const t = tiempo();
+    STEMS.forEach((s) => {
+      const a = pistas[s.id];
+      if (!a) return;
+      a.currentTime = posicion(s.id, t);
       a.play().catch(() => {});
     });
     m.onended = detener;
     sonando = true;
     pintarBoton();
     const cuadro = () => {
-      const tm = m.currentTime;
-      Object.values(pistas).forEach((a) => {
-        if (a !== m && Math.abs(a.currentTime - tm) > DESFASE_MAXIMO) a.currentTime = tm;
+      const tm = tiempo();
+      STEMS.forEach((s) => {
+        const a = pistas[s.id];
+        if (a && a !== m && Math.abs(a.currentTime - posicion(s.id, tm)) > DESFASE_MAXIMO) a.currentTime = posicion(s.id, tm);
       });
       pintarProgreso();
       raf = requestAnimationFrame(cuadro);
@@ -253,8 +269,9 @@ const Nucleo2 = (() => {
   }
 
   function buscar(segundos) {
-    Object.values(pistas).forEach((a) => {
-      if (a.readyState > 0) a.currentTime = segundos;
+    STEMS.forEach((s) => {
+      const a = pistas[s.id];
+      if (a?.readyState > 0) a.currentTime = posicion(s.id, segundos);
     });
     pintarProgreso();
   }
