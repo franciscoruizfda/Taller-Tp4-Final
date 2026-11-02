@@ -29,7 +29,7 @@ const Consola = (() => {
   let puerto = null;
   let joyX = 0;
   let bpmAcumulado = 0;
-  let boton = null;
+  let abriendo = false;
 
   // ---------- Acciones ----------
 
@@ -84,15 +84,18 @@ const Consola = (() => {
   // ---------- Conexión ----------
 
   async function conectar(elegido) {
+    if (puerto || abriendo) return;
+    abriendo = true;
     try {
       await elegido.open({ baudRate: BAUDIOS });
+      puerto = elegido;
+      console.info("Beatmind: consola conectada.");
+      leer();
     } catch (error) {
       console.warn("Beatmind: no se pudo abrir la consola. ¿Está abierto el Monitor Serie del Arduino?", error);
-      return;
+    } finally {
+      abriendo = false;
     }
-    puerto = elegido;
-    pintarBoton();
-    leer();
   }
 
   async function leer() {
@@ -116,18 +119,20 @@ const Consola = (() => {
       await puerto.close().catch(() => {});
       puerto = null;
       joyX = 0;
-      pintarBoton();
     }
   }
 
-  // El clic en este botón también habilita el sonido (el navegador no deja sonar sin un clic o una tecla).
-  async function alClic() {
-    boton.blur();
+  // Un Arduino ya autorizado en esta compu se conecta solo, sin que nadie toque nada.
+  async function conectarConocido() {
     const [conocido] = await navigator.serial.getPorts();
-    if (conocido) {
-      conectar(conocido);
-      return;
-    }
+    if (conocido) conectar(conocido);
+  }
+
+  // La primera vez el navegador exige que una persona elija el puerto: Ctrl + Alt + C (de «consola»).
+  async function elegirPuerto(e) {
+    if (!(e.ctrlKey && e.altKey && e.code === "KeyC")) return;
+    e.preventDefault();
+    if (puerto) return;
     try {
       conectar(await navigator.serial.requestPort());
     } catch {
@@ -135,20 +140,11 @@ const Consola = (() => {
     }
   }
 
-  async function pintarBoton() {
-    const conocido = (await navigator.serial.getPorts()).length > 0;
-    boton.hidden = Boolean(puerto);
-    boton.textContent = conocido ? "Activar consola" : "Conectar consola";
-  }
-
   if ("serial" in navigator) {
-    boton = document.createElement("button");
-    boton.className = "conectar-consola";
-    boton.addEventListener("click", alClic);
-    document.body.append(boton);
-    pintarBoton();
-    // Si se vuelve a enchufar un Arduino que ya se había elegido, se reconecta solo.
-    navigator.serial.addEventListener("connect", (e) => { if (!puerto) conectar(e.target); });
+    conectarConocido();
+    document.addEventListener("keydown", elegirPuerto);
+    // Si se vuelve a enchufar el Arduino, se reconecta solo.
+    navigator.serial.addEventListener("connect", (e) => conectar(e.target));
   } else {
     console.info("Beatmind: este navegador no tiene Web Serial; para usar la consola abrí la página en Chrome o Edge.");
   }

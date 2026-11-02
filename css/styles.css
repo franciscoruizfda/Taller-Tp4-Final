@@ -41,21 +41,6 @@ button:focus-visible { outline: 3px solid var(--verde); outline-offset: 4px; bor
 
 img { display: block; }
 
-/* Botón para conectar la consola física: fuera del lienzo, en la esquina de la ventana */
-.conectar-consola {
-  position: fixed;
-  right: 16px;
-  bottom: 16px;
-  z-index: 10;
-  padding: 10px 18px;
-  border: 2px solid var(--verde);
-  border-radius: 10px;
-  background: rgba(2, 1, 28, .85);
-  color: var(--verde);
-  font-size: 18px;
-}
-.conectar-consola:hover { background: var(--verde); color: #02011c; }
-
 /* ---------- Lienzo ---------- */
 
 #viewport {
