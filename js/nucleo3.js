@@ -600,6 +600,11 @@ const Nucleo3 = (() => {
     const pieza = PIEZAS_RITMO.find((x) => x.id === piezaActiva);
     $("[data-pieza-nombre]", p).textContent = pieza.nombre;
     $("[data-pieza-texto]", p).textContent = pieza.texto;
+    // Byte cambia según el sonido (assets/byte-bombo.png, byte-caja.png, byte-hihat.png);
+    // si la imagen todavía no está en la carpeta, queda el Byte DJ.
+    const imagen = $("[data-pieza-imagen]", p);
+    imagen.onerror = () => { imagen.onerror = null; imagen.src = "assets/personaje-dj.png"; };
+    imagen.src = `assets/byte-${pieza.id}.png`;
     pintarOpciones("ritmo");
   }
 

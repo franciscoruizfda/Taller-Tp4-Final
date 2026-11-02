@@ -29,8 +29,9 @@ const Nucleo2 = (() => {
   let solo = null;
   let actual = null;
   let pistas = {};
-  let faltan = [];
   let sonando = false;
+  let esperando = false; // se pidió play y se están terminando de cargar las pistas
+  const cargadas = {}; // id de canción → { pistas, faltan, listas }
   let raf = 0;
 
   const pantalla = () => document.getElementById("cancion");
@@ -40,9 +41,11 @@ const Nucleo2 = (() => {
   function armar() {
     const contenedor = pantalla().querySelector("[data-stems]");
     contenedor.outerHTML = STEMS.map((s) => `
-      <div class="stem-caja" style="left:${s.caja[0]}px;top:${s.caja[1]}px"></div>
+      <div class="stem-caja" style="left:${s.caja[0]}px;top:${s.caja[1]}px;--color:${s.color}"></div>
       <button class="stem-icono" data-solo="${s.id}" aria-pressed="false" aria-label="Escuchar solo ${s.nombre}"
-              style="left:${s.ico[0]}px;top:${s.ico[1]}px"><img src="assets/${s.icono}" alt=""></button>
+              style="left:${s.ico[0]}px;top:${s.ico[1]}px;--color:${s.color}">
+        <span style="-webkit-mask-image:url(assets/${s.icono});mask-image:url(assets/${s.icono})"></span>
+      </button>
       <div class="stem-fader" data-stem="${s.id}" role="slider" tabindex="0" aria-label="Volumen de ${s.nombre}"
            aria-valuemin="0" aria-valuemax="100"
            style="left:${s.riel}px;top:${s.caja[1] + 36.5}px;width:${ANCHO_RIEL}px;--color:${s.color}">
@@ -157,20 +160,45 @@ const Nucleo2 = (() => {
 
   // ---------- Carga de stems ----------
 
+  // Crea las 4 pistas de una canción una sola vez. «listas» se cumple cuando todas pueden sonar
+  // sin cortarse (o fallaron), así arrancan juntas.
+  function cargar(id) {
+    if (cargadas[id]) return cargadas[id];
+    const registro = { pistas: {}, faltan: [] };
+    registro.listas = Promise.all(STEMS.map((s) => new Promise((listo) => {
+      const audio = new Audio();
+      audio.preload = "auto";
+      audio.addEventListener("canplaythrough", listo, { once: true });
+      audio.addEventListener("error", () => {
+        registro.faltan.push(s.id);
+        delete registro.pistas[s.id];
+        listo();
+      }, { once: true });
+      audio.src = `assets/canciones/${id}/${s.id}.mp3`;
+      registro.pistas[s.id] = audio;
+    }))).then(() => { registro.cargada = true; });
+    cargadas[id] = registro;
+    return registro;
+  }
+
+  // Al entrar a «Seleccioná una canción» se empiezan a bajar las 4, para que al elegir ya estén.
+  function precargar() {
+    Object.keys(CANCIONES).forEach(cargar);
+  }
+
   function elegir(id) {
     if (id === actual || !CANCIONES[id]) return;
     detener();
-    Object.values(pistas).forEach((a) => { a.removeAttribute("src"); a.load(); });
     actual = id;
-    pistas = {};
-    faltan = [];
+    const registro = cargar(id);
+    pistas = registro.pistas;
     pintarCabecera();
     pintarProgreso();
     estado("Cargando la canción…");
-
-    let pendientes = STEMS.length;
-    const terminado = () => {
-      if (--pendientes > 0 || actual !== id) return;
+    registro.pistas[STEMS[0].id]?.addEventListener("loadedmetadata", pintarProgreso, { once: true });
+    registro.listas.then(() => {
+      if (actual !== id) return;
+      const { faltan } = registro;
       if (faltan.length === STEMS.length) {
         estado(`Falta el audio: agregá voz.mp3, bajo.mp3, melodia.mp3 y bateria.mp3 en assets/canciones/${id}/`);
       } else if (faltan.length) {
@@ -180,23 +208,6 @@ const Nucleo2 = (() => {
       }
       aplicarVolumenes();
       pintarProgreso();
-    };
-
-    STEMS.forEach((s) => {
-      const audio = new Audio();
-      audio.preload = "auto";
-      let contado = false;
-      const contar = () => { if (!contado) { contado = true; terminado(); } };
-      audio.addEventListener("canplay", contar, { once: true });
-      audio.addEventListener("loadedmetadata", pintarProgreso, { once: true });
-      audio.addEventListener("error", () => {
-        if (actual !== id) return;
-        faltan.push(s.id);
-        delete pistas[s.id];
-        contar();
-      }, { once: true });
-      audio.src = `assets/canciones/${id}/${s.id}.mp3`;
-      pistas[s.id] = audio;
     });
   }
 
@@ -226,7 +237,20 @@ const Nucleo2 = (() => {
 
   function reproducir() {
     const m = maestro();
-    if (!m || sonando) return;
+    if (!m || sonando || esperando) return;
+    // Si alguna pista todavía no está lista, se espera a las 4 y arrancan juntas desde el principio
+    // de donde estaba (si no, entraban a destiempo mientras cargaban).
+    const registro = cargadas[actual];
+    if (!registro.cargada) {
+      esperando = true;
+      const cancion = actual;
+      registro.listas.then(() => {
+        if (!esperando || actual !== cancion) return;
+        esperando = false;
+        reproducir();
+      });
+      return;
+    }
     if (m.ended || m.currentTime >= duracion() - 0.05) buscar(0);
     Sonido.detener();
     const t = tiempo();
@@ -252,6 +276,7 @@ const Nucleo2 = (() => {
   }
 
   function pausar() {
+    esperando = false;
     Object.values(pistas).forEach((a) => a.pause());
     cancelAnimationFrame(raf);
     sonando = false;
@@ -294,6 +319,7 @@ const Nucleo2 = (() => {
       detener();
       reproducir();
     },
+    precargar,
     alEntrar: () => { if (!actual) elegir("redondos"); },
     alSalir: pausar,
     get sonando() { return sonando; },

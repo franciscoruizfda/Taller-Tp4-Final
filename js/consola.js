@@ -90,7 +90,11 @@ const Consola = (() => {
   function moverJoystick(x, y) {
     joyX = x;
     // En «¿Qué es un beat?» el joystick a un lado elige esa tarjeta y la hace sonar.
-    if (actual === "que-es" && Math.abs(x) >= 60) elegirTarjetaBeat(x < 0 ? "pulso" : "instrumental");
+    // El analógico dibujado se inclina hacia donde se mueve el de la consola.
+    if (actual === "que-es") {
+      document.querySelector("#que-es .palanca img").style.translate = `${x * 0.2}px ${-y * 0.2}px`;
+      if (Math.abs(x) >= 60) elegirTarjetaBeat(x < 0 ? "pulso" : "instrumental");
+    }
     if (!TUTORIAL.includes(actual)) return;
     document.querySelectorAll(`#${actual} [data-control~="J"]`).forEach((luz) => {
       luz.style.translate = `${x * 0.15}px ${-y * 0.15}px`;

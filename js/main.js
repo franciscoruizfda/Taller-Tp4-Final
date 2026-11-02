@@ -511,6 +511,7 @@ function ir(id) {
     s.classList.toggle("activa", activa);
     s.inert = !activa;
   });
+  if (id === "modifica" || id === "selecciona") Nucleo2.precargar();
   if (id === "cancion") Nucleo2.alEntrar();
   if (Nucleo3.maneja(id)) Nucleo3.alEntrar(id);
   history.replaceState(null, "", `#${id}`);
@@ -567,6 +568,18 @@ function escuchar() {
     if (e.target.closest?.("input, textarea")) return; // escribir el nombre del beat no navega
     const enControl = e.target.closest?.("button, [role='slider']");
     const activaControl = enControl && (e.key === " " || e.key === "Enter");
+
+    // ATAJO TEMPORAL para trabajar: A pantalla anterior, D siguiente, sin frenos (elegir opción, tutorial).
+    // Borrar este bloque antes de la entrega.
+    const salto = { a: -1, d: 1 }[e.key.toLowerCase()];
+    if (salto) {
+      e.preventDefault();
+      // En Ritmo recorre bombo, caja y hi-hat antes de cambiar de pantalla, como el botón de siguiente.
+      if (actual === "crea-ritmo" && Nucleo3.frenaAvance(salto)) return;
+      const destino = PANTALLAS[PANTALLAS.indexOf(actual) + salto];
+      if (destino) ir(destino);
+      return;
+    }
 
     // Atajos: N avanza y 0 (fila de números o teclado numérico) retrocede en cualquier pantalla.
     const retroceder = e.key === "0" || e.code === "Numpad0";

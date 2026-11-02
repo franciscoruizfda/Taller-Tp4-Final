@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Akshar:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css?v=20261102e">
+  <link rel="stylesheet" href="css/styles.css?v=20261103b">
 </head>
 <body>
 <div id="viewport">
@@ -53,8 +53,8 @@
 
       <div class="a consola-tutorial" data-consola style="left:1135px;top:178px"></div>
 
-      <div class="progreso-tutorial" data-progreso="1" style="top:889px"></div>
-      <button class="cta tutorial" data-paso="1" style="left:613px;top:928px;width:693px">Presiona siguiente para continuar</button>
+      <div class="progreso-tutorial" data-progreso="1" style="top:888px"></div>
+      <button class="cta tutorial continuar-tutorial" data-paso="1" style="left:613px;top:928px;width:693px">Presiona siguiente para continuar</button>
     </section>
 
     <!-- ============ TUTORIAL 2 · COLORES ============ -->
@@ -68,10 +68,10 @@
         Cuando aparezcan diferentes opciones, cada una estará representada por un color.<br>
         Tocá el botón del <b>color correspondiente</b> a tu elección.</p>
 
-      <div class="a consola-tutorial" data-consola style="left:1136px;top:177px"></div>
+      <div class="a consola-tutorial" data-consola style="left:1135px;top:178px"></div>
 
       <div class="progreso-tutorial" data-progreso="2" style="top:888px"></div>
-      <button class="cta tutorial" data-paso="1" style="left:613px;top:927px;width:693px">Presiona siguiente para continuar</button>
+      <button class="cta tutorial continuar-tutorial" data-paso="1" style="left:613px;top:927px;width:693px">Presiona siguiente para continuar</button>
     </section>
 
     <!-- ============ TUTORIAL 3 · ANÁLOGO Y BOTONES LATERALES ============ -->
@@ -94,7 +94,7 @@
       </div>
 
       <div class="progreso-tutorial" data-progreso="3" style="top:888px"></div>
-      <button class="cta tutorial" data-paso="1" style="left:613px;top:927px;width:693px">Presiona siguiente para continuar</button>
+      <button class="cta tutorial continuar-tutorial" data-paso="1" style="left:613px;top:927px;width:693px">Presiona siguiente para continuar</button>
     </section>
 
     <!-- ============ TUTORIAL 4 · FADERS ============ -->
@@ -117,7 +117,7 @@
       <img class="a" src="assets/byte-senala.webp" alt="" style="left:1307px;top:362px;width:580px;height:386px">
 
       <div class="progreso-tutorial" data-progreso="4" style="top:888px"></div>
-      <button class="cta tutorial" data-paso="1" style="left:613px;top:927px;width:693px">Presiona siguiente para continuar</button>
+      <button class="cta tutorial continuar-tutorial" data-paso="1" style="left:613px;top:927px;width:693px">Presiona siguiente para continuar</button>
     </section>
 
     <!-- ============ TUTORIAL 5 · LISTO ============ -->
@@ -131,7 +131,7 @@
         Ahora <b>explorá, escuchá y descubrí</b> lo que podés crear.</p>
 
       <div class="progreso-tutorial" data-progreso="5" style="top:850px"></div>
-      <button class="cta tutorial espaciado" data-paso="1" style="left:613px;top:894px;width:693px">COMENZAR LA EXPERIENCIA</button>
+      <button class="cta tutorial continuar-tutorial espaciado" data-paso="1" style="left:613px;top:894px;width:693px">COMENZAR LA EXPERIENCIA</button>
       <p class="texto centrado" style="left:959.5px;top:991px;font-size:36px">Presiona siguiente para comenzar</p>
     </section>
 
@@ -171,8 +171,8 @@
       </button>
 
       <!-- Con el joystick a la izquierda o a la derecha se elige la tarjeta (y suena) -->
-      <div class="a palanca" aria-hidden="true" style="left:862px;top:855px;width:212px;height:170px"><i class="perilla-joy"></i><b class="flechas-joy"></b></div>
-      <button class="a boton-consola gris" data-paso="1" data-consola-boton="4" style="right:156px;top:931px"><span class="cuadro" aria-hidden="true"></span>¿CÓMO ESTÁ COMPUESTO?</button>
+      <div class="a palanca" aria-hidden="true" style="left:862px;top:855px;width:212px;height:170px"><img src="assets/tutorial-palanca.svg" alt=""></div>
+      <button class="a boton-consola verde" data-paso="1" data-consola-boton="3" style="right:156px;top:931px"><svg class="cuadro" viewBox="0 0 112 109" aria-hidden="true"><path class="esquinas" d="M1.5 25.5V1.5H25.5M86.5 1.5H110.5V25.5M110.5 83.5V107.5H86.5M25.5 107.5H1.5V83.5"/><rect x="15.5" y="15.5" width="81" height="78" rx="7"/></svg>¿CÓMO ESTÁ COMPUESTO?</button>
       <div data-nav></div>
     </section>
 
@@ -180,7 +180,7 @@
     <section class="screen capa" id="percusion" data-seccion="aprende" aria-label="Capas del beat: percusión">
       <h1 class="apilado degradado-b" data-capas="#00ff89 12, #0084ff 8, #cc4bff 4"
           style="left:410px;top:254px;font-size:90px">¿CÓMO ESTÁ COMPUESTO UN BEAT?</h1>
-      <img class="a" src="assets/personaje-percusion.png" alt="Personaje de DM-BEAT tocando pads"
+      <img class="a byte-capa" src="assets/personaje-percusion.png" alt="Personaje de DM-BEAT tocando pads"
            style="left:97px;top:184px;width:315px;height:263px;object-fit:cover">
       <span class="marco panel" style="left:162px;top:427px;height:425px"></span>
       <button class="a boton-play" data-play aria-label="Reproducir capa" aria-pressed="false" style="left:208px;top:741px;width:60px;height:75.22px">
@@ -209,7 +209,7 @@
     <section class="screen capa" id="bajo" data-seccion="aprende" aria-label="Capas del beat: bajo">
       <h1 class="apilado degradado-b" data-capas="#00ff89 12, #0084ff 8, #cc4bff 4"
           style="left:447px;top:197px;font-size:90px">¿CÓMO ESTÁ COMPUESTO UN BEAT?</h1>
-      <div class="a" style="left:51px;top:190px;width:529px;height:270px">
+      <div class="a byte-capa" style="left:51px;top:190px;width:529px;height:270px">
         <img src="assets/personaje-bajo.png" alt="Personaje de DM-BEAT tocando el bajo" style="width:100%;height:100%;object-fit:cover;object-position:top">
       </div>
       <span class="marco panel" style="left:162px;top:456px;height:416px"></span>
@@ -238,7 +238,7 @@
     <section class="screen capa" id="melodia" data-seccion="aprende" aria-label="Capas del beat: melodía">
       <h1 class="apilado degradado-b" data-capas="#00ff89 12, #0084ff 8, #cc4bff 4"
           style="left:448px;top:253px;font-size:90px">¿CÓMO ESTÁ COMPUESTO UN BEAT?</h1>
-      <img class="a" src="assets/personaje-melodia.png" alt="Personaje de DM-BEAT tocando el teclado"
+      <img class="a byte-capa" src="assets/personaje-melodia.png" alt="Personaje de DM-BEAT tocando el teclado"
            style="left:85px;top:180px;width:431px;height:287px;object-fit:cover">
       <span class="marco panel" style="left:180px;top:469px;height:405.62px"></span>
       <button class="a boton-play" data-play aria-label="Reproducir capa" aria-pressed="false" style="left:240px;top:761px;width:60px;height:75.22px">
@@ -268,7 +268,7 @@
     <section class="screen capa" id="estructura" data-seccion="aprende" aria-label="Capas del beat: estructuración">
       <h1 class="apilado degradado-b" data-capas="#00ff89 12, #0084ff 8, #cc4bff 4"
           style="left:388px;top:259px;font-size:90px">¿CÓMO ESTÁ COMPUESTO UN BEAT?</h1>
-      <img class="a" src="assets/personaje-estructura.png" alt="Personaje de DM-BEAT leyendo una partitura"
+      <img class="a byte-capa" src="assets/personaje-estructura.png" alt="Personaje de DM-BEAT leyendo una partitura"
            style="left:44px;top:177px;width:414px;height:276px;object-fit:cover">
       <span class="marco panel" style="left:168px;top:438px;height:443px"></span>
       <button class="a boton-play" data-play aria-label="Reproducir capa" aria-pressed="false" style="left:232px;top:764px;width:60px;height:75.22px">
@@ -303,7 +303,7 @@
     <section class="screen capa" id="mezcla" data-seccion="aprende" aria-label="Capas del beat: mezcla">
       <h1 class="apilado degradado-b" data-capas="#00ff89 12, #0084ff 8, #cc4bff 4"
           style="left:442px;top:266px;font-size:90px">¿CÓMO ESTÁ COMPUESTO UN BEAT?</h1>
-      <img class="a" src="assets/personaje-mezcla.png" alt="Personaje de DM-BEAT en una consola de DJ"
+      <img class="a byte-capa" src="assets/personaje-mezcla.png" alt="Personaje de DM-BEAT en una consola de DJ"
            style="left:77px;top:193px;width:429px;height:286px;object-fit:cover">
       <span class="marco panel" style="left:157px;top:479px;height:420px"></span>
       <button class="a boton-play" data-play aria-label="Reproducir capa" aria-pressed="false" style="left:229px;top:783px;width:60px;height:75.22px">
@@ -319,7 +319,7 @@
       <div class="a caja-mezcla" style="left:833px;top:540px;width:832px;height:296px"></div>
       <div class="a faders"></div>
       <div class="progreso-tutorial" data-progreso="5" style="top:971px"></div>
-      <button class="a siguiente-crea" data-paso="1" style="left:1472px;top:918px">SIGUIENTE<span data-flecha-siguiente></span></button>
+      <button class="a boton-consola verde" data-paso="1" data-consola-boton="3" style="right:156px;top:925px"><svg class="cuadro" viewBox="0 0 112 109" aria-hidden="true"><path class="esquinas" d="M1.5 25.5V1.5H25.5M86.5 1.5H110.5V25.5M110.5 83.5V107.5H86.5M25.5 107.5H1.5V83.5"/><rect x="15.5" y="15.5" width="81" height="78" rx="7"/></svg>CONTINUAR</button>
       <div data-nav></div>
     </section>
 
@@ -332,7 +332,7 @@
       <img class="a captura" src="assets/captura-fl-studio.png" alt="Captura de la interfaz de FL Studio"
            style="left:829.34px;top:212.22px;width:928.661px;height:521.782px">
 
-      <button class="a boton-consola gris" data-paso="1" data-consola-boton="4" style="right:154px;top:909px"><span class="cuadro" aria-hidden="true"></span>CONTINUAR</button>
+      <button class="a boton-consola verde" data-paso="1" data-consola-boton="3" style="right:154px;top:909px"><svg class="cuadro" viewBox="0 0 112 109" aria-hidden="true"><path class="esquinas" d="M1.5 25.5V1.5H25.5M86.5 1.5H110.5V25.5M110.5 83.5V107.5H86.5M25.5 107.5H1.5V83.5"/><rect x="15.5" y="15.5" width="81" height="78" rx="7"/></svg>CONTINUAR</button>
       <div data-nav></div>
     </section>
 
@@ -351,7 +351,7 @@
       <p class="texto ajustado" style="left:983px;top:288.47px;width:776px;font-size:40px;white-space:pre-wrap"> <span class="semi violeta">Romina Zanellato </span>,periodista, contó en Revista Anfibia,(2022) a través del caso de  <span class="negrita verde">Bizarrap</span> cómo en Argentina se puede producir un beat con muy poco equipamiento.</p>
       <p class="texto ajustado" style="left:988px;top:570.47px;width:776px;font-size:40px"><span class="negrita verde">Bizarrap</span> aprendió a usar <span class="semi violeta">FL Studio</span> a los 13 años y trabaja con una computadora, parlantes, un micrófono y algunos sintetizadores chicos.</p>
 
-      <button class="a boton-consola gris" data-paso="1" data-consola-boton="4" style="right:154px;top:909px"><span class="cuadro" aria-hidden="true"></span>CONTINUAR</button>
+      <button class="a boton-consola verde" data-paso="1" data-consola-boton="3" style="right:154px;top:909px"><svg class="cuadro" viewBox="0 0 112 109" aria-hidden="true"><path class="esquinas" d="M1.5 25.5V1.5H25.5M86.5 1.5H110.5V25.5M110.5 83.5V107.5H86.5M25.5 107.5H1.5V83.5"/><rect x="15.5" y="15.5" width="81" height="78" rx="7"/></svg>CONTINUAR</button>
       <div data-nav></div>
     </section>
 
@@ -367,7 +367,7 @@
         <img src="assets/personaje-dj.png" alt="Personaje de DM-BEAT mezclando como DJ">
       </div>
 
-      <button class="a boton-consola gris" data-paso="1" data-consola-boton="4" style="right:154px;top:909px"><span class="cuadro" aria-hidden="true"></span>EXPLORAR</button>
+      <button class="a boton-consola verde" data-paso="1" data-consola-boton="3" style="right:154px;top:909px"><svg class="cuadro" viewBox="0 0 112 109" aria-hidden="true"><path class="esquinas" d="M1.5 25.5V1.5H25.5M86.5 1.5H110.5V25.5M110.5 83.5V107.5H86.5M25.5 107.5H1.5V83.5"/><rect x="15.5" y="15.5" width="81" height="78" rx="7"/></svg>EXPLORAR</button>
       <div data-nav></div>
     </section>
 
@@ -432,8 +432,8 @@
 
       <div data-stems></div>
 
-      <button class="a boton-consola azul izquierda" data-paso="-1" data-consola-boton="1" style="left:154px;top:936px"><span class="cuadro" aria-hidden="true"></span>ELIGE OTRA CANCION</button>
-      <button class="a boton-consola gris" data-paso="1" data-consola-boton="4" style="right:158px;top:937px"><span class="cuadro" aria-hidden="true"></span>CREA TU PROPIO BEAT</button>
+      <button class="a boton-consola azul izquierda" data-paso="-1" data-consola-boton="1" style="left:154px;top:936px"><svg class="cuadro" viewBox="0 0 112 109" aria-hidden="true"><path class="esquinas" d="M1.5 25.5V1.5H25.5M86.5 1.5H110.5V25.5M110.5 83.5V107.5H86.5M25.5 107.5H1.5V83.5"/><rect x="15.5" y="15.5" width="81" height="78" rx="7"/></svg>ELIGE OTRA CANCION</button>
+      <button class="a boton-consola verde" data-paso="1" data-consola-boton="3" style="right:158px;top:937px"><svg class="cuadro" viewBox="0 0 112 109" aria-hidden="true"><path class="esquinas" d="M1.5 25.5V1.5H25.5M86.5 1.5H110.5V25.5M110.5 83.5V107.5H86.5M25.5 107.5H1.5V83.5"/><rect x="15.5" y="15.5" width="81" height="78" rx="7"/></svg>CREA TU PROPIO BEAT</button>
       <div data-nav></div>
     </section>
 
@@ -450,7 +450,7 @@
       <img class="a" src="assets/personaje-crea.png" alt="Personaje de DM-BEAT señalando con las dos manos"
            style="left:1140.64px;top:311px;width:686px;height:458px;object-fit:cover">
 
-      <button class="a boton-figma" data-paso="1" style="left:803px;top:922px;width:314px">CONTINUAR</button>
+      <button class="a boton-consola verde" data-paso="1" data-consola-boton="3" style="right:154px;top:909px"><svg class="cuadro" viewBox="0 0 112 109" aria-hidden="true"><path class="esquinas" d="M1.5 25.5V1.5H25.5M86.5 1.5H110.5V25.5M110.5 83.5V107.5H86.5M25.5 107.5H1.5V83.5"/><rect x="15.5" y="15.5" width="81" height="78" rx="7"/></svg>CONTINUAR</button>
       <div data-nav></div>
     </section>
 
@@ -479,7 +479,7 @@
       <p class="texto light ajustado" style="left:160px;top:631.53px;width:828px;font-size:40px">Hacer un beat desde cero puede llevar horas: buscar sonidos, combinar capas y ajustar cada detalle.</p>
       <p class="texto light ajustado" style="left:160px;top:746.53px;width:1639px;font-size:40px">Con <span class="violeta">DM-BEAT</span>, la IA te ayuda a generar una base en minutos para que puedas empezar a experimentar, modificarla y darle tu propia identidad.</p>
 
-      <button class="a boton-figma" data-paso="1" style="left:803px;top:921px;width:314px">CONTINUAR</button>
+      <button class="a boton-consola verde" data-paso="1" data-consola-boton="3" style="right:154px;top:909px"><svg class="cuadro" viewBox="0 0 112 109" aria-hidden="true"><path class="esquinas" d="M1.5 25.5V1.5H25.5M86.5 1.5H110.5V25.5M110.5 83.5V107.5H86.5M25.5 107.5H1.5V83.5"/><rect x="15.5" y="15.5" width="81" height="78" rx="7"/></svg>CONTINUAR</button>
       <div data-nav></div>
     </section>
 
@@ -514,7 +514,7 @@
       <img class="a" src="assets/personaje-primera-base.png" alt="Personaje de DM-BEAT presentando con la mano"
            style="left:1090.55px;top:310.47px;width:717.28px;height:478.19px;object-fit:cover">
 
-      <button class="a boton-figma" data-paso="1" style="left:803px;top:922px;width:314px">CONTINUAR</button>
+      <button class="a boton-consola verde" data-paso="1" data-consola-boton="3" style="right:154px;top:909px"><svg class="cuadro" viewBox="0 0 112 109" aria-hidden="true"><path class="esquinas" d="M1.5 25.5V1.5H25.5M86.5 1.5H110.5V25.5M110.5 83.5V107.5H86.5M25.5 107.5H1.5V83.5"/><rect x="15.5" y="15.5" width="81" height="78" rx="7"/></svg>CONTINUAR</button>
       <div data-nav></div>
     </section>
 
@@ -542,7 +542,7 @@
       <img class="a" src="assets/personaje-etapas.png" alt="Personaje de DM-BEAT mostrando las etapas: elegí un estilo, sumá sonidos, guardá tu base"
            style="left:1114.47px;top:332.61px;width:679px;height:453px;object-fit:cover">
 
-      <button class="a boton-figma" data-paso="1" style="left:803px;top:921px;width:314px">CONTINUAR</button>
+      <button class="a boton-consola verde" data-paso="1" data-consola-boton="3" style="right:154px;top:909px"><svg class="cuadro" viewBox="0 0 112 109" aria-hidden="true"><path class="esquinas" d="M1.5 25.5V1.5H25.5M86.5 1.5H110.5V25.5M110.5 83.5V107.5H86.5M25.5 107.5H1.5V83.5"/><rect x="15.5" y="15.5" width="81" height="78" rx="7"/></svg>CONTINUAR</button>
       <div data-nav></div>
     </section>
 
@@ -621,7 +621,7 @@
 
       <div class="a caja-crea" style="left:485px;top:477.41px;width:1293px;height:478.72px"></div>
       <p class="texto negrita" data-opciones-texto style="left:686.86px;top:499.93px;font-size:30px">Te propongo 3 opciones, elegí la que más te guste y seleccionala según el color</p>
-      <img class="a" src="assets/personaje-dj.png" alt="" style="left:498.75px;top:609.85px;width:188.11px;height:225.03px;object-fit:contain">
+      <img class="a" data-pieza-imagen src="assets/personaje-dj.png" alt="" style="left:498.75px;top:609.85px;width:188.11px;height:225.03px;object-fit:contain">
       <div class="a opciones" data-opciones="ritmo" style="left:709px;top:575px;width:1043.63px"></div>
 
       <button class="a siguiente-crea" data-paso="1" style="left:1510px;top:945px">SIGUIENTE<span data-flecha-siguiente></span></button>
@@ -640,8 +640,8 @@
 
       <div class="a caja-crea" style="left:485px;top:460px;width:1293px;height:469px"></div>
       <p class="texto negrita" data-opciones-texto style="left:513px;top:477px;font-size:30px">Te propongo estas opciones, seleccioná la que más te guste según el color</p>
-      <div class="a opciones" data-opciones="bajo" style="left:512px;top:540px;width:1022px"></div>
-      <img class="a" src="assets/byte-presenta.webp" alt="" style="left:1556px;top:629px;width:212px;height:184px;object-fit:contain">
+      <img class="a" src="assets/byte-presenta.webp" alt="" style="left:498.75px;top:609.85px;width:188.11px;height:225.03px;object-fit:contain">
+      <div class="a opciones" data-opciones="bajo" style="left:709px;top:540px;width:1043.63px"></div>
 
       <button class="a siguiente-crea" data-paso="1" style="left:1510px;top:945px">SIGUIENTE<span data-flecha-siguiente></span></button>
       <div data-nav></div>
@@ -701,7 +701,7 @@
       <div class="a qr" data-qr role="img" aria-label="Código QR para descargar tu beat en el celular" style="left:1288px;top:463px"></div>
       <p class="texto semi centrado" data-qr-texto style="left:1460px;top:846px;font-size:34px">ESCANEÁ Y DESCARGÁ</p>
 
-      <button class="cta finalizar" data-ir="cierre" style="left:958px;top:943px;width:344px;height:83px">FINALIZAR</button>
+      <button class="a boton-consola verde" data-ir="cierre" data-consola-boton="3" style="right:156px;top:955px"><svg class="cuadro" viewBox="0 0 112 109" aria-hidden="true"><path class="esquinas" d="M1.5 25.5V1.5H25.5M86.5 1.5H110.5V25.5M110.5 83.5V107.5H86.5M25.5 107.5H1.5V83.5"/><rect x="15.5" y="15.5" width="81" height="78" rx="7"/></svg>FINALIZAR</button>
       <div data-nav></div>
     </section>
 
@@ -772,17 +772,17 @@
 <!-- Consola de los tutoriales 1 y 2: cada luz se enciende cuando se toca ese control en la consola física -->
 <template id="tpl-consola-tutorial">
   <div class="a consola-marco" style="left:0;top:0;width:618px;height:630px"></div>
-  <img class="a" src="assets/skip-previous-verde.svg" alt="" style="left:116px;top:42px;width:86px;height:117px">
-  <img class="a" src="assets/skip-next-verde.svg" alt="" style="left:415px;top:42px;width:86px;height:117px">
-  <div class="a palanca" style="left:243px;top:22px;width:154px;height:157px"><i class="perilla-joy"></i><b class="flechas-joy"></b></div>
+  <span class="a salto" style="left:116px;top:42px"><img src="assets/skip-previous-verde.svg" alt=""><img class="encima" src="assets/skip-previous-celeste.svg" alt=""></span>
+  <span class="a salto" style="left:415px;top:42px"><img src="assets/skip-next-verde.svg" alt=""><img class="encima" src="assets/skip-next-celeste.svg" alt=""></span>
+  <div class="a palanca" style="left:243px;top:22px;width:154px;height:157px"><img src="assets/tutorial-palanca.svg" alt=""></div>
   <span class="a cuadro-color azul" style="left:50px;top:239px"></span>
   <span class="a cuadro-color violeta" style="left:191px;top:239px"></span>
   <span class="a cuadro-color verde" style="left:332px;top:239px"></span>
   <span class="a cuadro-color gris" style="left:474px;top:239px"></span>
-  <span class="a mini-fader" style="left:57px;top:374px;--c:#00ff89;--v:.85"><img src="assets/stem-voz.png" alt=""></span>
-  <span class="a mini-fader" style="left:315px;top:374px;--c:#0084ff;--v:.5"><img src="assets/stem-guitarra.png" alt=""></span>
-  <span class="a mini-fader" style="left:65px;top:442px;--c:#675180;--v:.12"><img src="assets/stem-melodia.png" alt=""></span>
-  <span class="a mini-fader" style="left:324px;top:443px;--c:#9ec5f4;--v:1"><img src="assets/stem-bateria.png" alt=""></span>
+  <span class="a mini-fader" style="left:57px;top:374px;--c:#00ff89;--v:.95"><i style="-webkit-mask-image:url(assets/stem-voz.png);mask-image:url(assets/stem-voz.png)"></i></span>
+  <span class="a mini-fader" style="left:315px;top:374px;--c:#0084ff;--v:.4"><i style="-webkit-mask-image:url(assets/stem-guitarra.png);mask-image:url(assets/stem-guitarra.png)"></i></span>
+  <span class="a mini-fader" style="left:57px;top:442px;--c:#b46cff;--v:.04"><i style="-webkit-mask-image:url(assets/stem-melodia.png);mask-image:url(assets/stem-melodia.png)"></i></span>
+  <span class="a mini-fader" style="left:315px;top:442px;--c:#9ec5f4;--v:1"><i style="-webkit-mask-image:url(assets/stem-bateria.png);mask-image:url(assets/stem-bateria.png)"></i></span>
   <span class="a mini-pausa" style="left:212px;top:537px"><i></i><i></i></span>
   <span class="a mini-play" style="left:385px;top:537px"></span>
   <p class="sr-only">Consola: botones anterior y siguiente con el joystick en el medio, cuatro botones de colores (azul, violeta, verde y gris), cuatro faders y los botones de pausa y play.</p>
@@ -795,8 +795,8 @@
   <span class="luz" data-control="B4" style="left:474px;top:239px;width:94px;height:94px"></span>
   <span class="luz fader" data-control="F1" style="left:57px;top:374px;width:247px;height:38px"></span>
   <span class="luz fader" data-control="F2" style="left:315px;top:374px;width:247px;height:38px"></span>
-  <span class="luz fader" data-control="F3" style="left:65px;top:442px;width:247px;height:38px"></span>
-  <span class="luz fader" data-control="F4" style="left:324px;top:443px;width:247px;height:38px"></span>
+  <span class="luz fader" data-control="F3" style="left:57px;top:442px;width:247px;height:38px"></span>
+  <span class="luz fader" data-control="F4" style="left:315px;top:442px;width:247px;height:38px"></span>
   <span class="luz" data-control="B2" style="left:204px;top:530px;width:44px;height:52px"></span>
   <span class="luz" data-control="B8" style="left:378px;top:530px;width:46px;height:52px"></span>
 </template>
@@ -806,12 +806,12 @@
   <span class="flecha"><img src="assets/skip-next-verde.svg" alt=""><img class="encima" src="assets/skip-next-celeste.svg" alt=""></span>
 </template>
 
-<script src="js/audio.js?v=20261102e"></script>
-<script src="js/vendor/qrcode.min.js?v=20261102e"></script>
-<script src="js/motor-beat.js?v=20261102e"></script>
-<script src="js/nucleo2.js?v=20261102e"></script>
-<script src="js/nucleo3.js?v=20261102e"></script>
-<script src="js/main.js?v=20261102e"></script>
-<script src="js/consola.js?v=20261102e"></script>
+<script src="js/audio.js?v=20261103b"></script>
+<script src="js/vendor/qrcode.min.js?v=20261103b"></script>
+<script src="js/motor-beat.js?v=20261103b"></script>
+<script src="js/nucleo2.js?v=20261103b"></script>
+<script src="js/nucleo3.js?v=20261103b"></script>
+<script src="js/main.js?v=20261103b"></script>
+<script src="js/consola.js?v=20261103b"></script>
 </body>
 </html>

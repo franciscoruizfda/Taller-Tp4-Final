@@ -669,18 +669,32 @@ img { display: block; }
 
 .estado-cancion { color: var(--rosa); }
 
+/* Cada fila toma el color de su canal (el mismo del fader de la consola): fondo, borde y brillo */
 .stem-caja {
   position: absolute;
   width: 788px;
   height: 120px;
+  border: 3px solid color-mix(in srgb, var(--color) 70%, transparent);
   border-radius: 84px;
-  background: #210a41;
-  box-shadow: 0 0 20px rgba(204, 75, 255, .36);
+  box-sizing: border-box;
+  background: radial-gradient(ellipse at 50% 50%, color-mix(in srgb, var(--color) 42%, #0a0a2a) 0%, color-mix(in srgb, var(--color) 16%, #0a0a2a) 100%);
+  box-shadow: 0 0 22px color-mix(in srgb, var(--color) 60%, transparent);
 }
+/* Ícono del canal pintado con su color (tocarlo deja sonar solo ese canal) */
 .stem-icono { position: absolute; width: 62px; height: 62px; transition: opacity .2s, filter .2s; }
-.stem-icono img { width: 100%; height: 100%; object-fit: contain; }
+.stem-icono span {
+  position: absolute;
+  inset: 0;
+  background: color-mix(in srgb, var(--color) 80%, #fff);
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
 .stem-icono:hover,
-.stem-icono[aria-pressed="true"] { filter: drop-shadow(0 0 6px var(--violeta)); }
+.stem-icono[aria-pressed="true"] { filter: drop-shadow(0 0 8px var(--color)); }
 .stem-icono.apagado,
 .stem-fader.apagado { opacity: .35; }
 
@@ -698,15 +712,17 @@ img { display: block; }
   top: 19.5px;
   height: 8px;
 }
-.stem-fader .riel { right: 0; background: #b696b8; }
-.stem-fader .relleno { width: calc(var(--v, 1) * 100%); background: var(--color); }
+/* Después de la perilla la línea queda oscura; antes, del color del canal */
+.stem-fader .riel { right: 0; background: rgba(5, 8, 22, .85); }
+.stem-fader .relleno { width: calc(var(--v, 1) * 100%); background: color-mix(in srgb, var(--color) 80%, #fff); box-shadow: 0 0 6px var(--color); }
 .stem-fader .perilla {
   position: absolute;
   top: 0;
   width: 23px;
   height: 47px;
   left: clamp(0px, calc(var(--v, 1) * 100% - 11.5px), calc(100% - 23px));
-  background: var(--color);
+  background: color-mix(in srgb, var(--color) 80%, #fff);
+  box-shadow: 0 0 8px var(--color);
 }
 .stem-fader:focus-visible { outline: 3px solid var(--verde); outline-offset: 6px; border-radius: 6px; }
 
@@ -1102,19 +1118,25 @@ img { display: block; }
 .cta.tutorial.espaciado { letter-spacing: 2px; }
 
 .progreso-tutorial { position: absolute; left: 718px; width: 485px; height: 9px; }
-.progreso-tutorial i {
+/* Cada rayita: contorno blanco arriba y otro verde corrido 2 px hacia abajo (como las letras apiladas).
+   Hecha: rellena con degradado lila. Pendiente: hueca. */
+.progreso-tutorial i { position: absolute; top: 0; width: 64px; height: 13px; }
+.progreso-tutorial i::before,
+.progreso-tutorial i::after {
+  content: "";
   position: absolute;
-  top: 0;
+  left: 0;
   width: 64px;
-  height: 9px;
-  border: 1.5px solid #2fb39a;
-  border-radius: 5px;
+  height: 11px;
+  border-radius: 6px;
   box-sizing: border-box;
 }
-.progreso-tutorial i.hecho {
-  border: 0;
-  background: linear-gradient(180deg, #e9a4ff 0%, var(--violeta) 55%, #33d6c4 100%);
-  box-shadow: 0 0 6px var(--violeta);
+.progreso-tutorial i::before { top: 1.5px; border: 1px solid rgba(31, 255, 152, .8); } /* capa verde, corrida hacia abajo */
+.progreso-tutorial i::after { top: 0; border: .6px solid rgba(255, 255, 255, .5); background: #15124a; } /* capa blanca, encima; el centro oscuro la deja hueca */
+.progreso-tutorial i.hecho::before { background: #1fff98; }
+.progreso-tutorial i.hecho::after {
+  background: linear-gradient(180deg, #fff 0%, #f0c2ff 30%, #cc4bff 85%);
+  box-shadow: 0 0 6px rgba(204, 75, 255, .7);
 }
 .texto-tutorial b { font-weight: 700; }
 
@@ -1157,91 +1179,129 @@ img { display: block; }
   transition: filter .2s;
 }
 .boton-consola.izquierda { flex-direction: row; gap: 34px; }
+/* .cuadro: un solo SVG con las cuatro esquinas (como un botón de la consola) y el cuadrado de color
+   centrado adentro, así se ve igual en cualquier navegador. Los márgenes negativos hacen que en la fila
+   ocupe lo mismo que el cuadrado solo. */
 .boton-consola .cuadro {
-  position: relative;
   flex: none;
-  width: 84px;
-  height: 81px;
-  border: 3px solid var(--borde-cuadro);
-  border-radius: 8px;
-  background: var(--fondo-cuadro);
-  box-sizing: border-box;
+  width: 112px;
+  height: 109px;
+  margin: -14px;
+  overflow: visible;
+  transition: filter .2s;
 }
-/* Las cuatro esquinas que lo enmarcan, como un botón de la consola */
-.boton-consola .cuadro::before {
-  content: "";
-  position: absolute;
-  inset: -14px;
-  --e: 3px solid #6f7f99;
-  background:
-    linear-gradient(#6f7f99, #6f7f99) top left / 24px 3px, linear-gradient(#6f7f99, #6f7f99) top left / 3px 24px,
-    linear-gradient(#6f7f99, #6f7f99) top right / 24px 3px, linear-gradient(#6f7f99, #6f7f99) top right / 3px 24px,
-    linear-gradient(#6f7f99, #6f7f99) bottom left / 24px 3px, linear-gradient(#6f7f99, #6f7f99) bottom left / 3px 24px,
-    linear-gradient(#6f7f99, #6f7f99) bottom right / 24px 3px, linear-gradient(#6f7f99, #6f7f99) bottom right / 3px 24px;
-  background-repeat: no-repeat;
-}
+.boton-consola .cuadro .esquinas { fill: none; stroke: #6f7f99; stroke-width: 3; }
+.boton-consola .cuadro rect { fill: var(--fondo-cuadro); stroke: var(--borde-cuadro); stroke-width: 3; }
 .boton-consola.gris { --fondo-cuadro: #5f7591; --borde-cuadro: #8ea3bf; }
 .boton-consola.azul { --fondo-cuadro: #8cc8ff; --borde-cuadro: #c4e2ff; }
+.boton-consola.verde { --fondo-cuadro: #1b9873; --borde-cuadro: #2dffa6; color: #fff; }
 .boton-consola:hover .cuadro,
-.boton-consola.tocado .cuadro { box-shadow: 0 0 18px var(--borde-cuadro); filter: brightness(1.25); }
+.boton-consola.tocado .cuadro { filter: drop-shadow(0 0 10px var(--borde-cuadro)) brightness(1.2); }
 
-/* Joystick dibujado: recorte de la perilla del dibujo del tutorial */
-.palanca .perilla-joy {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 52%;
-  aspect-ratio: 1;
-  transform: translate(-50%, -50%);
-  border-radius: 50%;
-  background: radial-gradient(circle at 50% 38%, #fff 0 22%, #e9dcff 34%, #b9a6dd 62%, #8d7bb8 100%);
-  box-shadow: 0 0 0 4px rgba(255, 255, 255, .35), 0 0 22px rgba(204, 75, 255, .8);
-}
-/* Cuatro flechitas violetas alrededor */
-.palanca .flechas-joy {
-  position: absolute;
-  inset: 4%;
-  background:
-    conic-gradient(from 135deg at 50% 0, #cc4bff 0 90deg, transparent 0) 50% 0 / 14px 10px,
-    conic-gradient(from -45deg at 50% 100%, #cc4bff 0 90deg, transparent 0) 50% 100% / 14px 10px,
-    conic-gradient(from 45deg at 0 50%, #cc4bff 0 90deg, transparent 0) 0 50% / 10px 14px,
-    conic-gradient(from 225deg at 100% 50%, #cc4bff 0 90deg, transparent 0) 100% 50% / 10px 14px;
-  background-repeat: no-repeat;
-}
+/* Joystick dibujado (la palanca del Figma) */
+.palanca img { width: 100%; height: 100%; object-fit: contain; }
 
-/* Consola del tutorial */
+/* Consola del tutorial (dibujo del Figma). Las luces de .luz van en una capa aparte, encima. */
 .consola-marco {
-  border: 6px solid var(--violeta);
+  border: 6px solid #d86cff;
   border-radius: 30px;
   box-sizing: border-box;
-  box-shadow: 0 0 14px rgba(204, 75, 255, .7), inset 0 0 14px rgba(204, 75, 255, .4);
+  background: rgba(158, 197, 244, .1);
+  box-shadow: 0 0 16px rgba(204, 75, 255, .75), inset 0 0 16px rgba(204, 75, 255, .35);
 }
-.cuadro-color { width: 94px; height: 94px; border: 3px solid var(--b); border-radius: 6px; background: var(--f); box-sizing: border-box; }
-.cuadro-color.azul { --f: #0b5fb8; --b: #3d8ce0; }
-.cuadro-color.violeta { --f: #5d4880; --b: #8a70b3; }
-.cuadro-color.verde { --f: #13996d; --b: #36d29e; }
-.cuadro-color.gris { --f: #55687f; --b: #8399b4; }
+.salto { width: 86px; height: 117px; filter: drop-shadow(0 0 6px rgba(0, 255, 137, .55)); }
+.salto img { position: absolute; inset: 0; width: 100%; height: 100%; }
+.salto img.encima { opacity: .45; }
+.cuadro-color {
+  width: 94px;
+  height: 94px;
+  border: 3px solid var(--b);
+  border-radius: 7px;
+  background: var(--f);
+  box-sizing: border-box;
+  box-shadow: 0 0 12px var(--b), inset 0 0 10px rgba(255, 255, 255, .12);
+}
+.cuadro-color.azul { --f: #1f63ad; --b: #2f9bff; }
+.cuadro-color.violeta { --f: #6a5288; --b: #b46cff; }
+.cuadro-color.verde { --f: #1b9873; --b: #2dffa6; }
+.cuadro-color.gris { --f: #5b6f8c; --b: #b8d3f5; }
 .mini-fader {
   width: 247px;
   height: 38px;
+  border: 2px solid color-mix(in srgb, var(--c) 75%, transparent);
   border-radius: 19px;
-  background: rgba(2, 1, 28, .75);
-  box-shadow: 0 0 8px var(--c);
+  box-sizing: border-box;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--c) 35%, #0b0a24), color-mix(in srgb, var(--c) 12%, #0b0a24));
+  box-shadow: 0 0 10px color-mix(in srgb, var(--c) 70%, transparent);
 }
+/* Riel con el relleno del color del canal hasta el valor */
 .mini-fader::before {
   content: "";
   position: absolute;
   left: 40px;
-  right: 16px;
-  top: 17px;
+  right: 18px;
+  top: 50%;
   height: 4px;
-  background: linear-gradient(90deg, var(--c) calc(var(--v) * 100%), #2a2440 0);
+  transform: translateY(-50%);
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--c) calc(var(--v) * 100%), rgba(255, 255, 255, .25) 0);
+  box-shadow: 0 0 4px var(--c);
 }
-.mini-fader img { position: absolute; left: 6px; top: 5px; width: 28px; height: 28px; object-fit: contain; }
-.mini-pausa { width: 28px; height: 38px; }
-.mini-pausa i { position: absolute; top: 0; width: 10px; height: 100%; background: var(--verde); }
-.mini-pausa i + i { left: 18px; }
-.mini-play { width: 30px; height: 38px; background: var(--verde); clip-path: polygon(0 0, 100% 50%, 0 100%); }
+/* Perilla: rectangulito al final del relleno */
+.mini-fader::after {
+  content: "";
+  position: absolute;
+  left: calc(40px + var(--v) * (100% - 58px) - 3px);
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+  height: 16px;
+  border-radius: 1px;
+  background: var(--c);
+  box-shadow: 0 0 4px var(--c);
+}
+/* Ícono del canal pintado con su color */
+.mini-fader i {
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  width: 24px;
+  height: 24px;
+  transform: translateY(-50%);
+  background: var(--c);
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+.mini-pausa { width: 26px; height: 36px; filter: drop-shadow(0 0 6px rgba(0, 255, 137, .7)); }
+.mini-pausa i { position: absolute; top: 0; width: 9px; height: 100%; background: var(--verde); }
+.mini-pausa i + i { left: 17px; }
+.mini-play { width: 28px; height: 34px; background: var(--verde); clip-path: polygon(0 0, 100% 50%, 0 100%); filter: drop-shadow(0 0 6px rgba(0, 255, 137, .7)); }
 
 /* «¿Qué es un beat?»: la tarjeta elegida con el joystick se ilumina por dentro (Figma) */
 .opcion[aria-pressed="true"] { background: rgba(158, 197, 244, .22); }
+
+/* «Presiona … para continuar» del tutorial: rótulo sobre una mancha violeta difuminada (Figma) */
+.cta.continuar-tutorial {
+  isolation: isolate;
+  background: none;
+  box-shadow: none;
+  font-weight: 700;
+}
+.cta.continuar-tutorial::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: #7d6799;
+  filter: blur(14px);
+  opacity: .9;
+}
+.cta.continuar-tutorial:hover { box-shadow: none; filter: brightness(1.12); }
+.palanca img { transition: translate .12s ease-out; }
+
+/* Byte de las capas del núcleo 1: va por encima del borde del rectángulo violeta */
+.byte-capa { z-index: 2; }

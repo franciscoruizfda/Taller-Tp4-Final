@@ -387,12 +387,10 @@ const Sonido = (() => {
     const programar = () => {
       if (sesion !== actual) return;
       const ahora = ctx.currentTime;
-      // Si la página se trabó y quedamos atrasados, se saltean los compases perdidos
-      // en lugar de tocarlos todos juntos (eso era lo que se escuchaba cortado).
-      while (siguiente < total && proximo < ahora - 0.02) {
-        proximo += largoDe();
-        siguiente++;
-      }
+      // Si la página se trabó (al cambiar de pantalla, cargar imágenes o sonidos) y quedamos atrasados,
+      // se retoma desde el compás que tocaba, un instante después: así nunca arranca más adelantado
+      // ni toca los compases perdidos todos juntos.
+      if (proximo < ahora - 0.02) proximo = ahora + 0.03;
       while (siguiente < total && proximo < ahora + ANTICIPO) {
         const largo = largoDe();
         op.alCompas(siguiente, proximo, actual.salidas, largo);
