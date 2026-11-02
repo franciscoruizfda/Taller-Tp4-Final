@@ -34,6 +34,9 @@ const Consola = (() => {
   let joyX = 0;
   let bpmAcumulado = 0;
   let abriendo = false;
+  const ESPERA_TUTORIAL = 450; // ms que se ve la luz del botón antes de pasar de pantalla
+  let esperandoAvance = false;
+  const apagados = new Map(); // luz → temporizador que la apaga
 
   // ---------- Acciones ----------
 
@@ -49,15 +52,52 @@ const Consola = (() => {
       return;
     }
     if (actual === "carga") return;
-    // En el tutorial cualquier botón sigue, salvo el de volver.
+    // En el tutorial cualquier botón sigue, salvo el de volver. Si el botón está dibujado
+    // en la pantalla, primero se ilumina un momento para que se vea cuál se tocó.
     if (TUTORIAL.includes(actual)) {
-      avanzar(nombre === "B3" ? -1 : 1);
+      if (esperandoAvance) return;
+      const desde = actual;
+      const direccion = nombre === "B3" ? -1 : 1;
+      if (!iluminar(nombre)) {
+        avanzar(direccion);
+        return;
+      }
+      esperandoAvance = true;
+      setTimeout(() => {
+        esperandoAvance = false;
+        if (actual === desde) avanzar(direccion);
+      }, ESPERA_TUTORIAL);
       return;
     }
     BOTONES[nombre]?.();
   }
 
+  // Enciende las luces del control tocado en la consola dibujada del tutorial.
+  function iluminar(control, duracion = ESPERA_TUTORIAL) {
+    const luces = document.querySelectorAll(`#${actual} [data-control~="${control}"]`);
+    luces.forEach((luz) => {
+      luz.classList.add("tocada");
+      clearTimeout(apagados.get(luz));
+      apagados.set(luz, setTimeout(() => luz.classList.remove("tocada"), duracion));
+    });
+    return luces.length > 0;
+  }
+
+  // El joystick en el tutorial: su luz se enciende y se corre hacia donde se lo inclina.
+  function moverJoystick(x, y) {
+    joyX = x;
+    if (!TUTORIAL.includes(actual)) return;
+    document.querySelectorAll(`#${actual} [data-control~="J"]`).forEach((luz) => {
+      luz.style.translate = `${x * 0.15}px ${-y * 0.15}px`;
+    });
+    if (x || y) iluminar("J", 600);
+  }
+
   function moverFader(nombre, porcentaje) {
+    if (TUTORIAL.includes(actual)) {
+      iluminar(nombre, 600);
+      return;
+    }
     const posicion = FADERS[nombre];
     if (posicion === undefined) return;
     if (actual === "cancion") Nucleo2.ajustar(STEMS[posicion], porcentaje / 100);
@@ -82,7 +122,7 @@ const Consola = (() => {
     let m;
     if ((m = /^B([1-8J])$/.exec(linea))) apretar(`B${m[1]}`);
     else if ((m = /^(F[1-4]):(\d+)$/.exec(linea))) moverFader(m[1], Number(m[2]));
-    else if ((m = /^J:(-?\d+),(-?\d+)$/.exec(linea))) joyX = Number(m[1]);
+    else if ((m = /^J:(-?\d+),(-?\d+)$/.exec(linea))) moverJoystick(Number(m[1]), Number(m[2]));
   }
 
   // ---------- Conexión ----------

@@ -51,8 +51,7 @@
       <p class="texto ajustado texto-tutorial" style="left:550px;top:428px;width:522px;font-size:36px;line-height:55px">
         Esta será la consola que te permita <b>explorar</b> y <b>crear</b> tu propia experiencia musical.</p>
 
-      <img class="a" src="assets/tutorial-consola.png" alt="Consola: botones anterior y siguiente, joystick, cuatro botones de colores, faders y botones de pausa y play"
-           style="left:1247px;top:234px;width:539px;height:559px">
+      <div class="a consola-tutorial" data-consola style="left:1255px;top:242px"></div>
 
       <div class="progreso-tutorial" data-progreso="1" style="top:889px"></div>
       <button class="cta tutorial" data-paso="1" style="left:613px;top:928px;width:693px">Presiona cualquier botón para continuar</button>
@@ -69,8 +68,7 @@
         Cuando aparezcan diferentes opciones, cada una estará representada por un color.<br>
         Tocá el botón del <b>color correspondiente</b> a tu elección.</p>
 
-      <img class="a" src="assets/tutorial-consola.png" alt="Consola con los cuatro botones de colores"
-           style="left:1247px;top:245px;width:539px;height:559px">
+      <div class="a consola-tutorial" data-consola style="left:1255px;top:253px"></div>
 
       <div class="progreso-tutorial" data-progreso="2" style="top:888px"></div>
       <button class="cta tutorial" data-paso="1" style="left:613px;top:927px;width:693px">Presiona cualquier botón para continuar</button>
@@ -88,8 +86,12 @@
         <b>presioná</b> el análogo para seleccionarla.<br><br>
         Usá los botones laterales para <b>avanzar</b> o <b>volver</b> cuando quieras.</p>
 
-      <img class="a" src="assets/tutorial-joystick.svg" alt="Joystick entre los botones anterior y siguiente"
-           style="left:1319px;top:414px;width:444px;height:165px">
+      <div class="a consola-tutorial" style="left:1339px;top:414px">
+        <img class="a" src="assets/tutorial-joystick.svg" alt="Joystick entre los botones anterior y siguiente" style="left:-20px;top:0;width:444px;height:165px">
+        <span class="luz" data-control="B3" style="left:0px;top:21px;width:90px;height:123px"></span>
+        <span class="luz" data-control="B1" style="left:313px;top:21px;width:90px;height:123px"></span>
+        <span class="luz redonda" data-control="J BJ" style="left:170px;top:40px;width:86px;height:86px"></span>
+      </div>
 
       <div class="progreso-tutorial" data-progreso="3" style="top:888px"></div>
       <button class="cta tutorial" data-paso="1" style="left:613px;top:927px;width:693px">Presiona cualquier botón para continuar</button>
@@ -105,8 +107,13 @@
         En algunas pantallas vas a poder moverlos para modificar el sonido o la música.</p>
 
       <div class="a globo-tutorial" style="left:162px;top:443px;width:1148px;height:370px"></div>
-      <img class="a" src="assets/tutorial-faders.svg" alt="Cuatro faders: voz, bajo, melodía y batería"
-           style="left:199px;top:492px;width:1076px;height:261px">
+      <div class="a consola-tutorial" style="left:219px;top:512px">
+        <img class="a" src="assets/tutorial-faders.svg" alt="Cuatro faders: voz, bajo, melodía y batería" style="left:-20px;top:-20px;width:1076px;height:261px">
+        <span class="luz fader" data-control="F1" style="left:0px;top:0px;width:479px;height:73px"></span>
+        <span class="luz fader" data-control="F3" style="left:556px;top:0px;width:479px;height:73px"></span>
+        <span class="luz fader" data-control="F2" style="left:0px;top:147px;width:479px;height:73px"></span>
+        <span class="luz fader" data-control="F4" style="left:556px;top:147px;width:479px;height:73px"></span>
+      </div>
       <img class="a" src="assets/byte-senala.webp" alt="" style="left:1307px;top:362px;width:530px;height:353px">
 
       <div class="progreso-tutorial" data-progreso="4" style="top:888px"></div>
@@ -297,11 +304,8 @@
       <h2 class="texto titulo-capa" style="left:362px;top:585px">MEZCLA</h2>
       <p class="texto light ajustado" style="left:352px;top:651px;width:485px;font-size:40px">Equilibrar volúmenes, aplicar efectos, etc.</p>
 
-      <div class="a caja-oscura" style="left:865px;top:581px;width:520px;height:279px"></div>
+      <div class="a caja-oscura" style="left:1034px;top:581px;width:520px;height:279px"></div>
       <div class="a faders"></div>
-
-      <div class="a caja-oscura" style="left:1406px;top:581px;width:316px;height:279px"></div>
-      <div class="a efectos"></div>
 
       <div data-pasos style="left:726px;top:903px"></div>
     </section>
@@ -652,32 +656,15 @@
 
     <!-- ============ CIERRE ============ -->
     <section class="screen" id="cierre" aria-label="Cierre">
-      <h1 class="apilado degradado-b centrado" data-capas="#00ff89 12, #0084ff 8, #cc4bff 4"
-          style="left:966.5px;top:30.84px;font-size:90px">¡GRACIAS POR PARTICIPAR!</h1>
-      <p class="texto centrado" style="left:960px;top:154.84px;font-size:40px">Espero que hayas aprendido y disfrutado armando tu propio beat</p>
+      <h1 class="apilado degradado-b centrado" data-capas="#00ff89 14, #0084ff 10, #cc4bff 5"
+          style="left:950px;top:168px;font-size:150px">¡GRACIAS POR PARTICIPAR!</h1>
+      <p class="texto centrado semi verde" style="left:932px;top:392px;font-size:40px">Espero que hayas aprendido y disfrutado armando tu propio beat</p>
 
-      <button class="circulo" data-ir="que-es" style="left:539px;top:310.84px" aria-label="Aprende">
-        <img src="assets/boton-aprende.svg" alt="">
-      </button>
-      <p class="texto" style="left:582px;top:543.84px;font-size:36px">APRENDE</p>
+      <img class="a" src="assets/personaje-saludo.png" alt="Personaje de DM-BEAT señalando y saludando"
+           style="left:663.85px;top:462.57px;width:538.15px;height:430.68px">
 
-      <button class="circulo" data-ir="modifica" style="left:1171px;top:310.84px" aria-label="Modifica">
-        <img src="assets/boton-modifica.svg" alt="">
-      </button>
-      <p class="texto" style="left:1218px;top:543.84px;font-size:36px">MODIFICA</p>
-
-      <img class="a" src="assets/perilla-consola.png" alt="Perilla de la consola"
-           style="left:795.8px;top:287.84px;width:333.5px;height:339.5px">
-
-      <button class="circulo" data-ir="crea" style="left:856px;top:711.84px" aria-label="Crea">
-        <img src="assets/boton-crea.svg" alt="">
-      </button>
-      <p class="texto" style="left:926px;top:930.84px;font-size:36px">CREA</p>
-
-      <img class="a" src="assets/personaje-saludo.png" alt="Personaje de DM-BEAT saludando"
-           style="left:16.55px;top:704.87px;width:249.452px;height:199.633px">
-      <button class="cta chico" data-ir="inicio" style="left:44px;top:902px;width:385px">VOLVER AL INICIO</button>
-      <p class="texto centrado" style="left:250.5px;top:1006px;font-size:30px">Presiona cualquier boton para volver</p>
+      <button class="cta chico cierre-volver" data-ir="inicio" style="left:35px;top:911px;width:475px">VOLVER AL INICIO</button>
+      <p class="texto" style="left:66px;top:1005px;font-size:30px">Presiona cualquier botón para volver</p>
 
       <div class="onda-logo" data-onda="chica" style="left:1685.5px;top:886.25px"></div>
       <p class="apilado degradado-a" data-capas="#00ff89 6.5, #0084ff 4.5, #cc4bff 2.5"
@@ -692,10 +679,12 @@
   <div class="nav">
     <div class="nav-brillo"></div>
     <div class="nav-barra"></div>
-    <span class="a nav-link" data-seccion="inicio" style="left:425px">INICIO</span>
-    <span class="a nav-link" data-seccion="aprende" style="left:547px">APRENDE</span>
-    <span class="a nav-link" data-seccion="modifica" style="left:709px">MODIFICA</span>
-    <span class="a nav-link" data-seccion="crea" style="left:871px">CREA</span>
+    <div class="nav-links">
+      <span class="nav-link" data-seccion="inicio">INICIO</span>
+      <span class="nav-link" data-seccion="aprende">APRENDE</span>
+      <span class="nav-link" data-seccion="modifica">MODIFICA</span>
+      <span class="nav-link" data-seccion="crea">CREA</span>
+    </div>
   </div>
 </template>
 
@@ -752,6 +741,24 @@
   <button class="a anterior-crea" data-paso="-1" style="left:165.47px;top:929.34px">
     <span class="flecha"><img src="assets/skip-previous-verde.svg" alt=""><img class="encima" src="assets/skip-previous-celeste.svg" alt=""></span>PASO ANTERIOR
   </button>
+</template>
+
+<!-- Consola de los tutoriales 1 y 2: cada luz se enciende cuando se toca ese control en la consola física -->
+<template id="tpl-consola-tutorial">
+  <img class="a" src="assets/tutorial-consola.png" alt="Consola: botones anterior y siguiente, joystick, cuatro botones de colores, faders y botones de pausa y play" style="left:-8px;top:-8px;width:539px;height:559px">
+  <span class="luz" data-control="B3" style="left:97px;top:37px;width:74px;height:100px"></span>
+  <span class="luz" data-control="B1" style="left:352px;top:37px;width:74px;height:100px"></span>
+  <span class="luz redonda" data-control="J BJ" style="left:232px;top:50px;width:76px;height:76px"></span>
+  <span class="luz" data-control="B6" style="left:42px;top:191px;width:81px;height:80px"></span>
+  <span class="luz" data-control="B7" style="left:161px;top:192px;width:81px;height:79px"></span>
+  <span class="luz" data-control="B5" style="left:281px;top:192px;width:81px;height:79px"></span>
+  <span class="luz" data-control="B4" style="left:400px;top:192px;width:81px;height:80px"></span>
+  <span class="luz fader" data-control="F1" style="left:48px;top:322px;width:211px;height:32px"></span>
+  <span class="luz fader" data-control="F3" style="left:272px;top:322px;width:211px;height:32px"></span>
+  <span class="luz fader" data-control="F2" style="left:48px;top:382px;width:211px;height:32px"></span>
+  <span class="luz fader" data-control="F4" style="left:272px;top:382px;width:211px;height:32px"></span>
+  <span class="luz" data-control="B2" style="left:166px;top:461px;width:34px;height:36px"></span>
+  <span class="luz" data-control="B8" style="left:319px;top:461px;width:37px;height:36px"></span>
 </template>
 
 <!-- Flecha del botón «siguiente» de los pasos del núcleo 3 -->

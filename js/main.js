@@ -78,14 +78,6 @@ const CANALES_MEZCLA = [
   { canal: "bateria", nombre: "Batería", icono: "mix-drums.png", riel: [1301, 592, 11], valor: 109.07 / ALTO_RIEL, boton: [1284, 790.08], ico: [6, 7.52, 33, 38.86] },
 ];
 
-// fondo: [left, top, ancho, alto]; texto: [left, top]; perilla: top del círculo de 28 px.
-const EFECTOS_MEZCLA = [
-  { clave: "reverb", nombre: "Reverb", valor: 0.88, fondo: [1427, 606, 101, 41], texto: [1438, 606], perilla: 614 },
-  { clave: "delay", nombre: "Delay", valor: 0.25, fondo: [1427, 672, 84, 41], texto: [1436, 672], perilla: 680 },
-  { clave: "eq", nombre: "EQ", valor: 0.5, fondo: [1427, 736, 52, 41], texto: [1441, 736], perilla: 745 },
-  { clave: "compresor", nombre: "Compresor", valor: 0, fondo: [1427, 801, 133, 42], texto: [1433, 802], perilla: 808 },
-];
-
 const ONDAS = {
   chica: {
     x: [0, 19, 38, 56, 75, 94, 113, 132, 151],
@@ -123,6 +115,10 @@ function montarPlantillas() {
     const hechas = Number(el.dataset.progreso);
     el.innerHTML = TUTORIAL.map((_, i) => `<i class="${i < hechas ? "hecho" : ""}" style="left:${i * 105.25}px"></i>`).join("");
   });
+
+  // Dibujo de la consola de los tutoriales 1 y 2, con sus luces.
+  const consola = document.getElementById("tpl-consola-tutorial");
+  document.querySelectorAll("[data-consola]").forEach((el) => el.append(consola.content.cloneNode(true)));
 
   const pasos = document.getElementById("tpl-pasos");
   document.querySelectorAll("[data-pasos]").forEach((el) => el.append(pasos.content.cloneNode(true)));
@@ -244,7 +240,7 @@ function armarRollos() {
 
 function armarMezcla() {
   const faders = document.querySelector("#mezcla .faders");
-  faders.style.cssText = "left:0;top:0";
+  faders.style.cssText = "left:169px;top:0"; // centrados en el panel (sin la caja de efectos)
   faders.innerHTML = CANALES_MEZCLA.map((c, i) => {
     const [x, y, ancho] = c.riel;
     return `
@@ -259,21 +255,7 @@ function armarMezcla() {
     </button>`;
   }).join("");
 
-  const efectos = document.querySelector("#mezcla .efectos");
-  efectos.style.cssText = "left:0;top:0";
-  efectos.innerHTML = EFECTOS_MEZCLA.map((ef, i) => `
-    <div class="efecto-fondo" style="left:${ef.fondo[0]}px;top:${ef.fondo[1]}px;width:${ef.fondo[2]}px;height:${ef.fondo[3]}px"></div>
-    <p class="texto efecto-nombre" style="left:${ef.texto[0]}px;top:${ef.texto[1]}px">${ef.nombre}</p>
-    <div class="perilla" role="slider" tabindex="0" aria-label="${ef.nombre}" aria-valuemin="0" aria-valuemax="100"
-         data-efecto="${i}" style="top:${ef.perilla - 8}px">
-      <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
-        <circle cx="14" cy="14" r="12" stroke="#210A41" stroke-width="4"/>
-        <path class="arco" d="M14 2A12 12 0 1 0 14 26A12 12 0 1 0 14 2" stroke="#CC4BFF" stroke-width="4" pathLength="100"/>
-      </svg>
-    </div>`).join("");
-
   CANALES_MEZCLA.forEach((_, i) => pintarFader(i));
-  EFECTOS_MEZCLA.forEach((_, i) => pintarPerilla(i));
 
   // Faders: arrastrar en vertical o usar flechas arriba/abajo
   faders.querySelectorAll(".fader").forEach((el) => {
@@ -304,35 +286,6 @@ function armarMezcla() {
     });
   });
 
-  // Perillas: arrastrar hacia arriba/abajo, clic para sumar un cuarto, o flechas
-  efectos.querySelectorAll(".perilla").forEach((el) => {
-    const efecto = EFECTOS_MEZCLA[Number(el.dataset.efecto)];
-    let inicio = null;
-    el.addEventListener("pointerdown", (e) => {
-      el.setPointerCapture(e.pointerId);
-      inicio = { y: e.clientY, valor: efecto.valor, movio: false };
-    });
-    el.addEventListener("pointermove", (e) => {
-      if (!inicio) return;
-      const delta = (inicio.y - e.clientY) / (150 * escala());
-      if (Math.abs(delta) > 0.02) inicio.movio = true;
-      efecto.valor = limitar(inicio.valor + delta);
-      pintarPerilla(Number(el.dataset.efecto));
-      aplicarEfectos();
-    });
-    el.addEventListener("pointerup", () => {
-      if (inicio && !inicio.movio) {
-        efecto.valor = efecto.valor >= 1 ? 0 : limitar(Math.round((efecto.valor + 0.25) * 4) / 4);
-        pintarPerilla(Number(el.dataset.efecto));
-        aplicarEfectos();
-      }
-      inicio = null;
-    });
-    el.addEventListener("keydown", (e) => ajustarConTeclas(e, efecto, () => {
-      pintarPerilla(Number(el.dataset.efecto));
-      aplicarEfectos();
-    }));
-  });
 }
 
 function pintarFader(i) {
@@ -343,13 +296,6 @@ function pintarFader(i) {
   perilla.style.left = `${22 - 14.37}px`;
   perilla.style.top = `${24 + (1 - c.valor) * ALTO_RIEL - 24.11}px`;
   el.setAttribute("aria-valuenow", Math.round(c.valor * 100));
-}
-
-function pintarPerilla(i) {
-  const ef = EFECTOS_MEZCLA[i];
-  const el = document.querySelector(`#mezcla .perilla[data-efecto="${i}"]`);
-  el.querySelector(".arco").setAttribute("stroke-dasharray", `${ef.valor * 100} 100`);
-  el.setAttribute("aria-valuenow", Math.round(ef.valor * 100));
 }
 
 function ajustarConTeclas(e, objeto, alCambiar) {
@@ -372,14 +318,9 @@ function aplicarVolumenes() {
   });
 }
 
+// La mezcla ya no tiene perillas de efectos: siempre suenan neutros.
 function aplicarEfectos() {
-  if (actual !== "mezcla") {
-    Sonido.aplicarEfectos(Sonido.efectosNeutros);
-    return;
-  }
-  const valores = {};
-  EFECTOS_MEZCLA.forEach((ef) => { valores[ef.clave] = ef.valor; });
-  Sonido.aplicarEfectos(valores);
+  Sonido.aplicarEfectos(Sonido.efectosNeutros);
 }
 
 // ---------- Sonido de cada pantalla ----------

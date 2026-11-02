@@ -158,12 +158,21 @@ img { display: block; }
 .nav-brillo { background: var(--azul); filter: blur(8.8px); }
 .nav-barra { background: rgba(2, 1, 28, .8); }
 
+/* Las 4 secciones, centradas a lo ancho y a lo alto de la barra */
+.nav-links {
+  position: absolute;
+  left: 142px;
+  top: 28px;
+  width: 1636px;
+  height: 95px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 48px;
+}
 .nav-link {
-  top: 48px;
-  height: 50px;
   font-size: 36px;
-  line-height: normal;
-  text-align: left;
+  line-height: 1;
   white-space: nowrap;
 }
 .nav-link.activo { color: var(--verde); }
@@ -485,12 +494,6 @@ img { display: block; }
 .canal[aria-pressed="true"] { opacity: .35; }
 .canal:hover { filter: drop-shadow(0 0 6px var(--violeta)); }
 
-.efecto-fondo {
-  position: absolute;
-  border-radius: 8px;
-  background: radial-gradient(ellipse at center, #2f0668 0%, #2c0d57 100%);
-}
-.efecto-nombre { font-size: 30px; }
 .perilla {
   position: absolute;
   left: 1626px;
@@ -518,15 +521,7 @@ img { display: block; }
 
 /* ---------- Cierre ---------- */
 
-.circulo {
-  position: absolute;
-  width: 209px;
-  height: 209px;
-  border-radius: 50%;
-  transition: filter .2s, transform .2s;
-}
-.circulo img { width: 209px; height: 209px; }
-.circulo:not(:disabled):hover { filter: drop-shadow(0 0 14px var(--violeta)); transform: scale(1.03); }
+.cta.cierre-volver { font-weight: 600; letter-spacing: 14px; padding-left: 14px; }
 
 .desenfocado { filter: blur(2px); }
 
@@ -1079,3 +1074,20 @@ img { display: block; }
   box-shadow: 0 0 6px var(--violeta);
 }
 .texto-tutorial b { font-weight: 700; }
+
+/* Luces de la consola dibujada en el tutorial: se encienden al tocar ese control en la consola física */
+.consola-tutorial { width: 0; height: 0; }
+.luz {
+  position: absolute;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, .22);
+  box-shadow: 0 0 0 3px #fff, 0 0 26px 8px rgba(255, 255, 255, .7);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .12s, translate .08s;
+}
+.luz.redonda { border-radius: 50%; }
+.luz.fader { border-radius: 999px; }
+.luz.tocada { opacity: 1; animation: luz-tocada .45s ease-out; }
+@keyframes luz-tocada { from { transform: scale(1.12); } to { transform: scale(1); } }
+@media (prefers-reduced-motion: reduce) { .luz.tocada { animation: none; } }
