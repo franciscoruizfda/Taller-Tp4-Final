@@ -20,10 +20,10 @@ const Consola = (() => {
   };
 
   /* Los 4 faders están en dos filas, igual que los rieles en pantalla y con sus mismos colores:
-       F1 arriba izquierda (verde)    F3 arriba derecha (azul)
-       F2 abajo izquierda (violeta)   F4 abajo derecha (celeste)
+       F1 arriba izquierda (verde)    F2 arriba derecha (azul)
+       F3 abajo izquierda (violeta)   F4 abajo derecha (celeste)
      Si al probar un fader mueve otro riel, alcanza con cambiar el orden acá. */
-  const FADERS = { F1: 0, F3: 1, F2: 2, F4: 3 }; // posición: 0 arriba izq, 1 arriba der, 2 abajo izq, 3 abajo der
+  const FADERS = { F1: 0, F2: 1, F3: 2, F4: 3 }; // posición: 0 arriba izq, 1 arriba der, 2 abajo izq, 3 abajo der
   const STEMS = ["voz", "bajo", "melodia", "bateria"]; // núcleo 2, la canción
   const CANALES_EQUILIBRIO = ["bombo", "hihat", "bajo", "melodia"]; // núcleo 3, paso Equilibrio
 

@@ -17,7 +17,7 @@ bool lecturaB[NB];
 unsigned long cambioB[NB];
 
 // ---------- FADERS ----------
-// F1 arriba izquierda, F2 abajo izquierda, F3 arriba derecha, F4 abajo derecha.
+// F1 arriba izquierda, F2 arriba derecha, F3 abajo izquierda, F4 abajo derecha.
 // F4 va en A5 (A3 y A4 son del joystick). Mientras no esté cableado queda en false:
 // un pin suelto lee valores al azar y movería el fader en pantalla solo.
 const int NF = 4;
