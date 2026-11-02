@@ -52,13 +52,15 @@ const Consola = (() => {
       return;
     }
     if (actual === "carga") return;
-    // En el tutorial cualquier botón sigue, salvo el de volver. Si el botón está dibujado
-    // en la pantalla, primero se ilumina un momento para que se vea cuál se tocó.
+    // En el tutorial los botones solo se iluminan en el dibujo, para probarlos;
+    // de pantalla se pasa únicamente con siguiente (B1) y anterior (B3).
     if (TUTORIAL.includes(actual)) {
+      const iluminado = iluminar(nombre);
+      if (nombre !== "B1" && nombre !== "B3") return;
       if (esperandoAvance) return;
       const desde = actual;
       const direccion = nombre === "B3" ? -1 : 1;
-      if (!iluminar(nombre)) {
+      if (!iluminado) {
         avanzar(direccion);
         return;
       }
