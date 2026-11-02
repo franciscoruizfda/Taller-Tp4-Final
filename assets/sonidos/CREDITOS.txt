@@ -19,7 +19,7 @@ POP
 CUMBIA
   bombo    cngal (conga grave) ................... https://freesound.org/s/99865/
   caja     Timbale High .......................... https://freesound.org/s/629425/
-  hihat    Guiro (guiro_short5), de VSCO 2 ....... https://freesound.org/s/375652/
+  hihat    Shaker (shake7), de VSCO 2 ............ https://freesound.org/s/375638/
   bajo     bass 16b — La1, 55,2 Hz ................ https://freesound.org/s/209943/
   melodia  g4.wav (acordeón) — 788,4 Hz ........... https://freesound.org/s/333725/
 

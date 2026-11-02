@@ -1,7 +1,8 @@
 /* Beatmind · Núcleo 1: navegación entre pantallas e interacción de las capas del beat. */
 
+const TUTORIAL = ["tutorial-1", "tutorial-2", "tutorial-3", "tutorial-4", "tutorial-5"];
 const PANTALLAS = [
-  "inicio", "carga", "que-es",
+  "inicio", "carga", ...TUTORIAL, "que-es",
   "percusion", "bajo", "melodia", "estructura", "mezcla",
   "fl-studio", "bizarrap",
   "modifica", "selecciona", "cancion",
@@ -9,6 +10,7 @@ const PANTALLAS = [
   "cierre",
 ];
 const DURACION_CARGA = 2800;
+const CAPAS = ["percusion", "bajo", "melodia", "estructura", "mezcla"];
 
 const stage = document.getElementById("stage");
 let actual = null;
@@ -114,6 +116,12 @@ function montarPlantillas() {
   document.querySelectorAll(".screen").forEach((s) => {
     const seccion = s.dataset.seccion || "inicio";
     s.querySelectorAll(".nav-link").forEach((l) => l.classList.toggle("activo", l.dataset.seccion === seccion));
+  });
+
+  // Las 5 rayitas de avance del tutorial.
+  document.querySelectorAll("[data-progreso]").forEach((el) => {
+    const hechas = Number(el.dataset.progreso);
+    el.innerHTML = TUTORIAL.map((_, i) => `<i class="${i < hechas ? "hecho" : ""}" style="left:${i * 105.25}px"></i>`).join("");
   });
 
   const pasos = document.getElementById("tpl-pasos");
@@ -508,6 +516,28 @@ function reproducirPantalla() {
   }
 }
 
+// Botones play y pausa de la consola física: a diferencia del play de cada pantalla, no alternan.
+function transporte(accion) {
+  if (actual === "cancion") {
+    if (accion === "play") Nucleo2.reproducir();
+    else Nucleo2.pausar();
+  } else if (accion === "play") {
+    if (!Sonido.sonando) reproducirPantalla();
+  } else if (Nucleo3.maneja(actual)) {
+    Nucleo3.pausar();
+  } else {
+    Sonido.detener();
+  }
+}
+
+// Fader de la consola física sobre el canal de la mezcla del núcleo 1.
+function moverFaderMezcla(canal, valor) {
+  const i = CANALES_MEZCLA.findIndex((c) => c.canal === canal);
+  CANALES_MEZCLA[i].valor = limitar(valor);
+  pintarFader(i);
+  aplicarVolumenes();
+}
+
 // ---------- Navegación ----------
 
 function ir(id) {
@@ -529,7 +559,9 @@ function ir(id) {
   history.replaceState(null, "", `#${id}`);
   aplicarVolumenes();
   aplicarEfectos();
-  if (id === "carga") timerCarga = setTimeout(() => ir("que-es"), DURACION_CARGA);
+  if (id === "carga") timerCarga = setTimeout(() => ir(TUTORIAL[0]), DURACION_CARGA);
+  // Las capas del beat (percusión → mezcla) suenan solas al entrar; el play sigue sirviendo para pausar.
+  if (CAPAS.includes(id)) alternar(id, document.getElementById(id).querySelector("[data-play]"));
 }
 
 function avanzar(direccion) {
@@ -575,26 +607,10 @@ function escuchar() {
         b.setAttribute("aria-pressed", Sonido.silenciado);
         b.setAttribute("aria-label", Sonido.silenciado ? "Activar sonido" : "Silenciar");
       });
-      return;
-    }
-    const transporte = e.target.closest("[data-transporte]");
-    if (transporte) {
-      const accion = transporte.dataset.transporte;
-      if (actual === "cancion") {
-        if (accion === "play") Nucleo2.reproducir();
-        else if (accion === "pausa") Nucleo2.pausar();
-        else Nucleo2.detener();
-      } else if (accion === "play") {
-        if (!Sonido.sonando) reproducirPantalla();
-      } else if (accion === "pausa" && Nucleo3.maneja(actual)) {
-        Nucleo3.pausar();
-      } else {
-        Sonido.detener();
-      }
     }
   });
 
-  // La interfaz física envía teclas: flechas para moverse, espacio/enter para reproducir.
+  // Teclado: flechas para moverse, espacio/enter para reproducir (la consola física va por js/consola.js).
   document.addEventListener("keydown", (e) => {
     if (e.repeat || e.metaKey || e.ctrlKey || e.altKey || e.key === "Tab") return;
     if (e.target.closest?.("input, textarea")) return; // escribir el nombre del beat no navega
@@ -609,16 +625,16 @@ function escuchar() {
       return;
     }
 
+    // Botones de colores: 1 azul, 2 violeta, 3 verde eligen la opción de ese color en los pasos del núcleo 3.
+    if (Nucleo3.maneja(actual) && Nucleo3.teclaOpcion(e.key)) {
+      e.preventDefault();
+      return;
+    }
+
     // ATAJO TEMPORAL para probar: 3 salta directo al núcleo 3. Borrar este bloque antes de la entrega.
     if (e.key === "3" || e.code === "Numpad3") {
       e.preventDefault();
       ir("crea");
-      return;
-    }
-
-    // I le pide una idea a Byte en los pasos que la tienen. Solo la prepara: aceptarla es siempre un clic.
-    if (e.key.toLowerCase() === "i" && Nucleo3.maneja(actual) && Nucleo3.pedirIdea()) {
-      e.preventDefault();
       return;
     }
 
@@ -628,6 +644,11 @@ function escuchar() {
       ir(actual === "inicio" ? "carga" : "inicio");
     } else if (actual === "carga") {
       return;
+    } else if (TUTORIAL.includes(actual)) {
+      // En el tutorial cualquier tecla sigue; la flecha izquierda vuelve.
+      if (activaControl) return;
+      e.preventDefault();
+      avanzar(e.key === "ArrowLeft" ? -1 : 1);
     } else if (e.key === "ArrowRight") {
       e.preventDefault();
       avanzar(1);

@@ -266,6 +266,12 @@ const Nucleo2 = (() => {
     pausar,
     detener,
     alternar,
+    // Fader de la consola física: volumen de un stem, de 0 a 1.
+    ajustar(id, valor) {
+      niveles[id] = Math.min(1, Math.max(0, valor));
+      pintarStem(id);
+      aplicarVolumenes();
+    },
     alEntrar: () => { if (!actual) elegir("redondos"); },
     alSalir: pausar,
     get sonando() { return sonando; },

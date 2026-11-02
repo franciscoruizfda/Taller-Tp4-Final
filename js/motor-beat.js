@@ -38,7 +38,7 @@ const MotorBeat = (() => {
       nombre: "Cumbia", bpm: 96,
       bombo: { ganancia: 0.9 },
       caja: { ganancia: 0.8 },
-      hihat: { ganancia: 9, desde: 0.025 }, // güiro grabado muy bajo: se compensa acá
+      hihat: { ganancia: 1.5 }, // shaker: grabado más bajo que los hi-hats de los otros estilos
       bajo: { ganancia: 0.8, raiz: 55.2, octava: 2 },
       melodia: { ganancia: 0.4, raiz: 788.4, octava: 5 },
     },
