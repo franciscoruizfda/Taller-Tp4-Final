@@ -756,7 +756,7 @@ img { display: block; }
 /* Menú lateral de pasos */
 .lateral-fondo {
   position: absolute;
-  left: 143px;
+  left: 150px;
   top: 170px;
   width: 323px;
   height: 868px;
@@ -884,7 +884,7 @@ img { display: block; }
   transition: filter .2s;
 }
 .siguiente-crea { gap: 18px; font-size: 40px; }
-.anterior-crea { gap: 0; font-size: 22px; }
+.anterior-crea { gap: 0; font-size: 31px; }
 .siguiente-crea .flecha,
 .anterior-crea .flecha {
   position: relative;
@@ -1143,3 +1143,105 @@ img { display: block; }
 .teclado-receta .blanca:nth-child(7) { border-radius: 0 4px 4px 0; }
 .teclado-receta .negra { width: 7px; height: 72.713px; border-radius: 0 0 1px 1px; background: var(--violeta); }
 .teclado-receta .negra.verde { background: var(--verde); box-shadow: 0 0 4px var(--verde); }
+
+/* Botón con el cuadrado del color del botón físico que lo activa (gris = continuar, azul = volver) */
+.boton-consola {
+  display: flex;
+  align-items: center;
+  gap: 39px;
+  height: 81px;
+  font-size: 36px;
+  font-weight: 700;
+  white-space: nowrap;
+  flex-direction: row-reverse;
+  transition: filter .2s;
+}
+.boton-consola.izquierda { flex-direction: row; gap: 34px; }
+.boton-consola .cuadro {
+  position: relative;
+  flex: none;
+  width: 84px;
+  height: 81px;
+  border: 3px solid var(--borde-cuadro);
+  border-radius: 8px;
+  background: var(--fondo-cuadro);
+  box-sizing: border-box;
+}
+/* Las cuatro esquinas que lo enmarcan, como un botón de la consola */
+.boton-consola .cuadro::before {
+  content: "";
+  position: absolute;
+  inset: -14px;
+  --e: 3px solid #6f7f99;
+  background:
+    linear-gradient(#6f7f99, #6f7f99) top left / 24px 3px, linear-gradient(#6f7f99, #6f7f99) top left / 3px 24px,
+    linear-gradient(#6f7f99, #6f7f99) top right / 24px 3px, linear-gradient(#6f7f99, #6f7f99) top right / 3px 24px,
+    linear-gradient(#6f7f99, #6f7f99) bottom left / 24px 3px, linear-gradient(#6f7f99, #6f7f99) bottom left / 3px 24px,
+    linear-gradient(#6f7f99, #6f7f99) bottom right / 24px 3px, linear-gradient(#6f7f99, #6f7f99) bottom right / 3px 24px;
+  background-repeat: no-repeat;
+}
+.boton-consola.gris { --fondo-cuadro: #5f7591; --borde-cuadro: #8ea3bf; }
+.boton-consola.azul { --fondo-cuadro: #8cc8ff; --borde-cuadro: #c4e2ff; }
+.boton-consola:hover .cuadro,
+.boton-consola.tocado .cuadro { box-shadow: 0 0 18px var(--borde-cuadro); filter: brightness(1.25); }
+
+/* Joystick dibujado: recorte de la perilla del dibujo del tutorial */
+.palanca .perilla-joy {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 52%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 38%, #fff 0 22%, #e9dcff 34%, #b9a6dd 62%, #8d7bb8 100%);
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, .35), 0 0 22px rgba(204, 75, 255, .8);
+}
+/* Cuatro flechitas violetas alrededor */
+.palanca .flechas-joy {
+  position: absolute;
+  inset: 4%;
+  background:
+    conic-gradient(from 135deg at 50% 0, #cc4bff 0 90deg, transparent 0) 50% 0 / 14px 10px,
+    conic-gradient(from -45deg at 50% 100%, #cc4bff 0 90deg, transparent 0) 50% 100% / 14px 10px,
+    conic-gradient(from 45deg at 0 50%, #cc4bff 0 90deg, transparent 0) 0 50% / 10px 14px,
+    conic-gradient(from 225deg at 100% 50%, #cc4bff 0 90deg, transparent 0) 100% 50% / 10px 14px;
+  background-repeat: no-repeat;
+}
+
+/* Consola del tutorial */
+.consola-marco {
+  border: 6px solid var(--violeta);
+  border-radius: 30px;
+  box-sizing: border-box;
+  box-shadow: 0 0 14px rgba(204, 75, 255, .7), inset 0 0 14px rgba(204, 75, 255, .4);
+}
+.cuadro-color { width: 94px; height: 94px; border: 3px solid var(--b); border-radius: 6px; background: var(--f); box-sizing: border-box; }
+.cuadro-color.azul { --f: #0b5fb8; --b: #3d8ce0; }
+.cuadro-color.violeta { --f: #5d4880; --b: #8a70b3; }
+.cuadro-color.verde { --f: #13996d; --b: #36d29e; }
+.cuadro-color.gris { --f: #55687f; --b: #8399b4; }
+.mini-fader {
+  width: 247px;
+  height: 38px;
+  border-radius: 19px;
+  background: rgba(2, 1, 28, .75);
+  box-shadow: 0 0 8px var(--c);
+}
+.mini-fader::before {
+  content: "";
+  position: absolute;
+  left: 40px;
+  right: 16px;
+  top: 17px;
+  height: 4px;
+  background: linear-gradient(90deg, var(--c) calc(var(--v) * 100%), #2a2440 0);
+}
+.mini-fader img { position: absolute; left: 6px; top: 5px; width: 28px; height: 28px; object-fit: contain; }
+.mini-pausa { width: 28px; height: 38px; }
+.mini-pausa i { position: absolute; top: 0; width: 10px; height: 100%; background: var(--verde); }
+.mini-pausa i + i { left: 18px; }
+.mini-play { width: 30px; height: 38px; background: var(--verde); clip-path: polygon(0 0, 100% 50%, 0 100%); }
+
+/* «¿Qué es un beat?»: la tarjeta elegida con el joystick se ilumina por dentro (Figma) */
+.opcion[aria-pressed="true"] { background: rgba(158, 197, 244, .22); }

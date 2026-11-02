@@ -110,9 +110,9 @@ const Nucleo3 = (() => {
   const COLORES = ["azul", "violeta", "verde"];
 
   const PIEZAS_RITMO = [
-    { id: "bombo", nombre: "BOMBO", texto: "Suele marcar los apoyos principales del ritmo. Probá un golpe al principio y otro en la mitad." },
-    { id: "caja", nombre: "CAJA", texto: "Le responde al bombo y marca acentos. Probá ponerla entre los golpes profundos." },
-    { id: "hihat", nombre: "HI-HAT", texto: "Son pequeños golpes que dan movimiento. Pueden sonar más seguido que el bombo y la caja." },
+    { id: "bombo", nombre: "BOMBO", texto: "Suele marcar los apoyos principales del ritmo." },
+    { id: "caja", nombre: "CAJA", texto: "Le responde al bombo y marca acentos." },
+    { id: "hihat", nombre: "HI-HAT", texto: "Son pequeños golpes que dan movimiento." },
   ];
 
   // Filas de la pantalla de equilibrio: y = centro de la fila. La caja queda con el volumen del estilo.

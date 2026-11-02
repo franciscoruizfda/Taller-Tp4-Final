@@ -41,6 +41,7 @@ const Consola = (() => {
   // ---------- Acciones ----------
 
   function color(n) {
+    if (botonDeColor(n)) return;
     if (actual === "selecciona") elegirCancion(n);
     else if (Nucleo3.maneja(actual)) Nucleo3.teclaOpcion(String(n));
   }
@@ -88,6 +89,8 @@ const Consola = (() => {
   // El joystick en el tutorial: su luz se enciende y se corre hacia donde se lo inclina.
   function moverJoystick(x, y) {
     joyX = x;
+    // En «¿Qué es un beat?» el joystick a un lado elige esa tarjeta y la hace sonar.
+    if (actual === "que-es" && Math.abs(x) >= 60) elegirTarjetaBeat(x < 0 ? "pulso" : "instrumental");
     if (!TUTORIAL.includes(actual)) return;
     document.querySelectorAll(`#${actual} [data-control~="J"]`).forEach((luz) => {
       luz.style.translate = `${x * 0.15}px ${-y * 0.15}px`;

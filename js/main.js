@@ -464,6 +464,22 @@ function moverFaderMezcla(i, valor) {
   aplicarVolumenes();
 }
 
+// Botón de pantalla con el cuadrado de color (gris = continuar, azul = volver): lo activa el botón físico
+// de ese color (o las teclas 1 a 4). Devuelve true si la pantalla tenía uno.
+function botonDeColor(n) {
+  const boton = document.querySelector(`#${actual} [data-consola-boton="${n}"]`);
+  if (!boton) return false;
+  boton.classList.add("tocado");
+  setTimeout(() => { boton.classList.remove("tocado"); boton.click(); }, 180); // que se vea cuál se tocó
+  return true;
+}
+
+// «¿Qué es un beat?»: el joystick elige una de las dos tarjetas y la hace sonar (si ya suena, sigue).
+function elegirTarjetaBeat(nombre) {
+  const tarjeta = document.querySelector(`#que-es [data-sonido="${nombre}"]`);
+  if (tarjeta.getAttribute("aria-pressed") !== "true") alternar(nombre, tarjeta);
+}
+
 // Botones de colores (o teclas 1 a 4) en «Seleccioná una canción»: cada tarjeta tiene el color de un botón.
 function elegirCancion(n) {
   const tarjeta = document.querySelectorAll("#selecciona [data-cancion]")[n - 1];
@@ -562,6 +578,10 @@ function escuchar() {
 
     // Botones de colores: 1 azul, 2 violeta, 3 verde eligen la opción de ese color en los pasos del núcleo 3.
     if (Nucleo3.maneja(actual) && Nucleo3.teclaOpcion(e.key)) {
+      e.preventDefault();
+      return;
+    }
+    if (/^[1-4]$/.test(e.key) && botonDeColor(Number(e.key))) {
       e.preventDefault();
       return;
     }
