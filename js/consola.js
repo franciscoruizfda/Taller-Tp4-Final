@@ -102,7 +102,9 @@ const Consola = (() => {
     }
     const posicion = FADERS[nombre];
     if (posicion === undefined) return;
-    if (actual === "cancion") Nucleo2.ajustar(STEMS[posicion], porcentaje / 100);
+    // En la mezcla del núcleo 1 los faders están en fila: F1 el de la izquierda … F4 el de la derecha.
+    if (actual === "mezcla") moverFaderMezcla(Number(nombre[1]) - 1, porcentaje / 100);
+    else if (actual === "cancion") Nucleo2.ajustar(STEMS[posicion], porcentaje / 100);
     else if (actual === "crea-equilibrio") Nucleo3.ajustarVolumen([CANALES_EQUILIBRIO[posicion]], porcentaje);
   }
 

@@ -471,6 +471,13 @@ function transporte(accion) {
   }
 }
 
+// Fader de la consola física sobre la mezcla del núcleo 1 (i: 0 el de la izquierda … 3 el de la derecha).
+function moverFaderMezcla(i, valor) {
+  CANALES_MEZCLA[i].valor = limitar(valor);
+  pintarFader(i);
+  aplicarVolumenes();
+}
+
 // Botones de colores (o teclas 1 a 4) en «Seleccioná una canción»: cada tarjeta tiene el color de un botón.
 function elegirCancion(n) {
   const tarjeta = document.querySelectorAll("#selecciona [data-cancion]")[n - 1];
