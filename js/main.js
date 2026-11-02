@@ -68,14 +68,18 @@ const ROLLOS = {
   },
 };
 
-// Geometría de la pantalla de mezcla tomada del Figma.
-const ALTO_RIEL = 183.04;
-
+// Mezcla: faders horizontales en dos filas, con el orden y los colores de los de la consola
+// (F1 arriba izquierda, F2 arriba derecha, F3 abajo izquierda, F4 abajo derecha). Posiciones del Figma:
+// circulo y riel: [left, top, ancho, alto]; ico: [left, top, ancho, alto] dentro del círculo; perilla: [ancho, alto].
 const CANALES_MEZCLA = [
-  { canal: "melodia", nombre: "Melodía", icono: "mix-music.png", riel: [931, 594, 11], valor: 96.53 / ALTO_RIEL, boton: [915, 792.08], ico: [4, 5.02, 36, 42.63] },
-  { canal: "general", nombre: "Volumen general", icono: "mix-audio.png", riel: [1055, 592, 10], valor: 154.2 / ALTO_RIEL, boton: [1038, 790.08], ico: [7, 8.78, 30, 36.36] },
-  { canal: "bajo", nombre: "Bajo", icono: "mix-guitar.png", riel: [1178, 594, 10], valor: 61.43 / ALTO_RIEL, boton: [1161, 792.08], ico: [5, 5.02, 35, 42.63] },
-  { canal: "bateria", nombre: "Batería", icono: "mix-drums.png", riel: [1301, 592, 11], valor: 109.07 / ALTO_RIEL, boton: [1284, 790.08], ico: [6, 7.52, 33, 38.86] },
+  { canal: "melodia", nombre: "Melodía", color: "#00ff89", icono: "mix-music.png",
+    circulo: [870, 587, 67.395, 69.51], ico: [5.99, 6.47, 53.916, 54.961], riel: [953.87, 614.79, 274.13, 14.184], perilla: [60.235, 26.749], valor: 144.575 / 274.13 },
+  { canal: "general", nombre: "Volumen general", color: "#0084ff", icono: "mix-audio.png",
+    circulo: [1289, 583, 61.441, 64], ico: [9.56, 10.42, 40.961, 43.163], riel: [1364.09, 609.5, 249.909, 11.872], perilla: [54.913, 24.629], valor: 210.54 / 249.909 },
+  { canal: "bajo", nombre: "Bajo", color: "#675180", icono: "mix-guitar.png",
+    circulo: [870, 701.72, 68.901, 72.189], ico: [7.66, 6.71, 53.59, 57.08], riel: [955.74, 731.42, 280.255, 13.391], perilla: [61.581, 27.78], valor: 94.058 / 280.255 },
+  { canal: "bateria", nombre: "Batería", color: "#9ec5f4", icono: "mix-drums.png",
+    circulo: [1289, 702, 59.361, 62], ico: [7.92, 8.65, 43.532, 44.698], riel: [1361.55, 728.29, 241.452, 12.651], perilla: [53.054, 23.859], valor: 143.879 / 241.452 },
 ];
 
 const ONDAS = {
@@ -100,9 +104,6 @@ const COLORES_ONDA = ["#e678eb", "#e678eb", "#e678eb", "#787eeb", "#787eeb", "#7
 // ---------- Armado del DOM ----------
 
 function montarPlantillas() {
-  const capaBase = document.getElementById("tpl-capa-base");
-  document.querySelectorAll("[data-capa-base]").forEach((el) => el.replaceWith(capaBase.content.cloneNode(true)));
-
   const nav = document.getElementById("tpl-nav");
   document.querySelectorAll("[data-nav]").forEach((el) => el.replaceWith(nav.content.cloneNode(true)));
   document.querySelectorAll(".screen").forEach((s) => {
@@ -110,7 +111,7 @@ function montarPlantillas() {
     s.querySelectorAll(".nav-link").forEach((l) => l.classList.toggle("activo", l.dataset.seccion === seccion));
   });
 
-  // Las 5 rayitas de avance del tutorial.
+  // Las 5 rayitas de avance del tutorial y de las capas del núcleo 1.
   document.querySelectorAll("[data-progreso]").forEach((el) => {
     const hechas = Number(el.dataset.progreso);
     el.innerHTML = TUTORIAL.map((_, i) => `<i class="${i < hechas ? "hecho" : ""}" style="left:${i * 105.25}px"></i>`).join("");
@@ -119,16 +120,6 @@ function montarPlantillas() {
   // Dibujo de la consola de los tutoriales 1 y 2, con sus luces.
   const consola = document.getElementById("tpl-consola-tutorial");
   document.querySelectorAll("[data-consola]").forEach((el) => el.append(consola.content.cloneNode(true)));
-
-  const pasos = document.getElementById("tpl-pasos");
-  document.querySelectorAll("[data-pasos]").forEach((el) => el.append(pasos.content.cloneNode(true)));
-
-  const silencio = document.getElementById("tpl-silencio");
-  document.querySelectorAll("[data-silencio-en]").forEach((el) => {
-    const boton = silencio.content.firstElementChild.cloneNode(true);
-    boton.style.cssText = el.style.cssText;
-    el.replaceWith(boton);
-  });
 }
 
 function armarTitulos() {
@@ -240,31 +231,33 @@ function armarRollos() {
 
 function armarMezcla() {
   const faders = document.querySelector("#mezcla .faders");
-  faders.style.cssText = "left:169px;top:0"; // centrados en el panel (sin la caja de efectos)
+  faders.style.cssText = "left:0;top:0";
   faders.innerHTML = CANALES_MEZCLA.map((c, i) => {
-    const [x, y, ancho] = c.riel;
+    const [cx, cy, cw, ch] = c.circulo;
+    const [ix, iy, iw, ih] = c.ico;
+    const [x, y, ancho, alto] = c.riel;
+    const [pw, ph] = c.perilla;
+    // El área del fader es más alta que el riel, para agarrarlo fácil con el mouse.
     return `
+    <button class="canal" data-canal="${i}" aria-pressed="false" aria-label="Silenciar ${c.nombre.toLowerCase()}"
+            style="left:${cx}px;top:${cy}px;width:${cw}px;height:${ch}px;--color:${c.color}">
+      <img src="assets/${c.icono}" alt="" style="left:${ix}px;top:${iy}px;width:${iw}px;height:${ih}px">
+    </button>
     <div class="fader" role="slider" tabindex="0" aria-label="${c.nombre}" aria-valuemin="0" aria-valuemax="100"
-         data-canal="${i}" style="left:${x + ancho / 2 - 22}px;top:${y - 24}px;height:${ALTO_RIEL + 48}px">
-      <div class="riel" style="left:${22 - ancho / 2}px;width:${ancho}px;height:${ALTO_RIEL}px"><div class="relleno"></div></div>
-      <img class="perilla-fader" src="assets/fader.svg" alt="">
-    </div>
-    <button class="canal" data-canal="${i}" aria-pressed="false" aria-label="Silenciar ${c.nombre.toLowerCase()}" style="left:${c.boton[0]}px;top:${c.boton[1]}px">
-      <img src="assets/mix-boton.svg" alt="" style="left:0;top:0;width:45px;height:53.91px">
-      <img class="icono" src="assets/${c.icono}" alt="" style="left:${c.ico[0]}px;top:${c.ico[1]}px;width:${c.ico[2]}px;height:${c.ico[3]}px">
-    </button>`;
+         data-canal="${i}" style="left:${x}px;top:${y + alto / 2 - 20}px;width:${ancho}px;--color:${c.color}">
+      <div class="riel" style="height:${alto}px;top:${20 - alto / 2}px"><div class="relleno"></div></div>
+      <span class="perilla-fader" style="width:${pw}px;height:${ph}px;top:${20 - ph / 2}px"></span>
+    </div>`;
   }).join("");
 
   CANALES_MEZCLA.forEach((_, i) => pintarFader(i));
 
-  // Faders: arrastrar en vertical o usar flechas arriba/abajo
+  // Faders en pantalla: arrastrar en horizontal o usar las flechas.
   faders.querySelectorAll(".fader").forEach((el) => {
     const i = Number(el.dataset.canal);
     const desdePuntero = (e) => {
-      const riel = el.querySelector(".riel").getBoundingClientRect();
-      CANALES_MEZCLA[i].valor = limitar(1 - (e.clientY - riel.top) / riel.height);
-      pintarFader(i);
-      aplicarVolumenes();
+      const riel = el.getBoundingClientRect();
+      moverFaderMezcla(i, (e.clientX - riel.left) / riel.width);
     };
     el.addEventListener("pointerdown", (e) => {
       el.setPointerCapture(e.pointerId);
@@ -273,38 +266,31 @@ function armarMezcla() {
     el.addEventListener("pointermove", (e) => {
       if (el.hasPointerCapture(e.pointerId)) desdePuntero(e);
     });
-    el.addEventListener("keydown", (e) => ajustarConTeclas(e, CANALES_MEZCLA[i], () => {
-      pintarFader(i);
-      aplicarVolumenes();
-    }));
+    el.addEventListener("keydown", (e) => {
+      const pasos = { ArrowUp: 0.05, ArrowRight: 0.05, ArrowDown: -0.05, ArrowLeft: -0.05 };
+      if (!(e.key in pasos)) return;
+      e.preventDefault();
+      e.stopPropagation(); // que las flechas no cambien de pantalla
+      moverFaderMezcla(i, CANALES_MEZCLA[i].valor + pasos[e.key]);
+    });
   });
 
+  // El círculo con el ícono silencia ese canal.
   faders.querySelectorAll(".canal").forEach((el) => {
     el.addEventListener("click", () => {
       el.setAttribute("aria-pressed", el.getAttribute("aria-pressed") !== "true");
       aplicarVolumenes();
     });
   });
-
 }
 
 function pintarFader(i) {
   const c = CANALES_MEZCLA[i];
   const el = document.querySelector(`#mezcla .fader[data-canal="${i}"]`);
-  el.querySelector(".relleno").style.height = `${c.valor * ALTO_RIEL}px`;
-  const perilla = el.querySelector(".perilla-fader");
-  perilla.style.left = `${22 - 14.37}px`;
-  perilla.style.top = `${24 + (1 - c.valor) * ALTO_RIEL - 24.11}px`;
+  const ancho = c.riel[2];
+  el.querySelector(".relleno").style.width = `${c.valor * ancho}px`;
+  el.querySelector(".perilla-fader").style.left = `${c.valor * ancho - c.perilla[0] / 2}px`;
   el.setAttribute("aria-valuenow", Math.round(c.valor * 100));
-}
-
-function ajustarConTeclas(e, objeto, alCambiar) {
-  const pasos = { ArrowUp: 0.05, ArrowRight: 0.05, ArrowDown: -0.05, ArrowLeft: -0.05 };
-  if (!(e.key in pasos)) return;
-  e.preventDefault();
-  e.stopPropagation();
-  objeto.valor = limitar(objeto.valor + pasos[e.key]);
-  alCambiar();
 }
 
 function aplicarVolumenes() {
@@ -471,7 +457,7 @@ function transporte(accion) {
   }
 }
 
-// Fader de la consola física sobre la mezcla del núcleo 1 (i: 0 el de la izquierda … 3 el de la derecha).
+// Fader de la consola física (o de la pantalla) sobre la mezcla del núcleo 1 (i: 0 F1 … 3 F4).
 function moverFaderMezcla(i, valor) {
   CANALES_MEZCLA[i].valor = limitar(valor);
   pintarFader(i);
@@ -521,6 +507,8 @@ function ir(id) {
 
 function avanzar(direccion) {
   if (Nucleo3.maneja(actual) && Nucleo3.frenaAvance(direccion)) return;
+  // En la bienvenida del tutorial se prueban los botones: «anterior» no saca de vuelta a la portada.
+  if (actual === TUTORIAL[0] && direccion < 0) return;
   let destino = PANTALLAS[PANTALLAS.indexOf(actual) + direccion];
   if (destino === "carga" && direccion < 0) destino = "inicio";
   if (!destino && direccion > 0) destino = "inicio"; // después del cierre se vuelve a empezar
@@ -554,14 +542,7 @@ function escuchar() {
       alternar(opcion.dataset.sonido, opcion);
       return;
     }
-    const silencio = e.target.closest("[data-silencio]");
-    if (silencio) {
-      Sonido.silenciar(!Sonido.silenciado);
-      document.querySelectorAll("[data-silencio]").forEach((b) => {
-        b.setAttribute("aria-pressed", Sonido.silenciado);
-        b.setAttribute("aria-label", Sonido.silenciado ? "Activar sonido" : "Silenciar");
-      });
-    }
+    if (e.target.closest("[data-pausa]")) transporte("pausa");
   });
 
   // Teclado: flechas para moverse, espacio/enter para reproducir (la consola física va por js/consola.js).

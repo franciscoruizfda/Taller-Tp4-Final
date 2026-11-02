@@ -248,21 +248,22 @@ img { display: block; }
   100% { transform: scale(1); }
 }
 
-/* ---------- Anterior / siguiente ---------- */
+/* ---------- Botones del Figma (CONTINUAR, EXPLORAR…) ----------
+   Los activa el botón «siguiente» de la consola (data-paso="1"); «ELIGE OTRA CANCION», el de «anterior». */
 
-[data-pasos] { position: absolute; }
-.paso {
-  position: absolute;
-  top: 0;
-  width: 104.712px;
-  height: 142.309px;
-  opacity: .9;
-  transition: opacity .2s, filter .2s;
+.boton-figma {
+  height: 81px;
+  border: 4px solid #eab0ff;
+  border-radius: 8px;
+  background: var(--violeta);
+  box-shadow: 0 0 12px rgba(204, 75, 255, .75);
+  font-size: 36px;
+  font-weight: 700;
+  white-space: nowrap;
+  transition: filter .2s;
 }
-.paso img { width: 100%; height: 100%; }
-.paso img.encima { position: absolute; inset: 0; opacity: .5; }
-.paso { filter: drop-shadow(0 0 5px rgba(61, 217, 185, .7)); }
-.paso:hover { opacity: 1; filter: drop-shadow(0 0 8px var(--verde)); }
+.boton-figma.azul { border-color: #61b3ff; background: var(--azul); box-shadow: 0 0 12px rgba(0, 132, 255, .75); }
+.boton-figma:hover { filter: brightness(1.12); }
 
 /* ---------- Pantallas de capas ---------- */
 
@@ -280,16 +281,20 @@ img { display: block; }
 .boton-play[aria-pressed="true"] { filter: drop-shadow(0 0 8px var(--verde)); }
 .boton-play[aria-pressed="true"] { animation: latido .65s ease-out infinite; }
 
-.boton-sonido img {
+/* Pausa de las capas: dos barras verdes al lado del play, como en la consola */
+.boton-pausa { width: 49px; height: 61px; }
+.boton-pausa i {
   position: absolute;
-  left: 0;
   top: 0;
-  width: 100%;
+  left: 0;
+  width: 18px;
   height: 100%;
-  object-fit: contain;
+  border-radius: 2px;
+  background: var(--verde);
+  box-shadow: 0 0 6px rgba(0, 255, 137, .6);
 }
-.boton-sonido .brillo-sonido { left: 2px; filter: blur(3.05px); }
-.boton-sonido[aria-pressed="true"] img { opacity: .3; }
+.boton-pausa i + i { left: 31px; }
+.boton-pausa:hover { filter: drop-shadow(0 0 8px var(--verde)); }
 
 .etiqueta {
   position: absolute;
@@ -454,45 +459,59 @@ img { display: block; }
   filter: drop-shadow(0 0 3px rgba(204, 75, 255, .9));
 }
 
-/* Mezcla */
-.caja-oscura { border-radius: 8px; background: var(--pista); }
+/* Mezcla: faders horizontales con los colores de la consola */
+.caja-mezcla { border-radius: 8px; background: rgba(47, 7, 104, .6); }
 
 .fader {
   position: absolute;
-  width: 44px;
-  cursor: ns-resize;
+  height: 40px;
+  cursor: ew-resize;
   touch-action: none;
 }
 .fader .riel {
   position: absolute;
-  top: 24px;
-  background: #7c4b8f;
+  left: 0;
+  right: 0;
+  background: #312e32;
 }
 .fader .relleno {
   position: absolute;
   left: 0;
-  right: 0;
+  top: 0;
   bottom: 0;
-  background: var(--violeta);
+  background: var(--color);
+  box-shadow: 0 0 4px var(--color);
 }
 .fader .perilla-fader {
   position: absolute;
-  width: 28.745px;
-  height: 48.22px;
-  max-width: none;
+  background: var(--color);
+  box-shadow: 0 0 4px var(--color);
   pointer-events: none;
 }
-.fader:focus-visible { outline: 3px solid var(--verde); outline-offset: 0; }
+/* Las dos rayitas blancas de la perilla */
+.fader .perilla-fader::before,
+.fader .perilla-fader::after {
+  content: "";
+  position: absolute;
+  top: 12%;
+  bottom: 12%;
+  width: 2px;
+  background: #fff;
+}
+.fader .perilla-fader::before { left: 40%; }
+.fader .perilla-fader::after { left: 61%; }
+.fader:focus-visible { outline: 3px solid var(--verde); outline-offset: 2px; }
 
+/* Círculo de color con el ícono del canal: silencia el canal */
 .canal {
   position: absolute;
-  width: 45px;
-  height: 53.91px;
+  border-radius: 50%;
+  background: var(--color);
+  transition: opacity .2s, filter .2s;
 }
-.canal img { position: absolute; max-width: none; }
-.canal .icono { object-fit: contain; }
+.canal img { position: absolute; max-width: none; object-fit: contain; pointer-events: none; }
+.canal:hover { filter: drop-shadow(0 0 8px var(--color)); }
 .canal[aria-pressed="true"] { opacity: .35; }
-.canal:hover { filter: drop-shadow(0 0 6px var(--violeta)); }
 
 .perilla {
   position: absolute;
@@ -529,20 +548,34 @@ img { display: block; }
 
 .medio { font-weight: 500; }
 
-.cuadro-dj { background: #1e0e1e; }
-.cuadro-dj img { width: 100%; height: 100%; object-fit: cover; }
-.cuadro-dj::after {
+/* Byte DJ en un recuadro oscuro con borde violeta neón (borde nítido + copia difuminada) */
+.recuadro-dj { background: #1e0e1e; }
+.recuadro-dj::before {
   content: "";
   position: absolute;
-  inset: 0;
+  left: 3px;
+  top: 3px;
+  width: 546px;
+  height: 456px;
+  box-sizing: border-box;
   border: 7px solid var(--violeta);
-  box-shadow: 0 0 14px var(--violeta), inset 0 0 14px var(--violeta);
+  filter: blur(6.85px);
+}
+.recuadro-dj img {
+  position: absolute;
+  left: 25.72px;
+  top: 19.84px;
+  width: 506.782px;
+  height: 422.318px;
+  box-sizing: border-box;
+  border: 7px solid var(--violeta);
+  object-fit: cover;
 }
 
-/* Tarjetas de canciones */
+/* Tarjetas de canciones: borde y recuadro del color del botón de la consola que la elige */
 .tarjetas {
   display: flex;
-  gap: 50px;
+  gap: 40px;
   align-items: flex-start;
   transform: translateX(-50%);
 }
@@ -551,33 +584,43 @@ img { display: block; }
   flex-direction: column;
   align-items: center;
   width: 325px;
-  font-size: 24px;
+  font-size: 26px;
   line-height: normal;
   text-align: center;
 }
 .tarjeta .tapa {
   display: block;
-  margin-bottom: 25px;
-  padding: 8px 10px;
-  border: 3px solid var(--color);
-  border-radius: 10px;
+  margin-bottom: 22px;
+  padding: 10px 12px;
+  border: 5px solid var(--color);
+  border-radius: 12px;
   background: var(--fondo);
+  box-shadow: 0 0 10px var(--color);
   transition: box-shadow .2s, transform .2s;
 }
-.tarjeta .tapa img { width: 200px; height: 200px; border-radius: 5px; object-fit: cover; }
+.tarjeta .tapa img { width: 236px; height: 236px; border-radius: 5px; object-fit: cover; }
 .tarjeta-titulo { margin-bottom: 7px; }
 .tarjeta-artista { font-weight: 300; }
 .tarjeta:hover .tapa,
-.tarjeta:focus-visible .tapa { box-shadow: 0 0 22px var(--color); transform: translateY(-4px); }
-.tarjeta.elegida .tapa { box-shadow: 0 0 14px var(--color); }
+.tarjeta:focus-visible .tapa { box-shadow: 0 0 26px var(--color); transform: translateY(-4px); }
+.tarjeta.elegida .tapa { box-shadow: 0 0 18px var(--color); }
 .tarjeta:focus-visible { outline: none; }
 
-.explicacion-fondo { background: #210a41; border-radius: 91px; }
-.explicacion-borde {
+/* «Cada canción tiene un color»: recuadro violeta con Byte señalando la consola */
+.explicacion-color {
+  background: #210a41;
   border: 7px solid var(--violeta);
-  border-radius: 62px;
+  box-sizing: border-box;
   box-shadow: 0 0 8px var(--violeta), inset 0 0 8px var(--violeta);
-  pointer-events: none;
+}
+.explicacion-color img {
+  position: absolute;
+  left: 110.87px;
+  top: 18.96px;
+  width: 302.771px;
+  height: 263.079px;
+  object-fit: cover;
+  object-position: 66% center;
 }
 
 /* Mezclador de stems */
@@ -1091,3 +1134,12 @@ img { display: block; }
 .luz.tocada { opacity: 1; animation: luz-tocada .45s ease-out; }
 @keyframes luz-tocada { from { transform: scale(1.12); } to { transform: scale(1); } }
 @media (prefers-reduced-motion: reduce) { .luz.tocada { animation: none; } }
+
+/* «Acá empieza tu primera base»: teclado de la receta */
+.teclado-receta { width: 121px; height: 102.801px; }
+.teclado-receta i { position: absolute; top: 0; }
+.teclado-receta .blanca { height: 102.801px; background: #fff; border-left: 1px solid #000; }
+.teclado-receta .blanca:first-child { border-left: 0; border-radius: 4px 0 0 4px; }
+.teclado-receta .blanca:nth-child(7) { border-radius: 0 4px 4px 0; }
+.teclado-receta .negra { width: 7px; height: 72.713px; border-radius: 0 0 1px 1px; background: var(--violeta); }
+.teclado-receta .negra.verde { background: var(--verde); box-shadow: 0 0 4px var(--verde); }

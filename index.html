@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Akshar:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css?v=20261102a">
+  <link rel="stylesheet" href="css/styles.css?v=20261102b">
 </head>
 <body>
 <div id="viewport">
@@ -142,7 +142,7 @@
       <p class="texto" style="left:659px;top:346px;font-size:36px">Tiene dos significados que conviene distinguir.</p>
 
       <button class="opcion" data-sonido="pulso" aria-pressed="false" style="left:323px;top:442.47px">
-        <span class="marco" style="--borde:7px"></span>
+        <span class="marco" style="--borde:7px;--grad:var(--azul);filter:drop-shadow(0 0 4px rgba(0,132,255,.9))"></span>
         <img class="a brillo" src="assets/icono-metronomo.png" alt="" style="left:84px;top:22px;width:53px;height:53px">
         <span class="texto" style="left:142px;top:25px;font-size:36px">BEAT COMO <span class="verde brillo-verde">PULSO</span></span>
         <img class="a" src="assets/pulso-onda-glow.svg" alt="" style="left:23.48px;top:92.5px;width:419.023px;height:79.61px">
@@ -158,7 +158,7 @@
            style="left:826.14px;top:393.85px;width:282.716px;height:424.074px">
 
       <button class="opcion" data-sonido="instrumental" aria-pressed="false" style="left:1132px;top:442.47px">
-        <span class="marco" style="--borde:7px"></span>
+        <span class="marco" style="--borde:7px;--grad:var(--verde);filter:drop-shadow(0 0 4px rgba(0,255,137,.9))"></span>
         <img class="a brillo" src="assets/icono-capas.png" alt="" style="left:29px;top:28px;width:42px;height:42px">
         <span class="texto" style="left:81px;top:25px;font-size:36px">BEAT COMO <span class="verde brillo-verde">INSTRUMENTAL</span></span>
         <img class="a brillo" src="assets/mini-bateria.png" alt="" style="left:77px;top:88px;width:35px;height:35px">
@@ -170,74 +170,79 @@
         <span class="texto" style="left:43px;top:303px;font-size:32px">Todo lo que suena menos la voz</span>
       </button>
 
-      <div data-pasos style="left:726px;top:883.4px"></div>
+      <button class="a boton-figma" data-paso="1" style="left:727px;top:937.47px;width:465px">¿CÓMO ESTÁ COMPUESTO?</button>
       <div data-nav></div>
     </section>
 
     <!-- ============ NÚCLEO 1.2 · PERCUSIÓN ============ -->
     <section class="screen capa" id="percusion" data-seccion="aprende" aria-label="Capas del beat: percusión">
-      <div data-capa-base></div>
+      <h1 class="apilado degradado-b" data-capas="#00ff89 12, #0084ff 8, #cc4bff 4"
+          style="left:410px;top:254px;font-size:90px">¿CÓMO ESTÁ COMPUESTO UN BEAT?</h1>
       <img class="a" src="assets/personaje-percusion.png" alt="Personaje de DM-BEAT tocando pads"
-           style="left:802px;top:277px;width:315px;height:263px;object-fit:cover">
-      <span class="marco panel" style="left:162px;top:535px"></span>
-      <button class="a boton-play" data-play aria-label="Reproducir capa" aria-pressed="false" style="left:188px;top:761px;width:60px;height:60px">
-        <img src="assets/boton-play-cuadrado.svg" alt="" style="top:-3.48px;height:66.96px">
+           style="left:97px;top:184px;width:315px;height:263px;object-fit:cover">
+      <span class="marco panel" style="left:162px;top:427px;height:425px"></span>
+      <button class="a boton-play" data-play aria-label="Reproducir capa" aria-pressed="false" style="left:208px;top:741px;width:60px;height:75.22px">
+        <img src="assets/boton-play.svg" alt="">
       </button>
-      <div data-silencio-en style="left:288px;top:761px;width:54px;height:57px"></div>
+      <button class="a boton-pausa" data-pausa aria-label="Pausar capa" style="left:292px;top:748px"><i></i><i></i></button>
 
-      <img class="a" src="assets/icono-pads-glow.svg" alt="" style="left:188px;top:568px;width:145.35px;height:141.49px">
-      <img class="a" src="assets/icono-pads.svg" alt="" style="left:193px;top:572px;width:137.35px;height:133.488px">
-      <h2 class="texto titulo-capa" style="left:362px;top:571px">PERCUSIÓN</h2>
-      <p class="texto light" style="left:348px;top:639px;font-size:40px">Marca el pulso y el ritmo.</p>
+      <img class="a" src="assets/icono-pads-glow.svg" alt="" style="left:188px;top:504px;width:145.35px;height:141.49px">
+      <img class="a" src="assets/icono-pads.svg" alt="" style="left:193px;top:508px;width:137.35px;height:133.488px">
+      <h2 class="texto titulo-capa" style="left:362px;top:507px">PERCUSIÓN</h2>
+      <p class="texto light" style="left:348px;top:575px;font-size:40px">Marca el pulso y el ritmo.</p>
 
-      <div class="a etiquetas" style="left:763px;top:554px">
+      <div class="a etiquetas" style="left:763px;top:490px">
         <div class="etiqueta" style="top:0">KICK</div>
         <div class="etiqueta" style="top:76px">SNARE</div>
         <div class="etiqueta" style="top:154px">HI-HAT</div>
         <div class="etiqueta" style="top:232px">CLAP</div>
       </div>
-      <div class="a secuenciador" style="left:960px;top:554px" role="grid" aria-label="Secuenciador de percusión"></div>
-
-      <div data-pasos style="left:726px;top:896.5px"></div>
+      <div class="a secuenciador" style="left:960px;top:490px" role="grid" aria-label="Secuenciador de percusión"></div>
+      <div class="progreso-tutorial" data-progreso="1" style="top:971px"></div>
+      <button class="a siguiente-crea" data-paso="1" style="left:1472px;top:918px">SIGUIENTE<span data-flecha-siguiente></span></button>
+      <div data-nav></div>
     </section>
 
     <!-- ============ NÚCLEO 1.2 · BAJO ============ -->
     <section class="screen capa" id="bajo" data-seccion="aprende" aria-label="Capas del beat: bajo">
-      <div data-capa-base></div>
-      <div class="a" style="left:695px;top:261px;width:529px;height:270px">
+      <h1 class="apilado degradado-b" data-capas="#00ff89 12, #0084ff 8, #cc4bff 4"
+          style="left:447px;top:197px;font-size:90px">¿CÓMO ESTÁ COMPUESTO UN BEAT?</h1>
+      <div class="a" style="left:51px;top:190px;width:529px;height:270px">
         <img src="assets/personaje-bajo.png" alt="Personaje de DM-BEAT tocando el bajo" style="width:100%;height:100%;object-fit:cover;object-position:top">
       </div>
-      <span class="marco panel" style="left:162px;top:531px"></span>
-      <button class="a boton-play" data-play aria-label="Reproducir capa" aria-pressed="false" style="left:193px;top:757.92px;width:60px;height:75.22px">
+      <span class="marco panel" style="left:162px;top:456px;height:416px"></span>
+      <button class="a boton-play" data-play aria-label="Reproducir capa" aria-pressed="false" style="left:220px;top:763px;width:60px;height:75.22px">
         <img src="assets/boton-play.svg" alt="">
       </button>
-      <div data-silencio-en style="left:291px;top:760.42px;width:54px;height:71.46px"></div>
+      <button class="a boton-pausa" data-pausa aria-label="Pausar capa" style="left:304px;top:770px"><i></i><i></i></button>
 
-      <img class="a desenfocado" src="assets/icono-bajo.png" alt="" style="left:199px;top:557.33px;width:100px;height:125.37px;object-fit:contain">
-      <h2 class="texto titulo-capa" style="left:334px;top:551px">BAJO</h2>
-      <p class="texto light ajustado" style="left:325px;top:620px;width:418px;font-size:40px">Da peso y une el ritmo con la armonía.</p>
+      <img class="a desenfocado" src="assets/icono-bajo.png" alt="" style="left:199px;top:526.33px;width:100px;height:125.37px;object-fit:contain">
+      <h2 class="texto titulo-capa" style="left:334px;top:520px">BAJO</h2>
+      <p class="texto light ajustado" style="left:325px;top:589px;width:418px;font-size:40px">Da peso y une el ritmo con la armonía.</p>
 
-      <div class="a pista-encabezado" style="left:788px;top:551px;width:942px">
+      <div class="a pista-encabezado" style="left:788px;top:520px;width:942px">
         <span class="led"></span><span class="texto" style="font-size:40px">Bajo</span>
       </div>
-      <div class="a pista-led" style="left:788px;top:625.03px"><span class="led apagado"></span></div>
-      <div class="a pista-led" style="left:788px;top:698.99px"><span class="led apagado"></span></div>
-      <div class="a pista-led" style="left:788px;top:772.96px"><span class="led apagado"></span></div>
-      <div class="a rollo" data-rollo="bajo" style="left:860px;top:625.03px"></div>
-
-      <div data-pasos style="left:726px;top:889.5px"></div>
+      <div class="a pista-led" style="left:788px;top:594.03px"><span class="led apagado"></span></div>
+      <div class="a pista-led" style="left:788px;top:667.99px"><span class="led apagado"></span></div>
+      <div class="a pista-led" style="left:788px;top:741.96px"><span class="led apagado"></span></div>
+      <div class="a rollo" data-rollo="bajo" style="left:860px;top:594.03px"></div>
+      <div class="progreso-tutorial" data-progreso="2" style="top:971px"></div>
+      <button class="a siguiente-crea" data-paso="1" style="left:1472px;top:918px">SIGUIENTE<span data-flecha-siguiente></span></button>
+      <div data-nav></div>
     </section>
 
     <!-- ============ NÚCLEO 1.2 · MELODÍA ============ -->
     <section class="screen capa" id="melodia" data-seccion="aprende" aria-label="Capas del beat: melodía">
-      <div data-capa-base></div>
+      <h1 class="apilado degradado-b" data-capas="#00ff89 12, #0084ff 8, #cc4bff 4"
+          style="left:448px;top:253px;font-size:90px">¿CÓMO ESTÁ COMPUESTO UN BEAT?</h1>
       <img class="a" src="assets/personaje-melodia.png" alt="Personaje de DM-BEAT tocando el teclado"
-           style="left:744px;top:261px;width:431px;height:287px;object-fit:cover">
-      <span class="marco panel" style="left:180px;top:534px"></span>
-      <button class="a boton-play" data-play aria-label="Reproducir capa" aria-pressed="false" style="left:211px;top:756.92px;width:60px;height:75.22px">
+           style="left:85px;top:180px;width:431px;height:287px;object-fit:cover">
+      <span class="marco panel" style="left:180px;top:469px;height:405.62px"></span>
+      <button class="a boton-play" data-play aria-label="Reproducir capa" aria-pressed="false" style="left:240px;top:761px;width:60px;height:75.22px">
         <img src="assets/boton-play.svg" alt="">
       </button>
-      <div data-silencio-en style="left:309px;top:759.42px;width:54px;height:71.46px"></div>
+      <button class="a boton-pausa" data-pausa aria-label="Pausar capa" style="left:324px;top:768px"><i></i><i></i></button>
 
       <div class="a mini-piano" style="left:211px;top:568.86px" aria-hidden="true">
         <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
@@ -247,36 +252,38 @@
       <h2 class="texto titulo-capa" style="left:362px;top:559px">MELODÍA</h2>
       <p class="texto light ajustado" style="left:349px;top:624px;width:453px;font-size:40px">Acordes que definen el clima emocional; alegre, triste, etc.</p>
 
-      <div class="a teclado" style="left:826px;top:556px" aria-hidden="true">
+      <div class="a teclado" style="left:826px;top:523px" aria-hidden="true">
         <i style="top:0;border-top:0"></i><i style="top:58.8px"></i><i style="top:117.6px"></i><i style="top:176.4px"></i><i style="top:235.2px"></i>
         <b style="top:47.04px"></b><b style="top:105.84px"></b><b style="top:164.64px"></b><b style="top:223.44px"></b>
       </div>
-      <div class="a rollo" data-rollo="melodia" style="left:960px;top:556px"></div>
-
-      <div data-pasos style="left:726px;top:896px"></div>
+      <div class="a rollo" data-rollo="melodia" style="left:960px;top:523px"></div>
+      <div class="progreso-tutorial" data-progreso="3" style="top:971px"></div>
+      <button class="a siguiente-crea" data-paso="1" style="left:1472px;top:918px">SIGUIENTE<span data-flecha-siguiente></span></button>
+      <div data-nav></div>
     </section>
 
     <!-- ============ NÚCLEO 1.2 · ESTRUCTURACIÓN ============ -->
     <section class="screen capa" id="estructura" data-seccion="aprende" aria-label="Capas del beat: estructuración">
-      <div data-capa-base></div>
+      <h1 class="apilado degradado-b" data-capas="#00ff89 12, #0084ff 8, #cc4bff 4"
+          style="left:388px;top:259px;font-size:90px">¿CÓMO ESTÁ COMPUESTO UN BEAT?</h1>
       <img class="a" src="assets/personaje-estructura.png" alt="Personaje de DM-BEAT leyendo una partitura"
-           style="left:753px;top:264.47px;width:414px;height:276px;object-fit:cover">
-      <span class="marco panel" style="left:168px;top:540px"></span>
-      <button class="a boton-play" data-play aria-label="Reproducir capa" aria-pressed="false" style="left:193px;top:767.39px;width:60px;height:75.22px">
+           style="left:44px;top:177px;width:414px;height:276px;object-fit:cover">
+      <span class="marco panel" style="left:168px;top:438px;height:443px"></span>
+      <button class="a boton-play" data-play aria-label="Reproducir capa" aria-pressed="false" style="left:232px;top:764px;width:60px;height:75.22px">
         <img src="assets/boton-play.svg" alt="">
       </button>
-      <div data-silencio-en style="left:291px;top:769.89px;width:54px;height:71.46px"></div>
+      <button class="a boton-pausa" data-pausa aria-label="Pausar capa" style="left:316px;top:771px"><i></i><i></i></button>
 
-      <img class="a" src="assets/icono-estructura.svg" alt="" style="left:192.14px;top:570.53px;width:122.71px;height:111.177px">
-      <h2 class="texto titulo-capa" style="left:345px;top:566px">ESTRUCTURACIÓN</h2>
-      <p class="texto light ajustado" style="left:335px;top:630px;width:465px;font-size:40px">Ordenar la base instrumental en Estribillo, estrofa, introducción.</p>
+      <img class="a" src="assets/icono-estructura.svg" alt="" style="left:192.14px;top:527.53px;width:122.71px;height:111.177px">
+      <h2 class="texto titulo-capa" style="left:345px;top:523px">ESTRUCTURACIÓN</h2>
+      <p class="texto light ajustado" style="left:335px;top:587px;width:465px;font-size:40px">Ordenar la base instrumental en Estribillo, estrofa, introducción.</p>
 
-      <div class="a etiquetas secciones" style="left:811px;top:569.37px">
+      <div class="a etiquetas secciones" style="left:811px;top:526.37px">
         <div class="etiqueta" data-seccion="0" style="top:0;height:87.8px">INTRO</div>
         <div class="etiqueta" data-seccion="1" style="top:96.11px;height:86.62px">ESTROFA</div>
         <div class="etiqueta" data-seccion="2" style="top:191.04px;height:87.8px">ESTRIBILLO</div>
       </div>
-      <div class="a pistas-estructura" style="left:1008.34px;top:569.37px">
+      <div class="a pistas-estructura" style="left:1008.34px;top:526.37px">
         <div class="pista" style="top:0;height:87.8px"></div>
         <div class="pista" style="top:96.11px;height:86.62px"></div>
         <div class="pista" style="top:191.04px;height:87.8px"></div>
@@ -285,29 +292,33 @@
         <img class="onda" src="assets/onda-bateria.png" alt="" style="left:490.66px;top:197.63px;width:221px;height:73px">
         <span class="cabezal" hidden></span>
       </div>
-
-      <div data-pasos style="left:726px;top:910px"></div>
+      <div class="progreso-tutorial" data-progreso="4" style="top:971px"></div>
+      <button class="a siguiente-crea" data-paso="1" style="left:1472px;top:918px">SIGUIENTE<span data-flecha-siguiente></span></button>
+      <div data-nav></div>
     </section>
 
     <!-- ============ NÚCLEO 1.2 · MEZCLA ============ -->
     <section class="screen capa" id="mezcla" data-seccion="aprende" aria-label="Capas del beat: mezcla">
-      <div data-capa-base></div>
+      <h1 class="apilado degradado-b" data-capas="#00ff89 12, #0084ff 8, #cc4bff 4"
+          style="left:442px;top:266px;font-size:90px">¿CÓMO ESTÁ COMPUESTO UN BEAT?</h1>
       <img class="a" src="assets/personaje-mezcla.png" alt="Personaje de DM-BEAT en una consola de DJ"
-           style="left:745px;top:270px;width:429px;height:286px;object-fit:cover">
-      <span class="marco panel" style="left:157px;top:558px"></span>
-      <button class="a boton-play" data-play aria-label="Reproducir capa" aria-pressed="false" style="left:193px;top:774.92px;width:60px;height:75.22px">
+           style="left:77px;top:193px;width:429px;height:286px;object-fit:cover">
+      <span class="marco panel" style="left:157px;top:479px;height:420px"></span>
+      <button class="a boton-play" data-play aria-label="Reproducir capa" aria-pressed="false" style="left:229px;top:783px;width:60px;height:75.22px">
         <img src="assets/boton-play.svg" alt="">
       </button>
-      <div data-silencio-en style="left:291px;top:777.42px;width:54px;height:71.46px"></div>
+      <button class="a boton-pausa" data-pausa aria-label="Pausar capa" style="left:313px;top:790px"><i></i><i></i></button>
 
-      <img class="a" src="assets/icono-mezcla.png" alt="" style="left:194px;top:584px;width:139px;height:138px;filter:drop-shadow(0 0 4px rgba(204,75,255,.8))">
-      <h2 class="texto titulo-capa" style="left:362px;top:585px">MEZCLA</h2>
-      <p class="texto light ajustado" style="left:352px;top:651px;width:485px;font-size:40px">Equilibrar volúmenes, aplicar efectos, etc.</p>
+      <img class="a" src="assets/icono-mezcla.png" alt="" style="left:227px;top:576px;width:139px;height:138px;filter:drop-shadow(0 0 4px rgba(204,75,255,.8))">
+      <h2 class="texto titulo-capa" style="left:395px;top:577px">MEZCLA</h2>
+      <p class="texto light ajustado" style="left:385px;top:643px;width:485px;font-size:40px">Equilibrar volúmenes, aplicar efectos, etc.</p>
 
-      <div class="a caja-oscura" style="left:1034px;top:581px;width:520px;height:279px"></div>
+      <!-- Faders horizontales en dos filas, con los colores y el orden de los de la consola -->
+      <div class="a caja-mezcla" style="left:833px;top:540px;width:832px;height:296px"></div>
       <div class="a faders"></div>
-
-      <div data-pasos style="left:726px;top:903px"></div>
+      <div class="progreso-tutorial" data-progreso="5" style="top:971px"></div>
+      <button class="a siguiente-crea" data-paso="1" style="left:1472px;top:918px">SIGUIENTE<span data-flecha-siguiente></span></button>
+      <div data-nav></div>
     </section>
 
     <!-- ============ NÚCLEO 1.3 · FL STUDIO ============ -->
@@ -319,7 +330,7 @@
       <img class="a captura" src="assets/captura-fl-studio.png" alt="Captura de la interfaz de FL Studio"
            style="left:829.34px;top:212.22px;width:928.661px;height:521.782px">
 
-      <div data-pasos style="left:726px;top:867.5px"></div>
+      <button class="a boton-figma" data-paso="1" style="left:1444px;top:909.47px;width:314px">CONTINUAR</button>
       <div data-nav></div>
     </section>
 
@@ -338,7 +349,7 @@
       <p class="texto ajustado" style="left:983px;top:288.47px;width:776px;font-size:40px;white-space:pre-wrap"> <span class="semi violeta">Romina Zanellato </span>,periodista, contó en Revista Anfibia,(2022) a través del caso de  <span class="negrita verde">Bizarrap</span> cómo en Argntina se puede producir un beat con muy poco equipamiento.</p>
       <p class="texto ajustado" style="left:988px;top:570.47px;width:776px;font-size:40px"><span class="negrita verde">Bizarrap</span> aprendió a usar <span class="semi violeta">FL Studio</span> a los 13 años y trabaja con una computadora, parlantes, un micrófono y algunos sintetizadores chicos.</p>
 
-      <div data-pasos style="left:726px;top:873.5px"></div>
+      <button class="a boton-figma" data-paso="1" style="left:1445px;top:910.94px;width:314px">CONTINUAR</button>
       <div data-nav></div>
     </section>
 
@@ -346,15 +357,15 @@
     <section class="screen" id="modifica" data-seccion="modifica" aria-label="Modificá una canción">
       <h1 class="apilado degradado-b" data-capas="#00ff89 12, #0084ff 8, #cc4bff 4"
           style="left:142px;top:195px;font-size:90px">MODIFICA UNA CANCION</h1>
-      <p class="texto light ajustado" style="left:142px;top:333px;width:1087px;font-size:40px">Hoy en día, existen aplicaciones y software especializado con herramientas de IA</p>
-      <p class="texto light ajustado" style="left:142px;top:455px;width:1041px;font-size:40px">Esto permite aislar y escuchar por separado la voz, la batería, el bajo y otros instrumentos, y descubrir cómo se construye la música que escuchás todos los días.</p>
-      <p class="texto light" style="left:142px;top:644px;font-size:40px"><span class="violeta">Explorá</span> tus canciones favoritas capa por capa.</p>
+      <p class="texto light ajustado" style="left:138.5px;top:380px;width:1087px;font-size:48px">Hoy en día, existen aplicaciones y software especializado con herramientas de IA</p>
+      <p class="texto light ajustado" style="left:138.5px;top:502px;width:1041px;font-size:48px">Esto permite aislar y escuchar por separado la voz, la batería, el bajo y otros instrumentos, y descubrir cómo se construye la música que escuchás todos los días.</p>
+      <p class="texto negrita" style="left:138.5px;top:789.47px;font-size:52px">Explorá tus canciones favoritas capa por capa.</p>
 
-      <div class="a cuadro-dj" style="left:1273px;top:195px;width:485px;height:404px">
+      <div class="a recuadro-dj" style="left:1225.5px;top:230.47px;width:553px;height:462px">
         <img src="assets/personaje-dj.png" alt="Personaje de DM-BEAT mezclando como DJ">
       </div>
 
-      <div data-pasos style="left:726px;top:867px"></div>
+      <button class="a boton-figma" data-paso="1" style="left:1446px;top:910.94px;width:314px">EXPLORAR</button>
       <div data-nav></div>
     </section>
 
@@ -363,14 +374,21 @@
       <h1 class="apilado degradado-b" data-capas="#00ff89 15, #0084ff 11, #cc4bff 6"
           style="left:454px;top:175px;font-size:90px">SELECCIONA UNA CANCION</h1>
 
-      <div class="a tarjetas" style="left:960.5px;top:338px">
-        <button class="tarjeta" data-cancion="redondos" style="--color:#0084ff;--fondo:#185a9f;width:332px">
-          <span class="tapa"><img src="assets/portada-redondos.png" alt="" style="height:201px"></span>
+      <div class="a explicacion-color" style="left:142px;top:299.47px;width:1636px;height:301px">
+        <img src="assets/personaje-consola.png" alt="Personaje de DM-BEAT señalando la consola">
+      </div>
+      <p class="texto negrita" style="left:605px;top:343.47px;font-size:48px">CADA CANCION TIENE UN COLOR</p>
+      <p class="texto light ajustado" style="left:604.68px;top:427.47px;width:1052.32px;font-size:48px"><span class="medio">Buscá el botón de ese mismo color en la </span><span class="negrita violeta">consola</span> y presionalo para seleccionar la canción que más te guste.</p>
+
+      <!-- Mismo orden y color que los botones de la consola: azul, violeta, verde, gris -->
+      <div class="a tarjetas" style="left:959.5px;top:660px">
+        <button class="tarjeta" data-cancion="redondos" style="--color:#0084ff;--fondo:#185a9f">
+          <span class="tapa"><img src="assets/portada-redondos.png" alt=""></span>
           <span class="tarjeta-titulo">Ñam Fri Fruli Fali Fru</span>
           <span class="tarjeta-artista">Patricio Rey y Sus Redonditos de Ricota</span>
         </button>
         <button class="tarjeta" data-cancion="duki" style="--color:#cc4bff;--fondo:#675180">
-          <span class="tapa"><img src="assets/portada-duki.png" alt="" style="height:199px"></span>
+          <span class="tapa"><img src="assets/portada-duki.png" alt=""></span>
           <span class="tarjeta-titulo">GIVENCHY</span>
           <span class="tarjeta-artista">DUKI</span>
         </button>
@@ -386,14 +404,6 @@
         </button>
       </div>
 
-      <div class="a explicacion-fondo" style="left:44.86px;top:711px;width:648.143px;height:301px"></div>
-      <img class="a" src="assets/personaje-consola.png" alt="Personaje de DM-BEAT señalando"
-           style="left:0;top:794.58px;width:324.182px;height:216.121px;object-fit:cover">
-      <p class="texto light" style="left:199.63px;top:754.58px;font-size:40px">CADA CANCION TIENE UN COLOR</p>
-      <p class="texto light ajustado" style="left:267.42px;top:817.6px;width:373.154px;font-size:25px"><span class="medio">Buscá el botón de ese mismo color en la </span><span class="negrita violeta">consola</span> y presionalo para seleccionar la canción que más te guste.</p>
-      <span class="a explicacion-borde" style="left:44.86px;top:711px;width:648.143px;height:301px"></span>
-
-      <div data-pasos style="left:726px;top:856px"></div>
       <div data-nav></div>
     </section>
 
@@ -420,7 +430,8 @@
 
       <div data-stems></div>
 
-      <div data-pasos style="left:726px;top:867px"></div>
+      <button class="a boton-figma azul" data-paso="-1" style="left:162px;top:937.47px;width:465px">ELIGE OTRA CANCION</button>
+      <button class="a boton-figma" data-paso="1" style="left:1293px;top:937.47px;width:465px">CREA TU PROPIO BEAT</button>
       <div data-nav></div>
     </section>
 
@@ -437,7 +448,7 @@
       <img class="a" src="assets/personaje-crea.png" alt="Personaje de DM-BEAT señalando con las dos manos"
            style="left:1140.64px;top:311px;width:686px;height:458px;object-fit:cover">
 
-      <div data-pasos style="left:726px;top:880px"></div>
+      <button class="a boton-figma" data-paso="1" style="left:803px;top:922px;width:314px">CONTINUAR</button>
       <div data-nav></div>
     </section>
 
@@ -466,7 +477,7 @@
       <p class="texto light ajustado" style="left:142px;top:631.53px;width:828px;font-size:40px">Hacer un beat desde cero puede llevar horas: buscar sonidos, combinar capas y ajustar cada detalle.</p>
       <p class="texto light ajustado" style="left:142px;top:746.53px;width:1639px;font-size:40px">Con <span class="violeta">DM-BEAT</span>, la IA te ayuda a generar una base en minutos para que puedas empezar a experimentar, modificarla y darle tu propia identidad.</p>
 
-      <div data-pasos style="left:726px;top:879.4px"></div>
+      <button class="a boton-figma" data-paso="1" style="left:803px;top:921px;width:314px">CONTINUAR</button>
       <div data-nav></div>
     </section>
 
@@ -475,10 +486,33 @@
       <h1 class="apilado degradado-b" data-capas="#00ff89 12, #0084ff 8, #cc4bff 4"
           style="left:142px;top:231.47px;font-size:90px">ACÁ EMPIEZA TU PRIMERA BASE</h1>
       <p class="texto medio ajustado" style="left:142px;top:415.47px;width:973px;font-size:40px;white-space:pre-wrap">En <span class="violeta">DM-BEAT</span>  vas a combinar los sonidos que conociste para crear una base musical propia.</p>
+
+      <!-- Percusión + bajo + melodía + estructura + mezcla = tu base -->
+      <div role="img" aria-label="Percusión, más bajo, más melodía, más estructura, más mezcla: igual a tu base">
+        <img class="a" src="assets/n3-pads-brillo.svg" alt="" style="left:138px;top:583.71px;width:131.846px;height:128.365px">
+        <img class="a" src="assets/n3-pads.svg" alt="" style="left:142px;top:587.71px;width:123.846px;height:120.365px">
+        <img class="a" src="assets/n3-mas.png" alt="" style="left:280px;top:634px;width:30px;height:29px">
+        <img class="a desenfocado" src="assets/icono-bajo.png" alt="" style="left:327px;top:590px;width:90px;height:113px;object-fit:contain">
+        <img class="a" src="assets/icono-bajo.png" alt="" style="left:327px;top:590px;width:90px;height:113px;object-fit:contain">
+        <img class="a" src="assets/n3-mas.png" alt="" style="left:423px;top:634px;width:30px;height:29px">
+        <div class="a teclado-receta" style="left:480px;top:599px">
+          <i class="blanca" style="left:0;width:17px"></i><i class="blanca" style="left:17px;width:18px"></i><i class="blanca" style="left:35px;width:17px"></i><i class="blanca" style="left:52px;width:17px"></i><i class="blanca" style="left:69px;width:17px"></i><i class="blanca" style="left:86px;width:18px"></i><i class="blanca" style="left:104px;width:17px"></i>
+          <i class="negra" style="left:14px"></i><i class="negra verde" style="left:32px"></i><i class="negra" style="left:49px"></i><i class="negra verde" style="left:66px"></i><i class="negra" style="left:83px"></i><i class="negra" style="left:101px"></i>
+        </div>
+        <img class="a" src="assets/n3-mas.png" alt="" style="left:606px;top:632px;width:30px;height:30px">
+        <img class="a" src="assets/n3-capas.svg" alt="" style="left:651.14px;top:596.23px;width:110.813px;height:100.708px">
+        <img class="a" src="assets/n3-mas.png" alt="" style="left:769px;top:634px;width:30px;height:29px">
+        <img class="a" src="assets/icono-mezcla.png" alt="" style="left:809px;top:585px;width:124px;height:124px;object-fit:cover">
+        <img class="a" src="assets/n3-igual.png" alt="" style="left:943px;top:627px;width:41px;height:41px">
+        <img class="a" src="assets/n3-onda-1.png" alt="" style="left:1005px;top:613px;width:77px;height:77px">
+        <img class="a" src="assets/n3-onda-2.png" alt="" style="left:1003px;top:611px;width:77px;height:77px">
+        <img class="a" src="assets/n3-onda-3.png" alt="" style="left:1001px;top:609px;width:77px;height:77px">
+      </div>
+
       <img class="a" src="assets/personaje-primera-base.png" alt="Personaje de DM-BEAT presentando con la mano"
            style="left:1090.55px;top:310.47px;width:717.28px;height:478.19px;object-fit:cover">
 
-      <div data-pasos style="left:726px;top:890.7px"></div>
+      <button class="a boton-figma" data-paso="1" style="left:803px;top:922px;width:314px">CONTINUAR</button>
       <div data-nav></div>
     </section>
 
@@ -487,11 +521,26 @@
       <h1 class="apilado degradado-b" data-capas="#00ff89 12, #0084ff 8, #cc4bff 4"
           style="left:142px;top:231.47px;font-size:90px">DE A POCO, Y A TU MANERA</h1>
       <p class="texto medio ajustado" style="left:142px;top:415.47px;width:973px;font-size:40px">Una etapa por vez: vas a escuchar, probar y elegir. No necesitás saber producir música.</p>
-      <p class="texto light violeta" style="left:142px;top:730.47px;font-size:50px"> Podés volver atrás y cambiar lo que quieras.</p>
+
+      <!-- Escuchás → probás → elegís -->
+      <div role="img" aria-label="Escuchás, después probás con los controles y al final elegís">
+        <img class="a" src="assets/n3-persona-auriculares.png" alt="" style="left:149px;top:631px;width:156px;height:156px;object-fit:cover">
+        <img class="a" src="assets/n3-flecha-verde.svg" alt="" style="left:345px;top:693.59px;width:51.5px;height:36.82px">
+        <img class="a" src="assets/n3-flecha-azul.svg" alt="" style="left:344px;top:692.59px;width:51.5px;height:36.82px">
+        <img class="a" src="assets/n3-flecha-violeta.svg" alt="" style="left:343px;top:691.59px;width:51.5px;height:36.82px">
+        <img class="a" src="assets/n3-flecha-blanca.svg" alt="" style="left:342px;top:690.59px;width:51.5px;height:36.82px">
+        <img class="a" src="assets/n3-controles.png" alt="" style="left:365px;top:576px;width:264px;height:264px;object-fit:cover">
+        <img class="a" src="assets/n3-flecha-verde.svg" alt="" style="left:588px;top:692.59px;width:51.5px;height:36.82px">
+        <img class="a" src="assets/n3-flecha-azul.svg" alt="" style="left:587px;top:691.59px;width:51.5px;height:36.82px">
+        <img class="a" src="assets/n3-flecha-violeta.svg" alt="" style="left:586px;top:690.59px;width:51.5px;height:36.82px">
+        <img class="a" src="assets/n3-flecha-blanca.svg" alt="" style="left:585px;top:689.59px;width:51.5px;height:36.82px">
+        <img class="a" src="assets/n3-elegir.png" alt="" style="left:671px;top:631px;width:163px;height:163px;object-fit:cover">
+      </div>
+
       <img class="a" src="assets/personaje-etapas.png" alt="Personaje de DM-BEAT mostrando las etapas: elegí un estilo, sumá sonidos, guardá tu base"
            style="left:1114.47px;top:332.61px;width:679px;height:453px;object-fit:cover">
 
-      <div data-pasos style="left:726px;top:880px"></div>
+      <button class="a boton-figma" data-paso="1" style="left:803px;top:921px;width:314px">CONTINUAR</button>
       <div data-nav></div>
     </section>
 
@@ -688,31 +737,6 @@
   </div>
 </template>
 
-<!-- Botones anterior / siguiente: una capa verde con otra celeste encima -->
-<template id="tpl-pasos">
-  <button class="paso" data-paso="-1" aria-label="Anterior">
-    <img src="assets/skip-previous-verde.svg" alt=""><img class="encima" src="assets/skip-previous-celeste.svg" alt="">
-  </button>
-  <button class="paso" data-paso="1" aria-label="Siguiente" style="left:363px">
-    <img src="assets/skip-next-verde.svg" alt=""><img class="encima" src="assets/skip-next-celeste.svg" alt="">
-  </button>
-</template>
-
-<!-- Título y barra comunes de las pantallas de capas -->
-<template id="tpl-capa-base">
-  <h1 class="apilado degradado-b" data-capas="#00ff89 12, #0084ff 8, #cc4bff 4"
-      style="left:296px;top:140px;font-size:90px">¿CÓMO ESTÁ COMPUESTO UN BEAT?</h1>
-  <div data-nav></div>
-</template>
-
-<!-- Botón de silencio de las pantallas de capas -->
-<template id="tpl-silencio">
-  <button class="a boton-sonido" data-silencio aria-label="Silenciar" aria-pressed="false">
-    <img class="brillo-sonido" src="assets/icono-sonido.png" alt="">
-    <img src="assets/icono-sonido.png" alt="">
-  </button>
-</template>
-
 <!-- Menú lateral de los 7 pasos del núcleo 3 -->
 <template id="tpl-crea-lateral">
   <div class="lateral-fondo"></div>
@@ -766,12 +790,12 @@
   <span class="flecha"><img src="assets/skip-next-verde.svg" alt=""><img class="encima" src="assets/skip-next-celeste.svg" alt=""></span>
 </template>
 
-<script src="js/audio.js?v=20261102a"></script>
-<script src="js/vendor/qrcode.min.js?v=20261102a"></script>
-<script src="js/motor-beat.js?v=20261102a"></script>
-<script src="js/nucleo2.js?v=20261102a"></script>
-<script src="js/nucleo3.js?v=20261102a"></script>
-<script src="js/main.js?v=20261102a"></script>
-<script src="js/consola.js?v=20261102a"></script>
+<script src="js/audio.js?v=20261102b"></script>
+<script src="js/vendor/qrcode.min.js?v=20261102b"></script>
+<script src="js/motor-beat.js?v=20261102b"></script>
+<script src="js/nucleo2.js?v=20261102b"></script>
+<script src="js/nucleo3.js?v=20261102b"></script>
+<script src="js/main.js?v=20261102b"></script>
+<script src="js/consola.js?v=20261102b"></script>
 </body>
 </html>

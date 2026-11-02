@@ -1,0 +1,26 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="131.846" height="128.365" viewBox="0 0 131.846 128.365" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Group 8" filter="url(#filter0_f_0_39)">
+<rect id="Rectangle 62" x="13.2105" y="15.4136" width="27.635" height="28.016" fill="#CC4BFF"/>
+<rect id="Rectangle 65" x="13.2105" y="49.6563" width="27.635" height="28.016" fill="#CC4BFF"/>
+<rect id="Rectangle 68" x="13.2105" y="83.8972" width="27.635" height="28.016" fill="#CC4BFF"/>
+<rect id="Rectangle 63" x="46.9882" y="15.4136" width="27.635" height="28.016" fill="#CC4BFF"/>
+<rect id="Rectangle 66" x="46.9882" y="49.6563" width="27.635" height="28.016" fill="#1FD97F"/>
+<rect id="Rectangle 69" x="46.9882" y="83.8972" width="27.635" height="28.016" fill="#CC4BFF"/>
+<rect id="Rectangle 64" x="80.7624" y="15.4136" width="27.635" height="28.016" fill="#CC4BFF"/>
+<rect id="Rectangle 67" x="80.7624" y="49.6563" width="27.635" height="28.016" fill="#CC4BFF"/>
+<rect id="Rectangle 70" x="80.7624" y="83.8972" width="27.635" height="28.016" fill="#CC4BFF"/>
+<rect id="Rectangle 71" x="114.54" y="15.4136" width="5.11759" height="28.016" fill="#CC4BFF"/>
+<rect id="Rectangle 72" x="114.54" y="49.6563" width="5.11759" height="28.016" fill="#CC4BFF"/>
+<ellipse id="Ellipse 37" cx="117.099" cy="86.4913" rx="2.55879" ry="2.59408" fill="#CC4BFF"/>
+<ellipse id="Ellipse 38" cx="117.099" cy="109.319" rx="2.55879" ry="2.59408" fill="#CC4BFF"/>
+<ellipse id="Ellipse 39" cx="117.099" cy="97.9058" rx="2.55879" ry="2.59408" fill="#CC4BFF"/>
+<path id="Rectangle 73" d="M13 5H118.846C123.264 5 126.846 8.58172 126.846 13V115.365C126.846 119.783 123.264 123.365 118.846 123.365H13C8.58172 123.365 5 119.783 5 115.365V13C5 8.58172 8.58172 5 13 5Z" stroke-width="2" stroke="#CC4BFF"/>
+</g>
+<defs>
+<filter id="filter0_f_0_39" x="0" y="-1.78814e-07" width="131.846" height="128.365" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feGaussianBlur stdDeviation="2" result="effect1_foregroundBlur_0_39"/>
+</filter>
+</defs>
+</svg>
