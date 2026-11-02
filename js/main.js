@@ -475,9 +475,15 @@ function transporte(accion) {
 function elegirCancion(n) {
   const tarjeta = document.querySelectorAll("#selecciona [data-cancion]")[n - 1];
   if (!tarjeta) return false;
-  Nucleo2.elegir(tarjeta.dataset.cancion);
-  ir("cancion");
+  abrirCancion(tarjeta.dataset.cancion);
   return true;
+}
+
+// La canción elegida empieza a sonar apenas se abre, sin tocar play.
+function abrirCancion(id) {
+  Nucleo2.elegir(id);
+  ir("cancion");
+  Nucleo2.empezar();
 }
 
 // ---------- Navegación ----------
@@ -523,8 +529,7 @@ function escuchar() {
     }
     const cancion = e.target.closest("[data-cancion]");
     if (cancion) {
-      Nucleo2.elegir(cancion.dataset.cancion);
-      ir("cancion");
+      abrirCancion(cancion.dataset.cancion);
       return;
     }
     const paso = e.target.closest("[data-paso]");

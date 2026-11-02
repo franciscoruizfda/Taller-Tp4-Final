@@ -272,6 +272,11 @@ const Nucleo2 = (() => {
       pintarStem(id);
       aplicarVolumenes();
     },
+    // Al elegir una canción arranca sola, desde el principio.
+    empezar() {
+      detener();
+      reproducir();
+    },
     alEntrar: () => { if (!actual) elegir("redondos"); },
     alSalir: pausar,
     get sonando() { return sonando; },
