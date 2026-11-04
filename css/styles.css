@@ -829,7 +829,11 @@ img { display: block; }
 /* Cajas, globos de diálogo y botones */
 .caja-crea { border-radius: 27px; background: #210a41; }
 .caja-crea.sombra { box-shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 1px 3px 1px rgba(0, 0, 0, .15); }
-.globo { border-radius: 10px; background: rgba(0, 0, 0, .5); }
+/* Globo de diálogo de Byte: rectángulo + punta en negro, y la transparencia se aplica al grupo entero.
+   Así la punta queda exactamente del mismo color que el rectángulo, sin zona más oscura donde se tocan. */
+.globo-grupo { position: absolute; inset: 0; opacity: .5; pointer-events: none; }
+.globo { border-radius: 10px; background: #000; }
+.globo-punta { background: #000; }
 .byte { object-fit: cover; object-position: left center; }
 
 
@@ -1004,6 +1008,9 @@ img { display: block; }
   place-items: center;
 }
 .boton-cuadrado img { width: 26.13px; height: 26.13px; }
+.boton-cuadrado .icono-reproducir { margin-left: 4px; border-width: 11px 0 11px 18px; }
+.boton-cuadrado .icono-pausar { gap: 6px; }
+.boton-cuadrado .icono-pausar i { width: 6px; height: 22px; border-radius: 2px; background: #fff; }
 .boton-cuadrado:hover,
 .boton-cuadrado[aria-pressed="true"] { box-shadow: 0 0 12px var(--violeta); background: rgba(204, 75, 255, .3); }
 
@@ -1158,12 +1165,12 @@ img { display: block; }
 @media (prefers-reduced-motion: reduce) { .luz.tocada { animation: none; } }
 
 /* «Acá empieza tu primera base»: teclado de la receta */
-.teclado-receta { width: 121px; height: 102.801px; }
+/* Mismo tamaño que en el Figma (109×93): fondo blanco = 7 teclas blancas; cada tecla de color
+   lleva debajo su propia línea divisoria (::after), así línea y tecla nunca se desfasan al escalar. */
+.teclado-receta { width: 109px; height: 93px; background: #fff; border-radius: 4px; }
 .teclado-receta i { position: absolute; top: 0; }
-.teclado-receta .blanca { height: 102.801px; background: #fff; border-left: 1px solid #000; }
-.teclado-receta .blanca:first-child { border-left: 0; border-radius: 4px 0 0 4px; }
-.teclado-receta .blanca:nth-child(7) { border-radius: 0 4px 4px 0; }
-.teclado-receta .negra { width: 7px; height: 72.713px; border-radius: 0 0 1px 1px; background: var(--violeta); }
+.teclado-receta .negra::after { content: ""; position: absolute; left: 3px; top: 100%; width: 1px; height: 27px; background: #000; }
+.teclado-receta .negra { width: 7px; height: 66px; border-radius: 0 0 1px 1px; background: var(--violeta); }
 .teclado-receta .negra.verde { background: var(--verde); box-shadow: 0 0 4px var(--verde); }
 
 /* Botón con el cuadrado del color del botón físico que lo activa (gris = continuar, azul = volver) */
