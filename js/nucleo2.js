@@ -18,7 +18,6 @@ const Nucleo2 = (() => {
     { id: "bateria", nombre: "la batería", icono: "stem-bateria.png", color: "#9ec5f4", caja: [962.5, 721.47], ico: [983.5, 750.47], riel: 1072.5 },
   ];
   const ANCHO_RIEL = 653;
-  const DESFASE_MAXIMO = 0.08; // segundos que se tolera entre pistas antes de resincronizar
 
   /* Corrección de stems que vienen corridos de origen, en segundos: positivo adelanta esa pista
      (suena antes), negativo la atrasa. Se encuentran a oído con la herramienta de afinación. */
@@ -29,10 +28,14 @@ const Nucleo2 = (() => {
   const niveles = { voz: 1, bajo: 1, melodia: 1, bateria: 1 };
   let solo = null;
   let actual = null;
-  let pistas = {};
+  let buffers = {}; // stem → AudioBuffer decodificado de la canción actual
+  let fuentes = []; // las 4 fuentes sonando ahora (cada play crea unas nuevas)
+  let inicio = 0; // instante del reloj de audio que corresponde al segundo 0 de la canción
+  let pausadoEn = 0; // segundo de la canción donde quedó al pausar
+  let decodificando = null; // promesa mientras se decodifica la canción elegida
   let sonando = false;
   let esperando = false; // se pidió play y se están terminando de cargar las pistas
-  const cargadas = {}; // id de canción → { pistas, faltan, listas }
+  const cargadas = {}; // id de canción → { datos, faltan, listas }
   let raf = 0;
 
   const pantalla = () => document.getElementById("cancion");
@@ -161,23 +164,36 @@ const Nucleo2 = (() => {
 
   // ---------- Carga de stems ----------
 
-  // Crea las 4 pistas de una canción una sola vez. «listas» se cumple cuando todas pueden sonar
-  // sin cortarse (o fallaron), así arrancan juntas.
+  /* Las pistas suenan con Web Audio: las 4 se decodifican y se programan para arrancar en el mismo
+     instante del reloj de audio, así quedan clavadas a la muestra y no se pueden desfasar. (Con un
+     <audio> por pista cada una llevaba su propio reloj y se corrían de a ratos.) El volumen de cada
+     pista es un nodo de ganancia aparte, así que moverlo no toca la reproducción. */
+  let ctx = null;
+  const ganancias = {};
+
+  function contexto() {
+    if (!ctx) {
+      ctx = new (window.AudioContext || window.webkitAudioContext)();
+      for (const s of STEMS) {
+        ganancias[s.id] = ctx.createGain();
+        ganancias[s.id].connect(ctx.destination);
+      }
+    }
+    return ctx;
+  }
+
+  // Baja los 4 archivos de una canción una sola vez (comprimidos, ocupan poco).
   function cargar(id) {
     if (cargadas[id]) return cargadas[id];
-    const registro = { pistas: {}, faltan: [] };
-    registro.listas = Promise.all(STEMS.map((s) => new Promise((listo) => {
-      const audio = new Audio();
-      audio.preload = "auto";
-      audio.addEventListener("canplaythrough", listo, { once: true });
-      audio.addEventListener("error", () => {
-        registro.faltan.push(s.id);
-        delete registro.pistas[s.id];
-        listo();
-      }, { once: true });
-      audio.src = `assets/canciones/${id}/${s.id}.mp3`;
-      registro.pistas[s.id] = audio;
-    }))).then(() => { registro.cargada = true; });
+    const registro = { datos: {}, faltan: new Set() };
+    registro.listas = Promise.all(STEMS.map((s) =>
+      fetch(`assets/canciones/${id}/${s.id}.mp3`)
+        .then((r) => {
+          if (!r.ok) throw new Error(`HTTP ${r.status}`);
+          return r.arrayBuffer();
+        })
+        .then((datos) => { registro.datos[s.id] = datos; })
+        .catch(() => { registro.faltan.add(s.id); })));
     cargadas[id] = registro;
     return registro;
   }
@@ -187,19 +203,33 @@ const Nucleo2 = (() => {
     Object.keys(CANCIONES).forEach(cargar);
   }
 
+  // Decodifica solo la canción elegida: ya decodificada ocupa mucho, y se suelta al cambiar de canción.
+  // Se decodifica una copia de los datos para poder volver a hacerlo si se la elige de nuevo.
+  function decodificar(id) {
+    const registro = cargar(id);
+    return registro.listas
+      .then(() => Promise.all(Object.entries(registro.datos).map(([stem, datos]) =>
+        contexto().decodeAudioData(datos.slice(0)).then(
+          (buffer) => [stem, buffer],
+          () => { registro.faltan.add(stem); return null; }))))
+      .then((pares) => Object.fromEntries(pares.filter(Boolean)));
+  }
+
   function elegir(id) {
     if (id === actual || !CANCIONES[id]) return;
     detener();
     actual = id;
-    const registro = cargar(id);
-    pistas = registro.pistas;
+    buffers = {};
+    pausadoEn = 0;
     pintarCabecera();
     pintarProgreso();
     estado("Cargando la canción…");
-    registro.pistas[STEMS[0].id]?.addEventListener("loadedmetadata", pintarProgreso, { once: true });
-    registro.listas.then(() => {
+    const registro = cargar(id);
+    const promesa = decodificar(id).then((decodificados) => {
       if (actual !== id) return;
-      const { faltan } = registro;
+      buffers = decodificados;
+      decodificando = null;
+      const faltan = [...registro.faltan];
       if (faltan.length === STEMS.length) {
         estado(`Falta el audio: agregá voz.mp3, bajo.mp3, melodia.mp3 y bateria.mp3 en assets/canciones/${id}/`);
       } else if (faltan.length) {
@@ -210,66 +240,76 @@ const Nucleo2 = (() => {
       aplicarVolumenes();
       pintarProgreso();
     });
+    decodificando = promesa;
   }
 
-  // La primera pista disponible marca el tiempo; las demás la siguen.
-  const maestro = () => STEMS.map((s) => pistas[s.id]).find(Boolean);
+  // La primera pista disponible da la duración.
+  const maestro = () => STEMS.map((s) => buffers[s.id]).find(Boolean);
   const corrimiento = (id) => CORRIMIENTOS[actual]?.[id] || 0;
-  // Dónde tiene que estar cada pista para un momento t de la canción.
-  const posicion = (id, t) => Math.max(0, t + corrimiento(id));
-  // Momento de la canción según la pista que marca el tiempo.
-  const tiempo = () => {
-    const s = STEMS.find((x) => pistas[x.id]);
-    return s ? pistas[s.id].currentTime - corrimiento(s.id) : 0;
-  };
-  const duracion = () => {
-    const d = maestro()?.duration;
-    return Number.isFinite(d) ? d : 0;
-  };
+  const duracion = () => maestro()?.duration || 0;
+  // Momento de la canción: sale del reloj de audio mientras suena, y del punto de pausa si no.
+  const tiempo = () => (sonando ? Math.min(Math.max(0, ctx.currentTime - inicio), duracion()) : pausadoEn);
 
   // ---------- Reproducción ----------
 
   function aplicarVolumenes() {
+    const c = contexto();
     for (const s of STEMS) {
-      const audio = pistas[s.id];
-      if (audio) audio.volume = solo && solo !== s.id ? 0 : niveles[s.id];
+      const valor = solo && solo !== s.id ? 0 : niveles[s.id];
+      ganancias[s.id].gain.setTargetAtTime(valor, c.currentTime, 0.015); // rampa cortita: sin chasquidos
     }
   }
 
+  // Programa las 4 pistas para que entren juntas, desde el momento t de la canción.
+  function arrancar(t) {
+    const c = contexto();
+    const cuando = c.currentTime + 0.05; // un margen mínimo para que las 4 queden en el mismo instante
+    inicio = cuando - t;
+    fuentes = STEMS.filter((s) => buffers[s.id]).map((s) => {
+      const fuente = c.createBufferSource();
+      fuente.buffer = buffers[s.id];
+      fuente.connect(ganancias[s.id]);
+      const desde = t + corrimiento(s.id);
+      if (desde >= 0) fuente.start(cuando, desde);
+      else fuente.start(cuando - desde); // pista atrasada: entra un poco después
+      return fuente;
+    });
+  }
+
+  function frenar() {
+    fuentes.forEach((f) => {
+      try { f.stop(); } catch { /* ya había terminado */ }
+      f.disconnect();
+    });
+    fuentes = [];
+  }
+
   function reproducir() {
-    const m = maestro();
-    if (!m || sonando || esperando) return;
-    // Si alguna pista todavía no está lista, se espera a las 4 y arrancan juntas desde el principio
-    // de donde estaba (si no, entraban a destiempo mientras cargaban).
-    const registro = cargadas[actual];
-    if (!registro.cargada) {
+    if (!actual || sonando || esperando) return;
+    // Si la canción todavía se está decodificando, se espera y arranca apenas esté.
+    if (decodificando) {
       esperando = true;
       const cancion = actual;
-      registro.listas.then(() => {
+      decodificando.then(() => {
         if (!esperando || actual !== cancion) return;
         esperando = false;
         reproducir();
       });
       return;
     }
-    if (m.ended || m.currentTime >= duracion() - 0.05) buscar(0);
+    if (!maestro()) return;
+    const c = contexto();
+    if (c.state === "suspended") c.resume();
     Sonido.detener();
-    const t = tiempo();
-    STEMS.forEach((s) => {
-      const a = pistas[s.id];
-      if (!a) return;
-      a.currentTime = posicion(s.id, t);
-      a.play().catch(() => {});
-    });
-    m.onended = detener;
+    if (pausadoEn >= duracion() - 0.05) pausadoEn = 0;
+    arrancar(pausadoEn);
     sonando = true;
     pintarBoton();
     const cuadro = () => {
-      const tm = tiempo();
-      STEMS.forEach((s) => {
-        const a = pistas[s.id];
-        if (a && a !== m && Math.abs(a.currentTime - posicion(s.id, tm)) > DESFASE_MAXIMO) a.currentTime = posicion(s.id, tm);
-      });
+      if (tiempo() >= duracion()) {
+        detener();
+        return;
+      }
       pintarProgreso();
       raf = requestAnimationFrame(cuadro);
     };
@@ -278,7 +318,8 @@ const Nucleo2 = (() => {
 
   function pausar() {
     esperando = false;
-    Object.values(pistas).forEach((a) => a.pause());
+    if (sonando) pausadoEn = tiempo();
+    frenar();
     cancelAnimationFrame(raf);
     sonando = false;
     pintarBoton();
@@ -294,11 +335,13 @@ const Nucleo2 = (() => {
     else reproducir();
   }
 
+  // Saltar a otro momento: si está sonando, las 4 pistas se vuelven a programar juntas desde ahí.
   function buscar(segundos) {
-    STEMS.forEach((s) => {
-      const a = pistas[s.id];
-      if (a?.readyState > 0) a.currentTime = posicion(s.id, segundos);
-    });
+    pausadoEn = Math.min(Math.max(0, segundos), duracion());
+    if (sonando) {
+      frenar();
+      arrancar(pausadoEn);
+    }
     pintarProgreso();
   }
 
