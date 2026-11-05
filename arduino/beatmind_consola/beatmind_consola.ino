@@ -8,14 +8,14 @@
 
 // ---------- BOTONES ----------
 const int NB = 9;
-// Cada mensaje es lo que la página espera de ese botón (igual que la consola dibujada en el tutorial):
-//   B3 |◀ atrás        B1 ▶| siguiente        BJ clic del joystick
-//   fila de colores, de izquierda a derecha: B6 verde agua, B7 violeta, B5 amarillo, B4 gris
-//   B2 ❚❚ pausa        B8 ▶ play
-// Si un botón hace otra cosa en la página, cambiá su mensaje acá (no el pin).
-// Botón físico:           atras  sig.  par1-izq par1-der par2-izq par2-der pausa  play   joy
-const int pinesB[NB]      = {2,    3,    7,       8,       5,       4,       9,     6,     10};
-const char* mensajesB[NB] = {"B3", "B1", "B6",    "B7",    "B5",    "B4",    "B2",  "B8",  "BJ"};
+// Qué hace cada código en la página (js/consola.js), con la consola vista de frente:
+//   B3 |◀ atrás                               B1 ▶| siguiente      BJ clic del joystick
+//   fila de colores, de izquierda a derecha: B8 azul, B2 violeta, B4 verde, B7 gris
+//   B5 ❚❚ pausa                               B6 ▶ play
+// Si cambiás un código acá, cambialo también en js/consola.js (BOTONES) e index.html (data-control).
+// Botón físico:           atras  sig.  azul  violeta verde  gris   pausa  play   joy
+const int pinesB[NB]      = {2,    3,    7,    8,      5,     4,     9,     6,     10};
+const char* mensajesB[NB] = {"B3", "B1", "B8", "B2",   "B4",  "B7",  "B5",  "B6",  "BJ"};
 
 const unsigned long REBOTE = 30;   // ms para filtrar rebotes
 

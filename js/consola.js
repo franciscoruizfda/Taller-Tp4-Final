@@ -7,16 +7,21 @@
 const Consola = (() => {
   const BAUDIOS = 115200; // tiene que coincidir con Serial.begin() del Arduino
 
-  // Qué hace cada botón, según el dibujo de la consola.
+  /* Qué hace cada botón de la consola física. El código es el que manda el Arduino
+     (mensajesB en arduino/beatmind_consola); la fila de colores va de izquierda a derecha:
+       B3 |◀ atrás                                   B1 ▶| siguiente
+       B8 azul    B2 violeta    B4 verde    B7 gris
+       B5 ❚❚ pausa                                   B6 ▶ play
+     Si cambia un código, cambialo también en el dibujo de la consola (data-control en index.html). */
   const BOTONES = {
     B1: () => avanzar(1), // ▶| siguiente
     B3: () => avanzar(-1), // |◀ anterior
-    B8: () => transporte("play"),
-    B2: () => transporte("pausa"),
-    B6: () => color(1), // verde agua: 1.ª canción / opción azul / 1.er estilo
-    B7: () => color(2), // violeta
-    B5: () => color(3), // amarillo: opción verde
-    B4: () => color(4), // gris: 4.ª canción / 4.º estilo
+    B6: () => transporte("play"),
+    B5: () => transporte("pausa"),
+    B8: () => color(1), // azul: 1.ª canción / opción azul / 1.er estilo
+    B2: () => color(2), // violeta
+    B4: () => color(3), // verde: opción verde
+    B7: () => color(4), // gris: 4.ª canción / 4.º estilo
   };
 
   /* Los 4 faders están en dos filas, igual que los rieles en pantalla y con sus mismos colores:
