@@ -1,14 +1,21 @@
-// ===== Beatmind · Consola: 8 botones + 3 faders + joystick → página web =====
+// ===== Beatmind · Consola: 8 botones + 4 faders + joystick → página web =====
 // Mismo cableado que consola_debug.ino. En vez de texto para leer, manda una línea corta
 // por cada cosa que pasa, y la página (js/consola.js) la recibe por USB con Web Serial:
 //   B1 ... B8   se apretó ese botón          BJ      se apretó el joystick
 //   F1:57       un fader, de 0 a 100 %       J:x,y   el joystick, de -100 a 100 por eje
+// Mientras se mueve un fader, los otros quedan bloqueados (ver BLOQUEO).
 // IMPORTANTE: cerrá el Monitor Serie antes de conectar la página (el puerto no se puede compartir).
 
 // ---------- BOTONES ----------
 const int NB = 9;
-const int pinesB[NB] = {3, 8, 2, 5, 6, 9, 4, 7, 10};
-const char* mensajesB[NB] = {"B1", "B2", "B3", "B4", "B5", "B6", "B7", "B8", "BJ"};
+// Cada mensaje es lo que la página espera de ese botón (igual que la consola dibujada en el tutorial):
+//   B3 |◀ atrás        B1 ▶| siguiente        BJ clic del joystick
+//   fila de colores, de izquierda a derecha: B6 verde agua, B7 violeta, B5 amarillo, B4 gris
+//   B2 ❚❚ pausa        B8 ▶ play
+// Si un botón hace otra cosa en la página, cambiá su mensaje acá (no el pin).
+// Botón físico:           atras  sig.  par1-izq par1-der par2-izq par2-der pausa  play   joy
+const int pinesB[NB]      = {2,    3,    7,       8,       5,       4,       9,     6,     10};
+const char* mensajesB[NB] = {"B3", "B1", "B6",    "B7",    "B5",    "B4",    "B2",  "B8",  "BJ"};
 
 const unsigned long REBOTE = 30;   // ms para filtrar rebotes
 
@@ -18,17 +25,23 @@ unsigned long cambioB[NB];
 
 // ---------- FADERS ----------
 // F1 arriba izquierda, F2 arriba derecha, F3 abajo izquierda, F4 abajo derecha.
-// F4 va en A5 (A3 y A4 son del joystick). Mientras no esté cableado queda en false:
-// un pin suelto lee valores al azar y movería el fader en pantalla solo.
+// (A3 y A4 son del joystick.)
 const int NF = 4;
-const int pinesF[NF] = {A0, A1, A2, A5};
-const bool conectadoF[NF] = {true, true, true, false};   // cuando conectes F4, pasalo a true
+//                      F1  F2  F3  F4
+const int pinesF[NF] = {A5, A2, A0, A1};
+const bool conectadoF[NF] = {true, true, true, true};   // si un fader no está cableado, ponelo en false
 
 // Valor crudo con el fader en la MITAD del recorrido (el mismo que en consola_debug.ino)
 const int MEDIO = 150;
 const int SALTO_FADER = 2;   // % mínimo de cambio para mandar (evita el temblor)
 
+// Bloqueo: mientras un fader se está moviendo, los demás se ignoran.
+// Se libera cuando el fader activo queda quieto este tiempo (ms).
+const unsigned long BLOQUEO = 400;
+
 int posF[NF];
+int faderActivo = -1;              // -1 = ninguno
+unsigned long ultimoMovimiento = 0;
 
 // ---------- JOYSTICK ----------
 const int PIN_X = A3;
@@ -96,17 +109,32 @@ int corregir(int crudo) {
 }
 
 void revisarFaders() {
+  unsigned long ahora = millis();
+
+  // Si el fader activo quedó quieto el tiempo suficiente, se liberan los demás
+  if (faderActivo != -1 && ahora - ultimoMovimiento > BLOQUEO) faderActivo = -1;
+
   for (int i = 0; i < NF; i++) {
     if (!conectadoF[i]) continue;
     int pos = corregir(leerSuave(pinesF[i]));
     // Los extremos se mandan siempre, para poder llegar a 0 y a 100 justos.
     bool extremo = (pos == 0 || pos == 100) && pos != posF[i];
-    if (abs(pos - posF[i]) >= SALTO_FADER || extremo) {
+    bool cambio = (abs(pos - posF[i]) >= SALTO_FADER || extremo);
+    if (!cambio) continue;
+
+    if (faderActivo == -1 || faderActivo == i) {
+      // Libre, o es el fader que se está usando: se manda
+      faderActivo = i;
+      ultimoMovimiento = ahora;
       posF[i] = pos;
       Serial.print('F');
       Serial.print(i + 1);
       Serial.print(':');
       Serial.println(pos);
+    } else {
+      // Bloqueado: se guarda la posición sin mandarla,
+      // así cuando se libere no pega un salto de golpe.
+      posF[i] = pos;
     }
   }
 }
