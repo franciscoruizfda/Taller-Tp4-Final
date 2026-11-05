@@ -11,13 +11,13 @@ const Consola = (() => {
      (mensajesB en arduino/beatmind_consola); la fila de colores va de izquierda a derecha:
        B3 |◀ atrás                                   B1 ▶| siguiente
        B8 azul    B2 violeta    B4 verde    B7 gris
-       B5 ❚❚ pausa                                   B6 ▶ play
+       B6 ❚❚ pausa                                   B5 ▶ play
      Si cambia un código, cambialo también en el dibujo de la consola (data-control en index.html). */
   const BOTONES = {
     B1: () => avanzar(1), // ▶| siguiente
     B3: () => avanzar(-1), // |◀ anterior
-    B6: () => transporte("play"),
-    B5: () => transporte("pausa"),
+    B5: () => transporte("play"),
+    B6: () => transporte("pausa"),
     B8: () => color(1), // azul: 1.ª canción / opción azul / 1.er estilo
     B2: () => color(2), // violeta
     B4: () => color(3), // verde: opción verde

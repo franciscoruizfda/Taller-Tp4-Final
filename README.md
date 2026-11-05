@@ -13,7 +13,7 @@ Página publicada: https://franciscoruizfda.github.io/Taller-Tp4-Final/
 | Control | Qué hace |
 |---|---|
 | B1 ▶\| / B3 \|◀ | Siguiente / anterior |
-| B6 ▶ / B5 ❚❚ | Play / pausa |
+| B5 ▶ / B6 ❚❚ | Play / pausa |
 | B8 azul, B2 violeta, B4 verde, B7 gris (de izquierda a derecha) | Elegir canción (núcleo 2) y opciones o estilos del núcleo 3 (1.ª a 4.ª) |
 | Faders (2 filas, como en pantalla) | Núcleo 2: voz, bajo, melodía y batería. Núcleo 3 (Equilibrio): bombo, hi-hat, bajo y melodía |
 | Joystick izquierda/derecha | Velocidad (BPM) en el paso Velocidad |
