@@ -79,7 +79,7 @@ const Nucleo3 = (() => {
       mezcla: { bombo: 70, caja: 65, hihat: 75, bajo: 75, melodia: 80 },
     },
     electronica: {
-      nombre: "ELECTRÓNICA", color: "#9ec5f4", foto: "estilo-electronica.png", posicion: "57% 37.5%",
+      nombre: "ELECTRÓNICA", color: "#ffc41f", // el 4.º estilo se elige con el botón amarillo (B7) foto: "estilo-electronica.png", posicion: "57% 37.5%",
       left: 1471, top: 590.47, tamano: 36,
       opciones: {
         bombo: [[0, 4, 8, 12], [0, 4, 8, 12, 14], [0, 4, 7, 8, 12]],
