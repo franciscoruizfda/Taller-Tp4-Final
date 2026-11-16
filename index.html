@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Akshar:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css?v=20261103b">
+  <link rel="stylesheet" href="css/styles.css?v=20261116">
 </head>
 <body>
 <div id="viewport">
@@ -40,7 +40,7 @@
     </section>
 
     <!-- ============ TUTORIAL 1 · BIENVENIDA ============ -->
-    <section class="screen" id="tutorial-1" aria-label="Tutorial 1 de 5: la consola">
+    <section class="screen" id="tutorial-1" aria-label="Tutorial 1 de 6: la consola">
       <div data-nav></div>
       <h1 class="apilado degradado-b" data-capas="#00ff89 12, #0084ff 8, #cc4bff 4"
           style="left:487px;top:168px;font-size:110px">¡BIENVENIDO!</h1>
@@ -58,7 +58,7 @@
     </section>
 
     <!-- ============ TUTORIAL 2 · COLORES ============ -->
-    <section class="screen" id="tutorial-2" aria-label="Tutorial 2 de 5: los colores">
+    <section class="screen" id="tutorial-2" aria-label="Tutorial 2 de 6: los colores">
       <div data-nav></div>
       <img class="a byte-tutorial" src="assets/personaje-consola.png" alt="" style="left:-11px;top:702px;width:436px;height:379px">
       <div class="a globo-tutorial" style="left:264px;top:305px;width:761px;height:425px"></div>
@@ -75,15 +75,14 @@
     </section>
 
     <!-- ============ TUTORIAL 3 · ANÁLOGO Y BOTONES LATERALES ============ -->
-    <section class="screen" id="tutorial-3" aria-label="Tutorial 3 de 5: el análogo">
+    <section class="screen" id="tutorial-3" aria-label="Tutorial 3 de 6: el análogo">
       <div data-nav></div>
       <img class="a byte-tutorial" src="assets/personaje-consola.png" alt="" style="left:-11px;top:704px;width:428px;height:372px">
       <div class="a globo-tutorial" style="left:264px;top:296px;width:1499px;height:432px"></div>
       <div class="a globo-tutorial" style="left:300px;top:727px;width:56px;height:33px;clip-path:polygon(0 0, 100% 0, 30% 100%)"></div>
       <p class="texto ajustado texto-tutorial" style="left:288px;top:316px;width:1010px;font-size:36px;line-height:55px">
         <b>Usá el análogo para explorar las opciones.</b><br><br>
-        Mové el análogo para desplazarte entre las opciones disponibles. Cuando encuentres la opción que querés,
-        <b>presioná</b> el análogo para seleccionarla.<br><br>
+        Mové el análogo para desplazarte entre las opciones disponibles.<br><br>
         Usá los botones laterales para <b>avanzar</b> o <b>volver</b> cuando quieras.</p>
 
       <div class="a consola-tutorial" style="left:1339px;top:414px">
@@ -98,7 +97,7 @@
     </section>
 
     <!-- ============ TUTORIAL 4 · FADERS ============ -->
-    <section class="screen" id="tutorial-4" aria-label="Tutorial 4 de 5: los faders">
+    <section class="screen" id="tutorial-4" aria-label="Tutorial 4 de 6: los faders">
       <div data-nav></div>
       <div class="a globo-tutorial" style="left:151px;top:193px;width:1189px;height:203px"></div>
       <div class="a globo-tutorial" style="left:1339px;top:325px;width:37px;height:60px;clip-path:polygon(0 0, 100% 72%, 0 100%)"></div>
@@ -109,6 +108,11 @@
       <div class="a globo-tutorial" style="left:162px;top:443px;width:1148px;height:370px"></div>
       <div class="a consola-tutorial" style="left:219px;top:512px">
         <img class="a" src="assets/tutorial-faders.svg" alt="Cuatro faders: voz, bajo, melodía y batería" style="left:-20px;top:-20px;width:1076px;height:261px">
+        <!-- Relleno y perilla de cada fader: se mueven con los faders de la consola física (--v de 0 a 1) -->
+        <div class="a riel-tutorial" data-fader="F1" style="left:59.4px;top:34.9px;--c:#00ff89;--v:.88"></div>
+        <div class="a riel-tutorial" data-fader="F2" style="left:623.3px;top:34.9px;--c:#0084ff;--v:.48"></div>
+        <div class="a riel-tutorial" data-fader="F3" style="left:59.4px;top:181.9px;--c:#cc4bff;--v:0"></div>
+        <div class="a riel-tutorial" data-fader="F4" style="left:623.3px;top:181.9px;--c:#9ec5f4;--v:.99"></div>
         <span class="luz fader" data-control="F1" style="left:0px;top:0px;width:479px;height:73px"></span>
         <span class="luz fader" data-control="F2" style="left:556px;top:0px;width:479px;height:73px"></span>
         <span class="luz fader" data-control="F3" style="left:0px;top:147px;width:479px;height:73px"></span>
@@ -120,8 +124,27 @@
       <button class="cta tutorial continuar-tutorial" data-paso="1" style="left:613px;top:927px;width:693px">Presiona cualquier botón para continuar</button>
     </section>
 
-    <!-- ============ TUTORIAL 5 · LISTO ============ -->
-    <section class="screen" id="tutorial-5" aria-label="Tutorial 5 de 5: a empezar">
+    <!-- ============ TUTORIAL 5 · BOTÓN AMARILLO ============ -->
+    <section class="screen" id="tutorial-5" aria-label="Tutorial 5 de 6: el botón amarillo">
+      <div data-nav></div>
+      <img class="a byte-tutorial" src="assets/personaje-consola.png" alt="" style="left:-11px;top:702px;width:436px;height:379px">
+      <div class="a globo-tutorial" style="left:264px;top:270px;width:820px;height:460px"></div>
+      <div class="a globo-tutorial" style="left:300px;top:729px;width:66px;height:30px;clip-path:polygon(0 0, 100% 0, 30% 100%)"></div>
+      <p class="texto ajustado texto-tutorial" style="left:301px;top:305px;width:760px;font-size:36px;line-height:55px">
+        <b>El botón amarillo sirve para continuar.</b><br><br>
+        Aparece en las pantallas <b>informativas</b>. Cuando lo veas, apretá el botón <b>amarillo</b> de la consola para pasar de página.</p>
+      <!-- Así se ve el botón en esas pantallas; se ilumina al apretar el amarillo de la consola (B7) -->
+      <div class="a boton-consola gris" data-control="B7" aria-hidden="true" style="left:301px;top:610px"><svg class="cuadro" viewBox="0 0 112 109"><path class="esquinas" d="M1.5 25.5V1.5H25.5M86.5 1.5H110.5V25.5M110.5 83.5V107.5H86.5M25.5 107.5H1.5V83.5"/><rect x="15.5" y="15.5" width="81" height="78" rx="7"/></svg>CONTINUAR</div>
+
+      <!-- La consola dibujada, con el botón amarillo latiendo para señalarlo -->
+      <div class="a consola-tutorial resalta-amarillo" data-consola style="left:1135px;top:178px"></div>
+
+      <div class="progreso-tutorial" data-progreso="5" style="top:888px"></div>
+      <button class="cta tutorial continuar-tutorial" data-paso="1" style="left:613px;top:927px;width:693px">Presiona cualquier botón para continuar</button>
+    </section>
+
+    <!-- ============ TUTORIAL 6 · LISTO ============ -->
+    <section class="screen" id="tutorial-6" aria-label="Tutorial 6 de 6: a empezar">
       <div data-nav></div>
       <img class="a" src="assets/byte-salta.webp" alt="" style="left:122px;top:252px;width:499px;height:531px">
       <div class="a globo-tutorial borde" style="left:591px;top:258px;width:1187px;height:302px"></div>
@@ -130,7 +153,7 @@
       <p class="texto ajustado texto-tutorial" style="left:657px;top:389px;width:964px;font-size:44px;line-height:66px">
         Ahora <b>explorá, escuchá y descubrí</b> lo que podés crear.</p>
 
-      <div class="progreso-tutorial" data-progreso="5" style="top:850px"></div>
+      <div class="progreso-tutorial" data-progreso="6" style="top:850px"></div>
       <button class="cta tutorial continuar-tutorial espaciado" data-paso="1" style="left:613px;top:894px;width:693px">COMENZAR LA EXPERIENCIA</button>
       <p class="texto centrado" style="left:959.5px;top:991px;font-size:36px">Presiona cualquier botón para comenzar</p>
     </section>
@@ -345,11 +368,11 @@
         <img src="assets/foto-bizarrap.png" alt="Bizarrap en su estudio">
         <span class="marco" style="--borde:13px;border-radius:0"></span>
       </figure>
-      <p class="texto ajustado negrita" style="left:162px;top:745.47px;width:788px;font-size:32px">"herramientas que un pibe puede tener en la habitación de su casa".</p>
+      <p class="texto ajustado negrita" style="left:162px;top:745.47px;width:788px;font-size:32px">“Herramientas que un pibe puede tener en la habitación de su casa”.</p>
       <p class="texto" style="left:162px;top:841.47px;font-size:24px"><span class="negrita violeta">Romina Zanellato</span>, Revista Anfibia (2022)</p>
 
-      <p class="texto ajustado" style="left:983px;top:288.47px;width:776px;font-size:40px;white-space:pre-wrap"> <span class="semi violeta">Romina Zanellato </span>,periodista, contó en Revista Anfibia,(2022) a través del caso de  <span class="negrita verde">Bizarrap</span> cómo en Argentina se puede producir un beat con muy poco equipamiento.</p>
-      <p class="texto ajustado" style="left:988px;top:570.47px;width:776px;font-size:40px"><span class="negrita verde">Bizarrap</span> aprendió a usar <span class="semi violeta">FL Studio</span> a los 13 años y trabaja con una computadora, parlantes, un micrófono y algunos sintetizadores chicos.</p>
+      <p class="texto ajustado" style="left:983px;top:288.47px;width:776px;font-size:40px">La periodista <span class="semi violeta">Romina Zanellato</span> contó en Revista Anfibia (2022), a partir del caso de <span class="negrita verde">Bizarrap</span>, que en Argentina se puede producir un beat con muy poco equipamiento.</p>
+      <p class="texto ajustado" style="left:983px;top:570.47px;width:776px;font-size:40px"><span class="negrita verde">Bizarrap</span> aprendió a usar <span class="semi violeta">FL Studio</span> a los 13 años. Hoy trabaja con una computadora, unos parlantes, un micrófono y algunos sintetizadores chicos.</p>
 
       <button class="a boton-consola gris" data-paso="1" data-consola-boton="4" style="right:154px;top:909px"><svg class="cuadro" viewBox="0 0 112 109" aria-hidden="true"><path class="esquinas" d="M1.5 25.5V1.5H25.5M86.5 1.5H110.5V25.5M110.5 83.5V107.5H86.5M25.5 107.5H1.5V83.5"/><rect x="15.5" y="15.5" width="81" height="78" rx="7"/></svg>CONTINUAR</button>
       <div data-nav></div>
@@ -773,7 +796,7 @@
   </button>
 </template>
 
-<!-- Consola de los tutoriales 1 y 2: cada luz se enciende cuando se toca ese control en la consola física -->
+<!-- Consola de los tutoriales 1, 2 y 5: cada luz se enciende cuando se toca ese control en la consola física -->
 <template id="tpl-consola-tutorial">
   <div class="a consola-marco" style="left:0;top:0;width:618px;height:630px"></div>
   <span class="a salto" style="left:116px;top:42px"><img src="assets/skip-previous-verde.svg" alt=""><img class="encima" src="assets/skip-previous-celeste.svg" alt=""></span>
@@ -789,7 +812,7 @@
   <span class="a mini-fader" style="left:315px;top:442px;--c:#9ec5f4;--v:1"><i style="-webkit-mask-image:url(assets/stem-bateria.png);mask-image:url(assets/stem-bateria.png)"></i></span>
   <span class="a mini-pausa" style="left:212px;top:537px"><i></i><i></i></span>
   <span class="a mini-play" style="left:385px;top:537px"></span>
-  <p class="sr-only">Consola: botones anterior y siguiente con el joystick en el medio, cuatro botones de colores (azul, violeta, verde y gris), cuatro faders y los botones de pausa y play.</p>
+  <p class="sr-only">Consola: botones anterior y siguiente con el joystick en el medio, cuatro botones de colores (azul, violeta, verde y amarillo), cuatro faders y los botones de pausa y play.</p>
   <span class="luz" data-control="B3" style="left:116px;top:42px;width:86px;height:117px"></span>
   <span class="luz" data-control="B1" style="left:415px;top:42px;width:86px;height:117px"></span>
   <span class="luz redonda" data-control="J BJ" style="left:268px;top:48px;width:104px;height:104px"></span>
@@ -810,12 +833,12 @@
   <span class="flecha"><img src="assets/skip-next-verde.svg" alt=""><img class="encima" src="assets/skip-next-celeste.svg" alt=""></span>
 </template>
 
-<script src="js/audio.js?v=20261103b"></script>
-<script src="js/vendor/qrcode.min.js?v=20261103b"></script>
-<script src="js/motor-beat.js?v=20261103b"></script>
-<script src="js/nucleo2.js?v=20261103b"></script>
-<script src="js/nucleo3.js?v=20261103b"></script>
-<script src="js/main.js?v=20261103b"></script>
-<script src="js/consola.js?v=20261105b"></script>
+<script src="js/audio.js?v=20261116"></script>
+<script src="js/vendor/qrcode.min.js?v=20261116"></script>
+<script src="js/motor-beat.js?v=20261116"></script>
+<script src="js/nucleo2.js?v=20261116"></script>
+<script src="js/nucleo3.js?v=20261116"></script>
+<script src="js/main.js?v=20261116"></script>
+<script src="js/consola.js?v=20261116"></script>
 </body>
 </html>

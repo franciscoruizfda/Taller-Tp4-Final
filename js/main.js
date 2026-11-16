@@ -1,6 +1,6 @@
 /* Beatmind · Núcleo 1: navegación entre pantallas e interacción de las capas del beat. */
 
-const TUTORIAL = ["tutorial-1", "tutorial-2", "tutorial-3", "tutorial-4", "tutorial-5"];
+const TUTORIAL = ["tutorial-1", "tutorial-2", "tutorial-3", "tutorial-4", "tutorial-5", "tutorial-6"];
 const PANTALLAS = [
   "inicio", "carga", ...TUTORIAL, "que-es",
   "percusion", "bajo", "melodia", "estructura", "mezcla",
@@ -111,13 +111,18 @@ function montarPlantillas() {
     s.querySelectorAll(".nav-link").forEach((l) => l.classList.toggle("activo", l.dataset.seccion === seccion));
   });
 
-  // Las 5 rayitas de avance del tutorial y de las capas del núcleo 1.
+  // Las rayitas de avance: una por pantalla del tutorial, o una por capa del núcleo 1.
+  // Quedan centradas en el mismo lugar sin importar cuántas sean.
   document.querySelectorAll("[data-progreso]").forEach((el) => {
     const hechas = Number(el.dataset.progreso);
-    el.innerHTML = TUTORIAL.map((_, i) => `<i class="${i < hechas ? "hecho" : ""}" style="left:${i * 105.25}px"></i>`).join("");
+    const total = TUTORIAL.includes(el.closest(".screen").id) ? TUTORIAL.length : CAPAS.length;
+    const ancho = (total - 1) * 105.25 + 64;
+    el.style.width = `${ancho}px`;
+    el.style.left = `${960.5 - ancho / 2}px`;
+    el.innerHTML = Array.from({ length: total }, (_, i) => `<i class="${i < hechas ? "hecho" : ""}" style="left:${i * 105.25}px"></i>`).join("");
   });
 
-  // Dibujo de la consola de los tutoriales 1 y 2, con sus luces.
+  // Dibujo de la consola de los tutoriales 1, 2 y 5, con sus luces.
   const consola = document.getElementById("tpl-consola-tutorial");
   document.querySelectorAll("[data-consola]").forEach((el) => el.append(consola.content.cloneNode(true)));
 }

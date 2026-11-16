@@ -1173,7 +1173,8 @@ img { display: block; }
 .teclado-receta .negra { width: 7px; height: 66px; border-radius: 0 0 1px 1px; background: var(--violeta); }
 .teclado-receta .negra.verde { background: var(--verde); box-shadow: 0 0 4px var(--verde); }
 
-/* Botón con el cuadrado del color del botón físico que lo activa (gris = continuar, azul = volver) */
+/* Botón con el cuadrado del color del botón físico que lo activa (gris = continuar, azul = volver).
+   El de continuar («gris», lo activa B7) se pinta amarillo para que se distinga más. */
 .boton-consola {
   display: flex;
   align-items: center;
@@ -1199,14 +1200,30 @@ img { display: block; }
 }
 .boton-consola .cuadro .esquinas { fill: none; stroke: #6f7f99; stroke-width: 3; }
 .boton-consola .cuadro rect { fill: var(--fondo-cuadro); stroke: var(--borde-cuadro); stroke-width: 3; }
-.boton-consola.gris { --fondo-cuadro: #5f7591; --borde-cuadro: #8ea3bf; }
+.boton-consola.gris { --fondo-cuadro: #ffc41f; --borde-cuadro: #fff07a; }
+.boton-consola.gris .cuadro .esquinas { display: none; } /* solo el cuadrado amarillo, sin las esquinas */
 .boton-consola.azul { --fondo-cuadro: #8cc8ff; --borde-cuadro: #c4e2ff; }
 .boton-consola.verde { --fondo-cuadro: #1b9873; --borde-cuadro: #2dffa6; color: #fff; }
 .boton-consola:hover .cuadro,
-.boton-consola.tocado .cuadro { filter: drop-shadow(0 0 10px var(--borde-cuadro)) brightness(1.2); }
+.boton-consola.tocado .cuadro,
+.boton-consola.tocada .cuadro { filter: drop-shadow(0 0 10px var(--borde-cuadro)) brightness(1.2); }
 
 /* Joystick dibujado (la palanca del Figma) */
 .palanca img { width: 100%; height: 100%; object-fit: contain; }
+
+/* Tutorial de faders: relleno y perilla encima de los rieles del dibujo (tutorial-faders.svg) */
+.riel-tutorial { width: 397px; height: 4px; pointer-events: none; }
+.riel-tutorial::before,
+.riel-tutorial::after { content: ""; position: absolute; background: var(--c); }
+.riel-tutorial::before { left: 0; top: 0; bottom: 0; width: calc(var(--v) * 100%); }
+.riel-tutorial::after {
+  left: clamp(0px, calc(var(--v) * 100% - 4.5px), calc(100% - 9px));
+  top: 50%;
+  width: 9px;
+  height: 18px;
+  transform: translateY(-50%);
+  box-shadow: 0 0 6px var(--c);
+}
 
 /* Consola del tutorial (dibujo del Figma). Las luces de .luz van en una capa aparte, encima. */
 .consola-marco {
@@ -1231,7 +1248,16 @@ img { display: block; }
 .cuadro-color.azul { --f: #1f63ad; --b: #2f9bff; }
 .cuadro-color.violeta { --f: #6a5288; --b: #b46cff; }
 .cuadro-color.verde { --f: #1b9873; --b: #2dffa6; }
-.cuadro-color.gris { --f: #5b6f8c; --b: #b8d3f5; }
+.cuadro-color.gris { --f: #ffc41f; --b: #fff07a; } /* B7: el botón de continuar, ahora amarillo */
+/* Tutorial del botón amarillo: el de la consola late para señalarlo */
+.resalta-amarillo .cuadro-color.gris { animation: latido-amarillo 1.4s ease-in-out infinite; }
+@keyframes latido-amarillo {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 12px var(--b), inset 0 0 10px rgba(255, 255, 255, .12); }
+  50% { transform: scale(1.1); box-shadow: 0 0 34px 8px var(--b), inset 0 0 10px rgba(255, 255, 255, .25); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .resalta-amarillo .cuadro-color.gris { animation: none; box-shadow: 0 0 30px 6px var(--b); }
+}
 .mini-fader {
   width: 247px;
   height: 38px;

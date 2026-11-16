@@ -110,6 +110,8 @@ const Consola = (() => {
   function moverFader(nombre, porcentaje) {
     if (TUTORIAL.includes(actual)) {
       iluminar(nombre, 600);
+      // En el tutorial de faders, el dibujado sigue al de la consola.
+      document.querySelector(`#${actual} [data-fader="${nombre}"]`)?.style.setProperty("--v", porcentaje / 100);
       return;
     }
     const posicion = FADERS[nombre];
