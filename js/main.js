@@ -1,6 +1,6 @@
 /* Beatmind · Núcleo 1: navegación entre pantallas e interacción de las capas del beat. */
 
-const TUTORIAL = ["tutorial-1", "tutorial-2", "tutorial-3", "tutorial-4", "tutorial-5", "tutorial-6"];
+const TUTORIAL = ["tutorial-1", "tutorial-2", "tutorial-3", "tutorial-4", "tutorial-5"];
 const PANTALLAS = [
   "inicio", "carga", ...TUTORIAL, "que-es",
   "percusion", "bajo", "melodia", "estructura", "mezcla",
@@ -122,7 +122,7 @@ function montarPlantillas() {
     el.innerHTML = Array.from({ length: total }, (_, i) => `<i class="${i < hechas ? "hecho" : ""}" style="left:${i * 105.25}px"></i>`).join("");
   });
 
-  // Dibujo de la consola de los tutoriales 1, 2 y 5, con sus luces.
+  // Dibujo de la consola de los tutoriales 1 y 2, con sus luces.
   const consola = document.getElementById("tpl-consola-tutorial");
   document.querySelectorAll("[data-consola]").forEach((el) => el.append(consola.content.cloneNode(true)));
 }
@@ -469,7 +469,7 @@ function moverFaderMezcla(i, valor) {
   aplicarVolumenes();
 }
 
-// Botón de pantalla con el cuadrado de color (gris = continuar, azul = volver): lo activa el botón físico
+// Botón de pantalla con el cuadrado de color (azul = volver): lo activa el botón físico
 // de ese color (o las teclas 1 a 4). Devuelve true si la pantalla tenía uno.
 function botonDeColor(n) {
   const boton = document.querySelector(`#${actual} [data-consola-boton="${n}"]`);
