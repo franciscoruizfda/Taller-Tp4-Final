@@ -1,5 +1,8 @@
 .DS_Store
 
+# Referencias completas de trabajo; la experiencia utiliza solamente sus muestras extraídas.
+assets/canciones/Referencias notas/
+
 # Canciones originales completas: el núcleo 2 usa solo las 4 pistas separadas de cada una
 assets/canciones/*/*.mp3
 !assets/canciones/*/voz.mp3

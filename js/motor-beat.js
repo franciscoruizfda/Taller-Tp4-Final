@@ -3,7 +3,9 @@
 
    Un beat ("datos") es: { estilo, bpm, ritmo: { bombo, caja, hihat } (16 booleanos cada uno),
    bajo y melodia (16 notas o null), volumen y silencio por canal }.
-   Cada estilo usa 5 samples CC0 de Freesound en assets/sonidos/<estilo>/{bombo,caja,hihat,bajo,melodia}.mp3.
+   Cada estilo usa 5 samples en assets/sonidos/<estilo>/{bombo,caja,hihat,bajo,melodia}.mp3.
+   Trap y cumbia usan recortes de las canciones de referencia; pop y electrónica usan Freesound CC0.
+   La procedencia y el procesamiento están documentados en assets/sonidos/CREDITOS.txt.
    Si no se pueden cargar (por ejemplo, abriendo el HTML sin servidor), suenan los instrumentos sintetizados. */
 
 const MotorBeat = (() => {
@@ -19,12 +21,12 @@ const MotorBeat = (() => {
      desde: segundos de silencio al comienzo del archivo. max: corte de los golpes largos. */
   const SONIDOS = {
     trap: {
-      nombre: "Trap", bpm: 140,
+      nombre: "Trap", bpm: 140, version: "galeria-20261126",
       bombo: { ganancia: 1 },
-      caja: { ganancia: 0.75 },
-      hihat: { ganancia: 0.4 },
-      bajo: { ganancia: 0.85, raiz: 32.7, octava: 1 },
-      melodia: { ganancia: 1, raiz: 1111, octava: 5 },
+      caja: { ganancia: 0.8 },
+      hihat: { ganancia: 0.55 },
+      bajo: { ganancia: 0.95, raiz: 49.098, octava: 1 }, // 808 de MESITA, Sol1
+      melodia: { ganancia: 0.8, raiz: 592.453, octava: 5 }, // Travis Scott, Re5
     },
     pop: {
       nombre: "Pop", bpm: 110,
@@ -35,12 +37,12 @@ const MotorBeat = (() => {
       melodia: { ganancia: 1.45, raiz: 261.2, octava: 4 },
     },
     cumbia: {
-      nombre: "Cumbia", bpm: 96,
-      bombo: { ganancia: 0.9 },
+      nombre: "Cumbia", bpm: 96, version: "galeria-20261126",
+      bombo: { ganancia: 1 },
       caja: { ganancia: 0.8 },
-      hihat: { ganancia: 1.5 }, // shaker: grabado más bajo que los hi-hats de los otros estilos
-      bajo: { ganancia: 0.8, raiz: 55.2, octava: 2 },
-      melodia: { ganancia: 0.4, raiz: 788.4, octava: 5 },
+      hihat: { ganancia: 0.65 },
+      bajo: { ganancia: 0.9, raiz: 82.134, octava: 2 }, // Los Palmeras, Mi2
+      melodia: { ganancia: 0.85, raiz: 221.471, octava: 3 }, // Los del Fuego, La3
     },
     electronica: {
       nombre: "Electrónica", bpm: 124,
@@ -84,7 +86,7 @@ const MotorBeat = (() => {
     cargando = Promise.all(ESTILOS.flatMap((estilo) => {
       muestras[estilo] = {};
       return CANALES.map((pieza) =>
-        Sonido.cargarMuestra(`assets/sonidos/${estilo}/${pieza}.mp3`)
+        Sonido.cargarMuestra(`assets/sonidos/${estilo}/${pieza}.mp3${SONIDOS[estilo].version ? `?v=${SONIDOS[estilo].version}` : ""}`)
           .then((buffer) => { muestras[estilo][pieza] = buffer; })
           .catch(() => {}));
     })).then(() => {

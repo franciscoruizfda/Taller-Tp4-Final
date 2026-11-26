@@ -1,13 +1,15 @@
 Sonidos del núcleo 3 (CREA)
-Todos son de Freesound.org con licencia Creative Commons 0 (dominio público): se pueden usar y redistribuir sin pedir permiso.
-Se usan las previsualizaciones en MP3. La nota medida es la que usa js/nucleo3.js para afinar cada sample.
+Trap y Cumbia: recortes de las seis grabaciones aportadas en assets/canciones/Referencias notas/,
+elegidos de oído en una galería de candidatos. La titularidad de las grabaciones corresponde a sus titulares.
+Pop y Electrónica: se conservan las previsualizaciones MP3 de Freesound.org con licencia Creative Commons 0.
+La nota indicada es la "raiz" que usa js/motor-beat.js para afinar cada sample.
 
-TRAP
-  bombo    808 Kick (wav format) ................ https://freesound.org/s/190942/
-  caja     Fat clap .............................. https://freesound.org/s/239906/
-  hihat    FD808A HiHat closed ................... https://freesound.org/s/455639/
-  bajo     JH 808 5 (C 2 sec) — Do1, 32,7 Hz ...... https://freesound.org/s/687927/
-  melodia  gluckC (glockenspiel) — 1111 Hz ........ https://freesound.org/s/396286/
+TRAP (140 BPM)
+  bombo    YSY A — PASTEL CON NUTELLA          00:31.846 (0,22 s)
+  caja     Travis Scott — MY EYES              01:44.612 (0,28 s)
+  hihat    MESITA — NO SOY YO                  01:17.555 (0,08 s)
+  bajo     MESITA — NO SOY YO                  00:53.801 (0,94 s) — raíz: Sol1, 49,098 Hz
+  melodia  Travis Scott — MY EYES              00:10.368 (0,41 s) — raíz: Re5, 592,453 Hz
 
 POP
   bombo    House/trance kick ..................... https://freesound.org/s/137722/
@@ -16,12 +18,12 @@ POP
   bajo     Bass Guitar_A1 [RAW] (Jazz Bass) — 55 Hz  https://freesound.org/s/396122/
   melodia  Electric Piano (FM) — Do4, 261,2 Hz ... https://freesound.org/s/817013/
 
-CUMBIA
-  bombo    cngal (conga grave) ................... https://freesound.org/s/99865/
-  caja     Timbale High .......................... https://freesound.org/s/629425/
-  hihat    Shaker (shake7), de VSCO 2 ............ https://freesound.org/s/375638/
-  bajo     bass 16b — La1, 55,2 Hz ................ https://freesound.org/s/209943/
-  melodia  g4.wav (acordeón) — 788,4 Hz ........... https://freesound.org/s/333725/
+CUMBIA (96 BPM)
+  bombo    Los del Fuego — Sabés               01:28.782 (0,75 s)
+  caja     Los Palmeras — Soy sabalero         01:27.046 (0,20 s)
+  hihat    Los Palmeras — Soy sabalero         01:42.731 (0,23 s)
+  bajo     Los Palmeras — Soy sabalero         01:12.086 (0,37 s) — raíz: Mi2, 82,134 Hz
+  melodia  Los del Fuego — Sabés               00:02.531 (0,36 s) — raíz: La3, 221,471 Hz
 
 ELECTRÓNICA
   bombo    909 kICK .............................. https://freesound.org/s/145775/
@@ -30,5 +32,15 @@ ELECTRÓNICA
   bajo     MOOG_BASS_SPACE_ECHO_C2 — 129,6 Hz ..... https://freesound.org/s/324031/
   melodia  Roland JP-8000 Synth Wave (C) — 130,8 Hz https://freesound.org/s/275439/
 
+Procesamiento de Trap y Cumbia (scripts en .audio-work/):
+  separar_completo.py  separa cada canción completa con Demucs 4 (htdemucs, shifts=2)
+                       en batería, bajo, voz y resto. https://github.com/facebookresearch/demucs
+  galeria.py           busca golpes y notas aislados (sin otro golpe encima, con poca voz y pocos
+                       restos de otros instrumentos), los recorta en su decaimiento natural, en estéreo
+                       y con filtro mínimo, y arma galeria/index.html para escucharlos y elegir.
+  exportar_galeria.py  exporta los elegidos: nivelación, MP3 estéreo 44,1 kHz, 224 kbit/s.
+  La separación es estimada: puede conservar restos de otros instrumentos.
+
 Para cambiar un sonido: reemplazá el MP3 manteniendo el nombre y, si es el bajo o la melodía,
-actualizá "raiz" (la frecuencia de la nota del sample) en SONIDOS dentro de js/motor-beat.js.
+actualizá "raiz" en SONIDOS dentro de js/motor-beat.js. Actualizá también "version" del estilo
+para que el navegador descargue las muestras nuevas. El motor se comparte con beat.html (QR).
