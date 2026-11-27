@@ -78,7 +78,7 @@ const CANALES_MEZCLA = [
     circulo: [1289, 583, 61.441, 64], ico: [9.56, 10.42, 40.961, 43.163], riel: [1364.09, 609.5, 249.909, 11.872], perilla: [54.913, 24.629], valor: 210.54 / 249.909 },
   { canal: "bajo", nombre: "Bajo", color: "#675180", icono: "mix-guitar.png",
     circulo: [870, 701.72, 68.901, 72.189], ico: [7.66, 6.71, 53.59, 57.08], riel: [955.74, 731.42, 280.255, 13.391], perilla: [61.581, 27.78], valor: 94.058 / 280.255 },
-  { canal: "bateria", nombre: "Batería", color: "#9ec5f4", icono: "mix-drums.png",
+  { canal: "bateria", nombre: "Batería", color: "#ffc41f", icono: "mix-drums.png",
     circulo: [1289, 702, 59.361, 62], ico: [7.92, 8.65, 43.532, 44.698], riel: [1361.55, 728.29, 241.452, 12.651], perilla: [53.054, 23.859], valor: 143.879 / 241.452 },
 ];
 

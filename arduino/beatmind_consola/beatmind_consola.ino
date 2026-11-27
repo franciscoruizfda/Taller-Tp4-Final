@@ -4,18 +4,23 @@
 //   B1 ... B8   se apretó ese botón          BJ      se apretó el joystick
 //   F1:57       un fader, de 0 a 100 %       J:x,y   el joystick, de -100 a 100 por eje
 // Mientras se mueve un fader, los otros quedan bloqueados (ver BLOQUEO).
+// Joystick activado (ver JOYSTICK_ACTIVO): VRx en A4, VRy en A5, clic en D10.
+// DEBUG = true: en vez de los mensajes cortos, escribe texto para leer en el Monitor Serie.
+// Antes de conectar la página, ponelo en false y volvé a cargar el código.
 // IMPORTANTE: cerrá el Monitor Serie antes de conectar la página (el puerto no se puede compartir).
 
+const bool DEBUG = false;
+
 // ---------- BOTONES ----------
-const int NB = 9;
-// Qué hace cada código en la página (js/consola.js), con la consola vista de frente:
-//   B3 |◀ atrás                               B1 ▶| siguiente      BJ clic del joystick
-//   fila de colores, de izquierda a derecha: B8 azul, B2 violeta, B4 verde, B7 gris
-//   B6 ❚❚ pausa                               B5 ▶ play
+// En la página (js/consola.js): B1 siguiente, B3 atrás, B5 PLAY, B6 PAUSA,
+// y la fila de colores de izquierda a derecha B8, B2, B4, B7.
+// Si al probar, play y pausa quedan al revés, intercambiá "B5" y "B6" en mensajesB.
 // Si cambiás un código acá, cambialo también en js/consola.js (BOTONES) e index.html (data-control).
-// Botón físico:           atras  sig.  azul  violeta verde  gris   play   pausa  joy
-const int pinesB[NB]      = {2,    3,    7,    8,      5,     4,     9,     6,     10};
-const char* mensajesB[NB] = {"B3", "B1", "B8", "B2",   "B4",  "B7",  "B5",  "B6",  "BJ"};
+const int NB = 9;
+// Botón físico:           atras  sig.  par1-izq par1-der par2-izq par2-der pausa  play   joy
+const int pinesB[NB]      = {2,    3,    7,       8,       5,       4,       9,     6,     10};
+const char* mensajesB[NB] = {"B3", "B1", "B8",    "B2",    "B4",    "B7",    "B5",  "B6",  "BJ"};
+const char* nombresB[NB]  = {"atras", "siguiente", "par1 izq", "par1 der", "par2 izq", "par2 der", "pausa", "reproducir", "joy clic"};
 
 const unsigned long REBOTE = 30;   // ms para filtrar rebotes
 
@@ -25,15 +30,15 @@ unsigned long cambioB[NB];
 
 // ---------- FADERS ----------
 // F1 arriba izquierda, F2 arriba derecha, F3 abajo izquierda, F4 abajo derecha.
-// (A3 y A4 son del joystick.)
+// (A4 y A5 son del joystick.)
 const int NF = 4;
 //                      F1  F2  F3  F4
-const int pinesF[NF] = {A5, A2, A0, A1};
+const int pinesF[NF] = {A0, A1, A2, A3};
 const bool conectadoF[NF] = {true, true, true, true};   // si un fader no está cableado, ponelo en false
 
 // Valor crudo con el fader en la MITAD del recorrido (el mismo que en consola_debug.ino)
 const int MEDIO = 150;
-const int SALTO_FADER = 2;   // % mínimo de cambio para mandar (evita el temblor)
+const int SALTO_FADER = 3;   // % mínimo de cambio para mandar (evita el temblor)
 
 // Bloqueo: mientras un fader se está moviendo, los demás se ignoran.
 // Se libera cuando el fader activo queda quieto este tiempo (ms).
@@ -44,8 +49,11 @@ int faderActivo = -1;              // -1 = ninguno
 unsigned long ultimoMovimiento = 0;
 
 // ---------- JOYSTICK ----------
-const int PIN_X = A3;
-const int PIN_Y = A4;
+// false = desactivado (no lee los ejes ni el clic). Para volver a usarlo, ponelo en true.
+const bool JOYSTICK_ACTIVO = true;
+
+const int PIN_X = A4;   // VRx
+const int PIN_Y = A5;   // VRy
 const int ZONA_MUERTA = 8;   // % alrededor del centro que se toma como 0
 
 int centroX, centroY;  // se miden al arrancar (no toques el joystick)
@@ -64,14 +72,37 @@ void setup() {
   }
   for (int i = 0; i < NF; i++) posF[i] = corregir(leerSuave(pinesF[i]));
 
-  centroX = leerSuave(PIN_X);
-  centroY = leerSuave(PIN_Y);
+  if (JOYSTICK_ACTIVO) {
+    centroX = leerSuave(PIN_X);
+    centroY = leerSuave(PIN_Y);
+  }
+
+  if (DEBUG) {
+    Serial.println(F("=== Beatmind DEBUG ==="));
+    Serial.println(F("Boton        Pin  Manda  Estado"));
+    for (int i = 0; i < NB; i++) {
+      if (!JOYSTICK_ACTIVO && pinesB[i] == 10) continue;
+      Serial.print(nombresB[i]);
+      for (int k = strlen(nombresB[i]); k < 13; k++) Serial.print(' ');
+      Serial.print('D');
+      Serial.print(pinesB[i]);
+      Serial.print(pinesB[i] < 10 ? F("   ") : F("  "));
+      Serial.print(mensajesB[i]);
+      Serial.print(F("     "));
+      Serial.println(estadoB[i] ? F("APRETADO  <- OJO: revisa que su cable no toque GND") : F("suelto"));
+    }
+    Serial.print(F("Faders conectados:"));
+    bool alguno = false;
+    for (int i = 0; i < NF; i++) if (conectadoF[i]) { Serial.print(F(" F")); Serial.print(i + 1); alguno = true; }
+    Serial.println(alguno ? F("") : F(" ninguno"));
+    Serial.println(F("----------------------------"));
+  }
 }
 
 void loop() {
   revisarBotones();
   revisarFaders();
-  revisarJoystick();
+  if (JOYSTICK_ACTIVO) revisarJoystick();
   delay(5);
 }
 
@@ -80,6 +111,7 @@ void loop() {
 void revisarBotones() {
   unsigned long ahora = millis();
   for (int i = 0; i < NB; i++) {
+    if (!JOYSTICK_ACTIVO && pinesB[i] == 10) continue;   // clic del joystick desactivado
     bool l = (digitalRead(pinesB[i]) == LOW);
     if (l != lecturaB[i]) {
       lecturaB[i] = l;
@@ -87,7 +119,16 @@ void revisarBotones() {
     }
     if (ahora - cambioB[i] > REBOTE && estadoB[i] != lecturaB[i]) {
       estadoB[i] = lecturaB[i];
-      if (estadoB[i]) Serial.println(mensajesB[i]);   // solo al apretar, no al soltar
+      if (DEBUG) {
+        Serial.print(mensajesB[i]);
+        Serial.print(F("  "));
+        Serial.print(nombresB[i]);
+        Serial.print(F(" (D"));
+        Serial.print(pinesB[i]);
+        Serial.println(estadoB[i] ? F(") -> APRETADO") : F(") -> suelto"));
+      } else if (estadoB[i]) {
+        Serial.println(mensajesB[i]);   // solo al apretar, no al soltar
+      }
     }
   }
 }
@@ -95,6 +136,8 @@ void revisarBotones() {
 // ---------- FADERS ----------
 
 int leerSuave(int pin) {
+  analogRead(pin);            // primera lectura descartada (arrastra del pin anterior)
+  delayMicroseconds(100);
   long suma = 0;
   for (int k = 0; k < 8; k++) suma += analogRead(pin);
   return suma / 8;
@@ -130,7 +173,13 @@ void revisarFaders() {
       Serial.print('F');
       Serial.print(i + 1);
       Serial.print(':');
-      Serial.println(pos);
+      Serial.print(pos);
+      if (DEBUG) {
+        Serial.print(F("   (pin A"));
+        Serial.print(pinesF[i] - A0);
+        Serial.print(F(")"));
+      }
+      Serial.println();
     } else {
       // Bloqueado: se guarda la posición sin mandarla,
       // así cuando se libere no pega un salto de golpe.

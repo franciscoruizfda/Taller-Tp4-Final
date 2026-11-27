@@ -4,7 +4,7 @@ Página publicada: https://franciscoruizfda.github.io/Taller-Tp4-Final/
 
 ## Probar con la consola (Arduino)
 
-1. Abrí `arduino/beatmind_consola/beatmind_consola.ino` en el Arduino IDE y subilo a la placa (mismo cableado que `consola_debug.ino`).
+1. Abrí `arduino/beatmind_consola/beatmind_consola.ino` en el Arduino IDE y subilo a la placa, con `DEBUG = false`.
 2. Cerrá el Monitor Serie del IDE: si queda abierto, la página no puede usar el puerto.
 3. Abrí la página publicada en **Chrome o Edge** de computadora (Firefox y Safari no tienen Web Serial).
 4. La primera vez, apretá **Ctrl + Alt + C** en el teclado y elegí el puerto del Arduino. Desde ahí la página se conecta sola cada vez que se abre (no hay ningún botón en pantalla).
@@ -18,7 +18,7 @@ Página publicada: https://franciscoruizfda.github.io/Taller-Tp4-Final/
 | Faders (2 filas, como en pantalla) | Núcleo 2: voz, bajo, melodía y batería. Núcleo 3 (Equilibrio): bombo, hi-hat, bajo y melodía |
 | Joystick izquierda/derecha | Velocidad (BPM) en el paso Velocidad |
 
-Los faders van en A5 (F1), A2 (F2), A0 (F3) y A1 (F4); el joystick en A3/A4. Mientras se mueve un fader, los otros se ignoran hasta que quede quieto (`BLOQUEO` en el sketch). Si un fader no está cableado, poné su valor en `false` en `conectadoF`, porque un pin suelto mueve el riel en pantalla solo.
+Los faders van en A0 (F1), A1 (F2), A2 (F3) y A3 (F4); el joystick en A4 (VRx) / A5 (VRy) y su clic en D10. Para probar el cableado sin la página, poné `DEBUG = true` en el sketch y mirá el Monitor Serie a 115200 (después volvé a ponerlo en `false` y subilo de nuevo). Mientras se mueve un fader, los otros se ignoran hasta que quede quieto (`BLOQUEO` en el sketch). Si un fader no está cableado, poné su valor en `false` en `conectadoF`, porque un pin suelto mueve el riel en pantalla solo.
 
 Los códigos de los botones están en tres lugares que tienen que coincidir: `mensajesB` del sketch, `BOTONES` en `js/consola.js` y los `data-control` del dibujo de la consola en `index.html`.
 

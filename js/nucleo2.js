@@ -15,7 +15,7 @@ const Nucleo2 = (() => {
     { id: "voz", nombre: "la voz", icono: "stem-voz.png", color: "#00ff89", caja: [154, 581.47], ico: [175, 610.47], riel: 264 },
     { id: "bajo", nombre: "el bajo", icono: "stem-guitarra.png", color: "#0084ff", caja: [962.5, 581.47], ico: [983.5, 610.47], riel: 1072.5 },
     { id: "melodia", nombre: "la melodía", icono: "stem-melodia.png", color: "#675180", caja: [154, 721.47], ico: [175, 750.47], riel: 264 },
-    { id: "bateria", nombre: "la batería", icono: "stem-bateria.png", color: "#9ec5f4", caja: [962.5, 721.47], ico: [983.5, 750.47], riel: 1072.5 },
+    { id: "bateria", nombre: "la batería", icono: "stem-bateria.png", color: "#ffc41f", caja: [962.5, 721.47], ico: [983.5, 750.47], riel: 1072.5 },
   ];
   const ANCHO_RIEL = 653;
 

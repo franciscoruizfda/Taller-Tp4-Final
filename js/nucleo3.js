@@ -26,7 +26,9 @@ const Nucleo3 = (() => {
       left: 480, top: 588.47,
       opciones: {
         bombo: [[0, 7, 10], [0, 3, 10], [0, 6, 11, 14]],
-        caja: [[8], [8, 15], [8, 14]],
+        // Caja con protagonismo y repartida en todo el compás (misma cantidad de golpes en cada mitad),
+        // siempre con el golpe fuerte en el 8 (medio tiempo del trap)
+        caja: [[2, 5, 8, 12], [1, 4, 6, 8, 11, 14], [1, 3, 5, 8, 10, 13]],
         hihat: [[0, 2, 4, 6, 8, 10, 12, 14], [0, 2, 4, 6, 8, 10, 12, 13, 14, 15], [0, 1, 2, 4, 6, 7, 8, 10, 12, 14, 15]],
         bajo: [
           { 0: "Re", 7: "Re", 10: "Fa" },
@@ -38,7 +40,7 @@ const Nucleo3 = (() => {
         bajo: { 0: "Re", 7: "Re", 10: "Fa" },
         melodia: { 0: "La", 3: "Sol", 6: "Fa", 8: "Re", 11: "Mi", 14: "Fa" },
       },
-      mezcla: { bombo: 80, caja: 70, hihat: 45, bajo: 90, melodia: 55 },
+      mezcla: { bombo: 80, caja: 80, hihat: 45, bajo: 90, melodia: 55 },
     },
     pop: {
       nombre: "POP", color: "#675180", foto: "estilo-pop.png", posicion: "54% center",
@@ -121,7 +123,7 @@ const Nucleo3 = (() => {
     { id: "bombo", nombre: "BOMBO", color: "#00ff89", y: 509 },
     { id: "hihat", nombre: "HI-HAT", color: "#0084ff", y: 618 },
     { id: "bajo", nombre: "BAJO", color: "#675180", y: 727 },
-    { id: "melodia", nombre: "MELODÍA", color: "#9ec5f4", y: 836 },
+    { id: "melodia", nombre: "MELODÍA", color: "#ffc41f", y: 836 },
   ];
   const RIEL = { left: 904, ancho: 647, perilla: 19 };
 
