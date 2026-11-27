@@ -270,6 +270,7 @@ img { display: block; }
 .marco.panel { inset: auto; width: 1596px; height: 341px; --borde: 7px; }
 
 .boton-play img {
+  filter: brightness(0) invert(1);
   position: absolute;
   top: -2.46px;
   left: 0;
@@ -278,10 +279,10 @@ img { display: block; }
   max-width: none;
 }
 .boton-play:hover,
-.boton-play[aria-pressed="true"] { filter: drop-shadow(0 0 8px var(--verde)); }
+.boton-play[aria-pressed="true"] { filter: drop-shadow(0 0 8px rgba(255, 255, 255, .7)); }
 .boton-play[aria-pressed="true"] { animation: latido .65s ease-out infinite; }
 
-/* Pausa de las capas: dos barras verdes al lado del play, como en la consola */
+/* Pausa de las capas: dos barras blancas al lado del play, como en la consola */
 .boton-pausa { width: 49px; height: 61px; }
 .boton-pausa i {
   position: absolute;
@@ -290,11 +291,11 @@ img { display: block; }
   width: 18px;
   height: 100%;
   border-radius: 2px;
-  background: var(--verde);
-  box-shadow: 0 0 6px rgba(0, 255, 137, .6);
+  background: #fff;
+  box-shadow: 0 0 6px rgba(255, 255, 255, .6);
 }
 .boton-pausa i + i { left: 31px; }
-.boton-pausa:hover { filter: drop-shadow(0 0 8px var(--verde)); }
+.boton-pausa:hover { filter: drop-shadow(0 0 8px rgba(255, 255, 255, .7)); }
 
 .etiqueta {
   position: absolute;
@@ -635,19 +636,19 @@ img { display: block; }
 
 .barra-cancion { border-radius: 28px; background: #210a41; }
 .play-cancion { position: absolute; width: 32px; height: 32px; }
-.play-cancion img { position: absolute; left: 0; top: -5.36px; width: 39.5px; height: 42.71px; max-width: none; }
+.play-cancion img { position: absolute; left: 0; top: -5.36px; width: 39.5px; height: 42.71px; max-width: none; filter: brightness(0) invert(1); }
 .play-cancion .pausa { display: none; }
 .play-cancion .pausa i {
   position: absolute;
   top: 4px;
   width: 9px;
   height: 24px;
-  background: var(--verde);
-  box-shadow: 0 0 6px var(--verde);
+  background: #fff;
+  box-shadow: 0 0 6px rgba(255, 255, 255, .7);
 }
 .play-cancion[aria-pressed="true"] img { display: none; }
 .play-cancion[aria-pressed="true"] .pausa { display: block; }
-.play-cancion:hover { filter: drop-shadow(0 0 6px var(--verde)); }
+.play-cancion:hover { filter: drop-shadow(0 0 6px rgba(255, 255, 255, .7)); }
 
 .progreso {
   position: absolute;
@@ -911,14 +912,14 @@ img { display: block; }
   width: 84.9px;
   height: 115.38px;
   flex: none;
-  filter: drop-shadow(0 0 5px rgba(61, 217, 185, .7));
+  filter: drop-shadow(0 0 5px rgba(255, 255, 255, .55));
 }
 .siguiente-crea .flecha img,
-.anterior-crea .flecha img { position: absolute; inset: 0; width: 100%; height: 100%; }
+.anterior-crea .flecha img { position: absolute; inset: 0; width: 100%; height: 100%; filter: brightness(0) invert(1); }
 .siguiente-crea .flecha img.encima,
 .anterior-crea .flecha img.encima { opacity: .5; }
 .siguiente-crea:hover .flecha,
-.anterior-crea:hover .flecha { filter: drop-shadow(0 0 8px var(--verde)); }
+.anterior-crea:hover .flecha { filter: drop-shadow(0 0 8px rgba(255, 255, 255, .7)); }
 .anterior-crea[hidden] { display: none; }
 
 /* Pasos 3 a 5 · opciones por color (azul, violeta, verde, como los botones de la interfaz física) */
@@ -994,8 +995,8 @@ img { display: block; }
   transition: background .2s, box-shadow .2s;
 }
 .boton-pulso:hover { background: rgba(255, 255, 255, .1); box-shadow: 0 0 12px rgba(255, 255, 255, .3); }
-.boton-pulso .icono-reproducir { margin-left: 0; border-width: 18px 0 18px 30px; border-left-color: var(--verde); filter: drop-shadow(0 0 4px var(--verde)); }
-.boton-pulso .icono-pausar i { width: 11px; height: 36px; background: var(--verde); box-shadow: 0 0 4px var(--verde); }
+.boton-pulso .icono-reproducir { margin-left: 0; border-width: 18px 0 18px 30px; border-left-color: #fff; filter: drop-shadow(0 0 4px rgba(255, 255, 255, .7)); }
+.boton-pulso .icono-pausar i { width: 11px; height: 36px; background: #fff; box-shadow: 0 0 4px rgba(255, 255, 255, .7); }
 
 /* Paso 6 · equilibrio */
 .boton-cuadrado {
@@ -1059,11 +1060,11 @@ img { display: block; }
 .play-grande .icono-reproducir {
   margin-left: 30px;
   border-width: 92px 0 92px 158px;
-  border-left-color: var(--verde);
-  filter: drop-shadow(0 0 10px rgba(0, 255, 137, .7));
+  border-left-color: #fff;
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, .7));
 }
 .play-grande .icono-pausar { gap: 40px; }
-.play-grande .icono-pausar i { width: 50px; height: 170px; border-radius: 8px; background: var(--verde); box-shadow: 0 0 10px rgba(0, 255, 137, .7); }
+.play-grande .icono-pausar i { width: 50px; height: 170px; border-radius: 8px; background: #fff; box-shadow: 0 0 10px rgba(255, 255, 255, .7); }
 .play-grande[aria-pressed="true"] { animation: latido var(--pulso, .5s) ease-out infinite; }
 
 .icono-reproducir {
@@ -1233,8 +1234,9 @@ img { display: block; }
   background: rgba(158, 197, 244, .1);
   box-shadow: 0 0 16px rgba(204, 75, 255, .75), inset 0 0 16px rgba(204, 75, 255, .35);
 }
-.salto { width: 86px; height: 117px; filter: drop-shadow(0 0 6px rgba(0, 255, 137, .55)); }
-.salto img { position: absolute; inset: 0; width: 100%; height: 100%; }
+/* Flechas, pausa y play de la consola dibujada: en blanco */
+.salto { width: 86px; height: 117px; filter: drop-shadow(0 0 6px rgba(255, 255, 255, .55)); }
+.salto img { position: absolute; inset: 0; width: 100%; height: 100%; filter: brightness(0) invert(1); }
 .salto img.encima { opacity: .45; }
 .cuadro-color {
   width: 94px;
@@ -1300,10 +1302,10 @@ img { display: block; }
   -webkit-mask-repeat: no-repeat;
   mask-repeat: no-repeat;
 }
-.mini-pausa { width: 26px; height: 36px; filter: drop-shadow(0 0 6px rgba(0, 255, 137, .7)); }
-.mini-pausa i { position: absolute; top: 0; width: 9px; height: 100%; background: var(--verde); }
+.mini-pausa { width: 26px; height: 36px; filter: drop-shadow(0 0 6px rgba(255, 255, 255, .7)); }
+.mini-pausa i { position: absolute; top: 0; width: 9px; height: 100%; background: #fff; }
 .mini-pausa i + i { left: 17px; }
-.mini-play { width: 28px; height: 34px; background: var(--verde); clip-path: polygon(0 0, 100% 50%, 0 100%); filter: drop-shadow(0 0 6px rgba(0, 255, 137, .7)); }
+.mini-play { width: 28px; height: 34px; background: #fff; clip-path: polygon(0 0, 100% 50%, 0 100%); filter: drop-shadow(0 0 6px rgba(255, 255, 255, .7)); }
 
 /* «¿Qué es un beat?»: la tarjeta elegida con el joystick se ilumina por dentro (Figma) */
 .opcion[aria-pressed="true"] { background: rgba(158, 197, 244, .22); }
@@ -1325,6 +1327,29 @@ img { display: block; }
   opacity: .9;
 }
 .cta.continuar-tutorial:hover { box-shadow: none; filter: brightness(1.12); }
+/* «siguiente ▶|» resaltado dentro del rótulo del tutorial */
+.boton-siguiente {
+  color: #fff;
+  font-weight: 800;
+  text-shadow: 0 0 6px rgba(255, 255, 255, .45);
+}
+/* Flecha ▶| al final: en el rótulo va pegada al borde derecho; en el texto suelto, al final de la frase */
+.flecha-siguiente {
+  display: inline-block;
+  height: .85em;
+  width: auto;
+  margin-left: .4em;
+  vertical-align: -.08em;
+  fill: #fff;
+  filter: drop-shadow(0 0 4px rgba(255, 255, 255, .45));
+}
+.cta.continuar-tutorial .flecha-siguiente {
+  position: absolute;
+  right: 28px;
+  top: 50%;
+  margin: 0;
+  transform: translateY(-50%);
+}
 .palanca img { transition: translate .12s ease-out; }
 
 /* Byte de las capas del núcleo 1: va por encima del borde del rectángulo violeta */
